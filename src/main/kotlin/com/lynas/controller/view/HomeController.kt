@@ -21,7 +21,6 @@ class HomeController(val appUserService: AppUserService) {
 
     @RequestMapping(value = "/user/{userName}")
     fun home(@PathVariable userName: String): String {
-        println(appUserService.loadUserByUsername(userName))
         return "home"
     }
 
