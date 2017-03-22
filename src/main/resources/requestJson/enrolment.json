@@ -1,0 +1,12 @@
+[
+  {
+    "year": 2016,
+    "roleNumber": 1,
+    "student": {
+      "id": 25
+    },
+    "cls": {
+      "id": 23
+    }
+  }
+]

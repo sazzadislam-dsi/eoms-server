@@ -20,7 +20,7 @@ open class WebSecurityConfig(val userDetailService: UserDetailService) : WebSecu
     override fun configure(http: HttpSecurity) {
         http
                 .authorizeRequests()
-                .antMatchers("/test").permitAll()
+                .antMatchers("/login", "/logout").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head>
+    <title>The News Reporter</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" th:href="${@environment.getProperty('font-awesome.min.css')}"/>
+    <link rel="stylesheet" type="text/css" th:href="${@environment.getProperty('font.css')}"/>
+    <link rel="stylesheet" type="text/css" th:href="${@environment.getProperty('bootstrap.min.css')}"/>
+    <link rel="stylesheet" type="text/css" th:href="${@environment.getProperty('style.css')}"/>
+    <link rel="stylesheet" type="text/css" th:href="${@environment.getProperty('responsive.css')}"/>
+    <link rel="stylesheet" type="text/css" th:href="${@environment.getProperty('jquery.bxslider.css')}"/>
+</head>
+<body>
+<div class="body_wrapper">
+    <div class="center">
+        <div class="header_area">
+            <div class="logo floatleft">
+                <a href="/">
+                    <h2>Baitul Moakkdem Institute</h2>
+                    <h3>Established - 1982</h3>
+                </a>
+            </div>
+            <div class="social_plus_search floatright">
+                <div class="social">
+
+                </div>
+                <div class="search">
+                    <form action="#" method="post" id="search_form">
+                        <input type="text" value="Search" id="s"/>
+                        <input type="submit" id="searchform" value="search"/>
+                        <input type="hidden" value="post" name="post_type"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="main_menu_area">
+            <ul id="nav">
+                <li><a href="#">Class</a>
+                    <ul>
+                        <li><a href="/class/home">View Class Info</a></li>
+                        <li><a href="/class/createClass">Create Class</a></li>
+                        <li><a href="#">Other</a>
+                            <ul>
+                                <li><a href="#">Single item</a></li>
+                                <li><a href="#">Single item</a></li>
+                                <li><a href="#">Single item</a></li>
+                                <li><a href="#">Single item</a></li>
+                                <li><a href="#">Single item</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#">Teacher</a>
+                    <ul>
+                        <li><a href="/teacher/home">View Teacher Info</a></li>
+                        <li><a href="#">Add new Teacher</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Student</a>
+                    <ul>
+                        <li><a href="/student/create">Create Student</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Movies</a>
+                    <ul>
+                        <li><a href="#">Single item</a></li>
+                        <li><a href="#">Single item</a></li>
+                        <li><a href="#">Single item</a>
+                            <ul>
+                                <li><a href="#">Single item</a></li>
+                                <li><a href="#">Single item</a></li>
+                                <li><a href="#">Single item</a></li>
+                                <li><a href="#">Single item</a></li>
+                                <li><a href="#">Single item</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Single item</a></li>
+                        <li><a href="#">Single item</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">entertainment</a></li>
+                <li><a href="#">culture</a></li>
+                <li>
+                    <form th:action="@{/logout}" method="post"><input type="submit" value="Logout"/></form>
+
+                </li>
+            </ul>
+        </div>
+        <div layout:fragment="page-content">
+            Page content goes here
+            <div class="content_area">
+                <div class="main_content floatleft">
+                    Page content goes here
+                </div>
+            </div>
+        </div>
+        <div class="footer_top_area">
+        </div>
+        <div class="footer_bottom_area">
+            <div class="footer_menu">
+
+            </div>
+            <div class="copyright_text">
+                <p>Copyright &copy; 2045 The News Reporter Inc. All rights reserved | Design by
+                    <a target="_blank" rel="nofollow"
+                       href="http://www.graphicsfuel.com/2045/10/wp-magazine-theme-template-psd/">Rafi MD</a></p>
+                <p>
+                    Trade marks and images used in the design are the copyright of their respective owners and are used
+                    for demo purposes only.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/assets/js/jquery-min.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.bxslider.js"></script>
+<script type="text/javascript" src="/assets/js/selectnav.min.js"></script>
+<script type="text/javascript">
+    selectnav('nav', {
+        label: '-Navigation-',
+        nested: true,
+        indent: '-'
+    });
+    selectnav('f_menu', {
+        label: '-Navigation-',
+        nested: true,
+        indent: '-'
+    });
+    $('.bxslider').bxSlider({
+        mode: 'fade',
+        captions: true
+    });
+</script>
+
+
+<div id="messageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Error !</h4>
+            </div>
+            <div class="modal-body">
+                <p id="errorField">Some text in the modal.</p>
+                <p id="errorMessage">Some text in the modal.</p>
+                <p id="errorSuggestion">Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/assets/js/app.js"></script>
+</body>
+</html>

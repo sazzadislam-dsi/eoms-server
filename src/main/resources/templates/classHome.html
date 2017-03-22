@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{template/secure}"
+      lang="en">
+<body>
+<div layout:fragment="page-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>
+                Available class details
+            </h1>
+        </div>
+    </div>
+    <div class="row separator">
+        <div class="col-lg-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Section</th>
+                    <th>Shift</th>
+                    <th>Option 1</th>
+                    <th>Option 2</th>
+                    <th>Option 3</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cls: ${classList}">
+                    <td th:text="${cls.name}">Class</td>
+                    <td th:text="${cls.section}">Section</td>
+                    <td th:text="${cls.shift}">Shift</td>
+                    <td>
+                        <a th:href="|/class/detail/${cls.id}|">Details</a>
+                    </td>
+                    <td>
+                        <a th:href="|/class/updateClass/${cls.id}|">Update</a>
+                    </td>
+                    <td>
+                        <a th:href="|/class/delete/${cls.id}|">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

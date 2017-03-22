@@ -1,26 +1,25 @@
 package com.lynas.controller.view
 
-import com.lynas.service.AppUserService
+import com.lynas.service.OrganizationService
+import com.lynas.util.AppConstant
+import com.lynas.util.SpringUtil
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by sazzad on 7/15/16
  */
 
 @Controller
-class HomeController(val appUserService: AppUserService) {
+class HomeController constructor(val orgService: OrganizationService, val springUtil: SpringUtil) {
 
     @RequestMapping(value = "/")
-    fun home(): String {
-        //println(appUserService.loadUserByUsername("admin"))
-        return "home"
-    }
-
-
-    @RequestMapping(value = "/user/{userName}")
-    fun home(@PathVariable userName: String): String {
+    fun home(request: HttpServletRequest): String {
+        println("aaa" + springUtil.getAppOrganizationName())
+        if (null == request.session.getAttribute(AppConstant.organization)) {
+            request.session.setAttribute(AppConstant.organization, orgService.findByName(springUtil.getAppOrganizationName()))
+        }
         return "home"
     }
 

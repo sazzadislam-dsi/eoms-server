@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{template/secure}"
+      lang="en">
+<body>
+<div layout:fragment="page-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>
+                Enroll
+            </h1>
+        </div>
+    </div>
+    <div class="row separator">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6 est esb">
+            <form class="enrolmentCreate" role="form" method="post" action="/enrolments">
+                <div>
+                    <div>
+                        <label>Student ID</label>
+                        <input required type="text" class="form-control" id="studentId" name="studentId" placeholder="">
+                    </div>
+                    <div>
+                        <label>Class ID</label>
+                        <input required type="text" class="form-control" name="classId" id="classId" placeholder="">
+                    </div>
+                    <div>
+                        <label>Role Number</label>
+                        <input required type="text" class="form-control" id="roleNumber" name="roleNumber"
+                               placeholder="">
+                    </div>
+                    <div>
+                        <label>Year</label>
+                        <input required type="text" class="form-control" id="year" name="year" placeholder="">
+                    </div>
+
+                </div>
+                <input type="submit" value="Create Class" class="btn btn-primary est"/>
+
+            </form>
+        </div>
+        <div class="col-lg-3"></div>
+    </div>
+</div>
+</body>
+</html>

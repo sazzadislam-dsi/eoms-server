@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{template/secure}"
+      lang="en">
+<body>
+<div layout:fragment="page-content">
+    <div class="row">
+        <div class="col-lg-8 ">
+            <h3 class="esb">Personal Information</h3>
+            <table class="table table-striped">
+                <tr>
+                    <td>First Name</td>
+                    <td th:text="${student.person.firstName}"></td>
+                </tr>
+                <tr>
+                    <td>Last Name</td>
+                    <td th:text="${student.person.lastName}"></td>
+                </tr>
+                <tr>
+                    <td>Date of Birth</td>
+                    <td th:text="${#dates.format(student.person.dateOfBirth, 'dd-MMM-yyyy')}"></td>
+
+                </tr>
+                <tr>
+                    <td>Sex</td>
+                    <td th:text="${student.person.sex}"></td>
+                </tr>
+                <tr>
+                    <td>Religion</td>
+                    <td th:text="${student.person.religion}"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-lg-4">
+            ops
+        </div>
+    </div>
+    <div class="row est">
+        <div class="col-lg-8">
+            <h3 class="separator">Contact Information</h3>
+
+            <div th:each="contactInfo : ${student.person.contactInformationList}" class="separator">
+                <table class="table table-striped">
+                    <tr>
+                        <td style="width: 30%">Care of</td>
+                        <td th:text="${contactInfo.name}"></td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td th:text="${contactInfo.address}"></td>
+                    </tr>
+                    <tr>
+                        <td>phone_1</td>
+                        <td th:text="${contactInfo.phone_1}"></td>
+                    </tr>
+                    <tr>
+                        <td>phone_2</td>
+                        <td th:text="${contactInfo.phone_2}"></td>
+                    </tr>
+                    <tr>
+                        <td>phone_3</td>
+                        <td th:text="${contactInfo.phone_3}"></td>
+                    </tr>
+                    <tr>
+                        <td>contactType</td>
+                        <td th:text="${contactInfo.contactType}"></td>
+                    </tr>
+                </table>
+                <a th:href="|/contactInformation/${contactInfo.id}/update/${student.id}/student|">Update</a>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <a th:href="|/student/${student.id}/update|">Update Personal Information</a>
+            <br/>
+            <a th:href="|/student/${student.id}/addContactInformation|"> Add Contact Info</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
