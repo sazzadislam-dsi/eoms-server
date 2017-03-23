@@ -1,6 +1,7 @@
 package com.lynas.config
 
 import com.lynas.util.AppConstant
+import org.apache.log4j.Logger
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter
 import javax.servlet.http.HttpServletRequest
