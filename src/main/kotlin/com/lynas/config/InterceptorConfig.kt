@@ -15,14 +15,13 @@ import javax.servlet.http.HttpServletResponse
 class InterceptorConfig : HandlerInterceptorAdapter() {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any?): Boolean {
-        /*when (request.requestURI) {
+        when (request.requestURI) {
             "/", "/login", "/logout" -> return true
         }
         if (null == request.session.getAttribute(AppConstant.organization)) {
             response.sendRedirect("/")
             return false
-        }*/
-        println("Running in interceptor")
+        }
         return true
     }
 }
