@@ -61,4 +61,9 @@ fun String.convertToDate() : Date {
     return dateFormatter.parse(this)
 }
 
+fun Date.str(): String {
+    val dateFormatter = SimpleDateFormat("dd-MM-yyyy")
+    return dateFormatter.format(this).toString()
+}
+
 fun getOrganizationFromSession(request: HttpServletRequest) = request.session.getAttribute(AppConstant.organization) as Organization

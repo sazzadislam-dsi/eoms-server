@@ -5,6 +5,7 @@ import com.lynas.service.PersonService
 import com.lynas.model.Student
 import com.lynas.service.StudentService
 import com.lynas.util.getLogger
+import com.lynas.util.str
 import org.slf4j.Logger
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -50,8 +51,10 @@ class StudentController(val studentService: StudentService, val personService: P
     @GetMapping("/{studentId}/details")
     fun viewDetails(@PathVariable studentId: Long, model: Model): String {
         val student = studentService.findById(studentId)
+        val person = student.person
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!).contactInformationList
         model.addAttribute("student", student)
+        model.addAttribute("studentDob", person?.dateOfBirth?.str())
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
         println(student.toString())
         return "studentDetails"
