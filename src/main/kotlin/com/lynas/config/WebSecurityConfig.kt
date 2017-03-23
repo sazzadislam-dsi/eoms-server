@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 @Configuration
 @EnableWebSecurity
-open class WebSecurityConfig(val userDetailService: UserDetailService) : WebSecurityConfigurerAdapter() {
+class WebSecurityConfig(val userDetailService: UserDetailService) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http

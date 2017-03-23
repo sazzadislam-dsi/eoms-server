@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse
  */
 
 @Component
-open class InterceptorConfig : HandlerInterceptorAdapter() {
+class InterceptorConfig : HandlerInterceptorAdapter() {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any?): Boolean {
         /*when (request.requestURI) {
