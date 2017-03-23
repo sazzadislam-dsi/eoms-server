@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml"
       layout:decorator="layout/secure"
       lang="en">
@@ -19,20 +20,23 @@
                 <div>
                     <div>
                         <label>Student ID</label>
-                        <input required type="text" class="form-control" id="studentId" name="studentId" placeholder="">
+                        <input th:required="required" type="text" class="form-control" id="studentId" name="studentId"
+                               placeholder=""/>
                     </div>
                     <div>
                         <label>Class ID</label>
-                        <input required type="text" class="form-control" name="classId" id="classId" placeholder="">
+                        <input th:required="required" type="text" class="form-control" name="classId" id="classId"
+                               placeholder=""/>
                     </div>
                     <div>
                         <label>Role Number</label>
-                        <input required type="text" class="form-control" id="roleNumber" name="roleNumber"
-                               placeholder="">
+                        <input th:required="required" type="text" class="form-control" id="roleNumber" name="roleNumber"
+                               placeholder=""/>
                     </div>
                     <div>
                         <label>Year</label>
-                        <input required type="text" class="form-control" id="year" name="year" placeholder="">
+                        <input th:required="required" type="text" class="form-control" id="year" name="year"
+                               placeholder=""/>
                     </div>
 
                 </div>

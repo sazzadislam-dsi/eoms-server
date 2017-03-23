@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml"
       layout:decorator="layout/secure"
       lang="en">
@@ -19,19 +20,21 @@
                 <div>
                     <div>
                         <label>First Name</label>
-                        <input required type="text" class="form-control" id="firstName" name="firstName" placeholder="">
+                        <input th:required="required" type="text" class="form-control" id="firstName" name="firstName"
+                               placeholder=""/>
                     </div>
                     <div>
                         <label>Last Name</label>
-                        <input required type="text" class="form-control" name="lastName" id="lastName" placeholder="">
+                        <input th:required="required" type="text" class="form-control" name="lastName" id="lastName"
+                               placeholder=""/>
                     </div>
                     <div>
                         <label>Date of birth</label>
-                        <input required type="text" class="form-control" id="dateOfBirth" name="dateOfBirth"
-                               placeholder="15-12-1989">
+                        <input th:required="required" type="text" class="form-control" id="dateOfBirth"
+                               name="dateOfBirth"
+                               placeholder="15-12-1989"/>
                     </div>
                     <div>
-
                         <label for="sex">Select Gender</label>
                         <select class="form-control" id="sex" name="sex">
                             <option>MALE</option>
@@ -51,7 +54,6 @@
                     </div>
                 </div>
                 <input type="submit" value="Create Class" class="btn btn-primary est"/>
-
             </form>
         </div>
         <div class="col-lg-3"></div>
