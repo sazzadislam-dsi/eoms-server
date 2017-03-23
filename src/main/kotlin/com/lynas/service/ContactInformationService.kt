@@ -10,15 +10,15 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-open class ContactInformationService (val contactInformationRepository: ContactInformationRepository) {
+class ContactInformationService(val contactInformationRepository: ContactInformationRepository) {
 
     @Transactional
-    open fun save(contactInformation: ContactInformation) {
+    fun save(contactInformation: ContactInformation) {
         contactInformationRepository.save(contactInformation)
     }
 
     @Transactional
-    open fun findById(id: Long): ContactInformation? {
+    fun findById(id: Long): ContactInformation? {
         return contactInformationRepository.findOne(id)
     }
 }

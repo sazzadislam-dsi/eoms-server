@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-open class StuffService(
+class StuffService(
         val stuffRepository: StuffRepository,
         val personRepository: PersonRepository) {
 
     @Transactional
-    open fun save(stuff: Stuff) {
+    fun save(stuff: Stuff) {
         stuff.person = personRepository.save(stuff.person)
         stuffRepository.save(stuff)
     }

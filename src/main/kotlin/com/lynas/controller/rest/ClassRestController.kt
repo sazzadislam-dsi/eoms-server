@@ -20,13 +20,13 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("classes")
-open class ClassRestController(val classService: ClassService) {
+class ClassRestController(val classService: ClassService) {
 
     private val logger = LoggerFactory.getLogger(ClassRestController::class.java)
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    open fun post(@RequestBody cls: Course, request: HttpServletRequest): ResponseEntity<*> {
+    fun post(@RequestBody cls: Course, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Received Class :: " + cls.toString())
         var createdClass = cls
         createdClass.organization = request.session.getAttribute(AppConstant.organization) as Organization?
@@ -43,7 +43,7 @@ open class ClassRestController(val classService: ClassService) {
 
     @PatchMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    open fun patch(@RequestBody cls: Course, request: HttpServletRequest): Course {
+    fun patch(@RequestBody cls: Course, request: HttpServletRequest): Course {
         val previousClass = classService.findById(cls.id!!)
 
         println(cls.toString())

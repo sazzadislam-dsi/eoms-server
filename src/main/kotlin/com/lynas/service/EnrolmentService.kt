@@ -10,15 +10,15 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-open class EnrolmentService (val enrolmentRepository: EnrolmentRepository) {
+class EnrolmentService(val enrolmentRepository: EnrolmentRepository) {
 
     @Transactional
-    open fun save(enrolment: Enrolment) {
+    fun save(enrolment: Enrolment) {
         enrolmentRepository.save(enrolment)
     }
 
     @Transactional
-    open fun studentEnrolmentCheck(studentId: Long): Boolean {
+    fun studentEnrolmentCheck(studentId: Long): Boolean {
         return enrolmentRepository.countStudentEnrolment(studentId) == 0
     }
 }

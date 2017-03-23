@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-open class ExamService  (val examRepository: ExamRepository) {
+class ExamService(val examRepository: ExamRepository) {
 
     @Transactional
-    open fun save(exam: Exam) {
+    fun save(exam: Exam) {
         examRepository.save(exam)
     }
 }

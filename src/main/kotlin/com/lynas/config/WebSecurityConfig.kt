@@ -33,7 +33,7 @@ class WebSecurityConfig(val userDetailService: UserDetailService) : WebSecurityC
 
     @Autowired
     @Throws(Exception::class)
-    open fun configureGlobal(auth: AuthenticationManagerBuilder) {
+    fun configureGlobal(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userDetailService).passwordEncoder(BCryptPasswordEncoder())
     }
 }

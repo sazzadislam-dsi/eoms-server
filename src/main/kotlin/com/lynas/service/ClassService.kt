@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-open class ClassService(val classRepo: ClassRepository) {
+class ClassService(val classRepo: ClassRepository) {
 
     @Transactional
-    open fun save(course: Course): Course {
+    fun save(course: Course): Course {
         val foundCourse = classRepo.findByProperty(course.name, course.shift.toString(), course.section.toString(), course.organization?.name)
         if (null == foundCourse) {
             return classRepo.save(course)
@@ -25,23 +25,23 @@ open class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    open fun findListByOrganizationName(name: String?): List<Course> {
+    fun findListByOrganizationName(name: String?): List<Course> {
         return classRepo.findListByOrganizationName(name)
     }
 
     @Transactional
-    open fun findById(id: Long): Course {
+    fun findById(id: Long): Course {
         return classRepo.findById(id)
     }
 
 
     @Transactional
-    open fun deleteById(id: Long) {
+    fun deleteById(id: Long) {
         return classRepo.delete(id)
     }
 
     @Transactional
-    open fun findStudentsByClassId(classID: Long): Collection<ClassDetailQueryResult> {
+    fun findStudentsByClassId(classID: Long): Collection<ClassDetailQueryResult> {
         return classRepo.findStudentsByClass(classID)
     }
 }
