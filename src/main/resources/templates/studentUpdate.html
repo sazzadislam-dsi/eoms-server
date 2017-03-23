@@ -12,23 +12,23 @@
             <form class="studentUpdate" role="form" method="patch" action="/students">
                 <div>
                     <label>First Name</label>
-                    <input required type="text" class="form-control" id="firstName" name="firstName"
-                           th:value="${student.person.firstName}">
+                    <input th:required="required" type="text" class="form-control" id="firstName" name="firstName"
+                           th:value="${student.person.firstName}"/>
                 </div>
                 <div>
                     <label>Last Name</label>
-                    <input required type="text" class="form-control" name="lastName" id="lastName"
-                           th:value="${student.person.lastName}">
+                    <input th:required="required" type="text" class="form-control" name="lastName" id="lastName"
+                           th:value="${student.person.lastName}"/>
                 </div>
                 <div>
                     <label>Date of birth</label>
-                    <input required type="text" class="form-control" id="dateOfBirth" name="dateOfBirth"
-                           th:value="${student.person.dateOfBirth}">
+                    <input th:required="required" type="text" class="form-control" id="dateOfBirth" name="dateOfBirth"
+                           th:value="${student.person.dateOfBirth}"/>
                 </div>
                 <div>
                     <label for="sex">Select Gender</label>
                     <select class="form-control" id="sex" name="sex">
-                        <option selected th:text="${student.person.sex}"></option>
+                        <option th:selected="selected" th:text="${student.person.sex}"></option>
                         <option>MALE</option>
                         <option>FEMALE</option>
                         <option>OTHER</option>
@@ -37,7 +37,7 @@
                 <div>
                     <label for="religion">Select Religion</label>
                     <select class="form-control" id="religion" name="religion">
-                        <option selected th:text="${student.person.religion}"></option>
+                        <option th:selected="selected" th:text="${student.person.religion}"></option>
                         <option>MUSLIM</option>
                         <option>HINDU</option>
                         <option>CHRISTAN</option>
@@ -45,7 +45,7 @@
                         <option>OTHER</option>
                     </select>
                 </div>
-                <input type="hidden" class="form-control" name="studentId" th:value="${student.id}">
+                <input type="hidden" class="form-control" name="studentId" th:value="${student.id}"/>
                 <input type="submit" value="Update Student" class="btn btn-primary"/>
 
             </form>
