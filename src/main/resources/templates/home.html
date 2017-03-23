@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{../template/secure}"
+      layout:decorator="layout/secure"
       lang="en">
 <body>
-<div layout:fragment="page-content">
+<section layout:fragment="content">
     <h3>Organization Add New</h3>
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
@@ -40,6 +40,6 @@
             <td>10</td>
         </tr>
     </table>
-</div>
+</section>
 </body>
 </html>
