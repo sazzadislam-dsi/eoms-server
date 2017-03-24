@@ -122,4 +122,11 @@ class StudentRestController(val studentService: StudentService, val logger: Logg
     }
 
 
+    @GetMapping("{id}")
+    fun getById(@PathVariable id: Long): Student {
+        val student: Student = studentService.findById(id)
+        return student
+    }
+
+
 }

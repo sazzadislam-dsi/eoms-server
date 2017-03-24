@@ -113,7 +113,30 @@
 
 
     $("#studentIdDetails").click(function () {
-        alert("StDelClick");
+        const studentId = $('#studentId').val();
+        const url = "/students/" + studentId;
+        $.ajax({
+            url: url,
+            type: 'GET',
+            contentType: "application/json",
+            dataType: "json",
+            beforeSend: function (request) {
+                request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
+                request.setRequestHeader("Accept", "application/json");
+            },
+            success: function (response) {
+                const name = response.person.firstName + " " + response.person.lastName;
+                const dob = response.person.dateOfBirth;
+                console.log(name);
+                console.log(dob);
+                $(".stName").html(name);
+                $(".stDob").html(dob);
+
+            },
+            error: function (error) {
+                alert(error);
+            }
+        });
     });
 
 })(jQuery);
