@@ -111,6 +111,12 @@
         //alert(xhr.responseText);
     });
 
+    function prettyDate(date) {
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        return months[date.getUTCMonth()] + ' ' + date.getUTCDate() + ', ' + date.getUTCFullYear();
+    }
 
     $("#studentIdDetails").click(function () {
         const studentId = $('#studentId').val();
@@ -126,11 +132,9 @@
             },
             success: function (response) {
                 const name = response.person.firstName + " " + response.person.lastName;
-                const dob = response.person.dateOfBirth;
-                console.log(name);
-                console.log(dob);
+                var dob = new Date(response.person.dateOfBirth);
                 $(".stName").html(name);
-                $(".stDob").html(dob);
+                $(".stDob").html(prettyDate(dob));
 
             },
             error: function (error) {
