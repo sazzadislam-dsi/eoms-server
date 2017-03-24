@@ -7,7 +7,7 @@ import com.lynas.util.AppConstant
 import com.lynas.util.responseConflict
 import com.lynas.util.responseOK
 import com.lynas.util.verifyClassOrganization
-import org.slf4j.LoggerFactory
+import org.apache.log4j.Logger
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -20,9 +20,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("classes")
-class ClassRestController(val classService: ClassService) {
-
-    private val logger = LoggerFactory.getLogger(ClassRestController::class.java)
+class ClassRestController(val classService: ClassService, val logger: Logger) {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
