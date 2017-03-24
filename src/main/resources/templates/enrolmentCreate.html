@@ -14,8 +14,7 @@
         </div>
     </div>
     <div class="row separator">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-6 est esb">
+        <div class="col-lg-4 est esb">
             <form class="enrolmentCreate" role="form" method="post" action="/enrolments">
                 <div>
                     <div>
@@ -38,13 +37,19 @@
                         <input th:required="required" type="text" class="form-control" id="year" name="year"
                                placeholder=""/>
                     </div>
-
                 </div>
                 <input type="submit" value="Create Class" class="btn btn-primary est"/>
-
             </form>
         </div>
-        <div class="col-lg-3"></div>
+        <div class="col-lg-1">
+            <div class="est esb">
+                <p></p>
+                <input id="studentIdDetails" type="button" class="btn btn-primary est" value="Details"/>
+                <p></p>
+                <input class="btn btn-primary est" type="button" value="Details"/>
+            </div>
+        </div>
+        <div class="col-lg-7"></div>
     </div>
 </div>
 </body>

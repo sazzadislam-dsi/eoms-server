@@ -111,4 +111,9 @@
         //alert(xhr.responseText);
     });
 
+
+    $("#studentIdDetails").click(function () {
+        alert("StDelClick");
+    });
+
 })(jQuery);
