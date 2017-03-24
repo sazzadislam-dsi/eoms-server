@@ -20,7 +20,7 @@
                 <tr>
                     <th>Name</th>
                     <th>ID</th>
-                    <th>Shift</th>
+                    <th>Details</th>
                     <th>Option 1</th>
                     <th>Option 2</th>
                     <th>Option 3</th>
@@ -32,7 +32,7 @@
                     <td th:text="${std.person != null} ? ${std.person.firstName} : '(null)'">First Name</td>
                     <td th:text="${std.id}">Student ID</td>
                     <td>
-                        <a th:href="|/student/${std.id}/details|">Update</a>
+                        <a th:href="|/student/${std.id}/details|">Details</a>
                     </td>
                     <td>
                         <!--<a th:href="|/class/updateClass/${cls.id}|">Update</a>-->
