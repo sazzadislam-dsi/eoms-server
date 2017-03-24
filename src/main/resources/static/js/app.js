@@ -138,7 +138,34 @@
 
             },
             error: function (error) {
-                alert(error);
+                console.dir(error);
+                alert("Error getting student with given Id");
+            }
+        });
+    });
+
+
+    $("#classDetails").click(function () {
+        const classId = $('#classId').val();
+        const url = "/classes/" + classId;
+        $.ajax({
+            url: url,
+            type: 'GET',
+            contentType: "application/json",
+            dataType: "json",
+            beforeSend: function (request) {
+                request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
+                request.setRequestHeader("Accept", "application/json");
+            },
+            success: function (response) {
+                console.dir(response);
+                $(".clsName").html(response.name);
+                $(".clsSection").html(response.section);
+                $(".clsShift").html(response.shift);
+            },
+            error: function (error) {
+                console.dir(error);
+                alert("Error getting class with given Id");
             }
         });
     });

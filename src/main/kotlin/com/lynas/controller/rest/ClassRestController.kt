@@ -61,4 +61,32 @@ class ClassRestController(val classService: ClassService, val logger: Logger) {
         return classService.findListByOrganizationName(name)
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    fun getById(@PathVariable id: Long): Course {
+        return classService.findById(id)
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
