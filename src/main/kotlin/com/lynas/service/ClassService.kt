@@ -44,4 +44,9 @@ class ClassService(val classRepo: ClassRepository) {
     fun findStudentsByClassId(classID: Long): Collection<ClassDetailQueryResult> {
         return classRepo.findStudentsByClass(classID)
     }
+
+    @Transactional
+    fun findListCountByOrganizationName(name: String?): Int {
+        return classRepo.findListCountByOrganizationName(name)
+    }
 }

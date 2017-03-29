@@ -1,10 +1,12 @@
 package com.lynas.controller.view
 
+import com.lynas.service.ClassService
 import com.lynas.service.OrganizationService
 import com.lynas.util.AppConstant
 import com.lynas.util.SpringUtil
 import org.apache.log4j.Logger
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
 import javax.servlet.http.HttpServletRequest
 
@@ -13,14 +15,20 @@ import javax.servlet.http.HttpServletRequest
  */
 
 @Controller
-class HomeController constructor(val orgService: OrganizationService, val springUtil: SpringUtil, val log: Logger) {
+class HomeController constructor(
+        val orgService: OrganizationService,
+        val classService: ClassService,
+        val springUtil: SpringUtil,
+        val log: Logger) {
 
     @RequestMapping(value = "/")
-    fun home(request: HttpServletRequest): String {
+    fun home(request: HttpServletRequest, model: Model): String {
         log.warn("AT HOME")
         println("aaa" + springUtil.getAppOrganizationName())
         if (null == request.session.getAttribute(AppConstant.organization)) {
-            request.session.setAttribute(AppConstant.organization, orgService.findByName(springUtil.getAppOrganizationName()))
+            val orgName = springUtil.getAppOrganizationName()
+            request.session.setAttribute(AppConstant.organization, orgService.findByName(orgName))
+            model.addAttribute("totalNumberOfClasses", classService.findListCountByOrganizationName(orgName))
         }
         return "home"
     }
