@@ -19,7 +19,7 @@ class UserDetailService(val appUserService: AppUserService) : UserDetailsService
 
 
     override fun loadUserByUsername(userName: String): UserDetails {
-        // todo need to fix to get in from db
+        // todo uncomment following in production
         //val appUser:AppUser? = appUserService.findByUserName(userName)
         val appUser: AppUser? = AppUser().apply {
             username = userName
