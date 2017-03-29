@@ -16,4 +16,7 @@ interface StudentRepository : GraphRepository<Student> {
     @Query("match (s:Student) -[:studentIsAPerson]- (p:Person) <-[:personHasListOfContactInformation]- (c:ContactInformation) where ID(c) = {0} return s")
     fun findStudentByContactId(id: Long): Student
 
+    @Query("MATCH (s:Student) return count(s)")
+    fun getTotalNumberOfStudents(): Int
+
 }

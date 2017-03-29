@@ -39,4 +39,9 @@ class StudentService(val studentRepository: StudentRepository) {
         return studentList
     }
 
+    @Transactional
+    fun getTotalNumberOfStudents(): Int {
+        return studentRepository.getTotalNumberOfStudents()
+    }
+
 }

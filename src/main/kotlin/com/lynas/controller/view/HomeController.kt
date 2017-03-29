@@ -2,6 +2,7 @@ package com.lynas.controller.view
 
 import com.lynas.service.ClassService
 import com.lynas.service.OrganizationService
+import com.lynas.service.StudentService
 import com.lynas.util.AppConstant
 import com.lynas.util.SpringUtil
 import org.apache.log4j.Logger
@@ -19,6 +20,7 @@ class HomeController constructor(
         val orgService: OrganizationService,
         val classService: ClassService,
         val springUtil: SpringUtil,
+        val studentService: StudentService,
         val log: Logger) {
 
     @RequestMapping(value = "/")
@@ -29,6 +31,7 @@ class HomeController constructor(
             val orgName = springUtil.getAppOrganizationName()
             request.session.setAttribute(AppConstant.organization, orgService.findByName(orgName))
             model.addAttribute("totalNumberOfClasses", classService.findListCountByOrganizationName(orgName))
+            model.addAttribute("totalNumberOfStudents", studentService.getTotalNumberOfStudents())
         }
         return "home"
     }
