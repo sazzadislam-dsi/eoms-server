@@ -23,17 +23,18 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("enrolments")
-class EnrolmentRestController(val enrolmentService: EnrolmentService,
-                              val studentService: StudentService,
-                              val classService: ClassService) {
+class EnrolmentRestController (val enrolmentService: EnrolmentService,
+                               val studentService: StudentService,
+                               val classService: ClassService) {
 
     val logger = getLogger(EnrolmentRestController::class.java)
 
     @PostMapping
     fun post(@RequestBody enrolmentJson: EnrolmentJson): ResponseEntity<*> {
         logger.info("Hit in enrolment post method with {}", enrolmentJson)
-        if (!enrolmentService.studentEnrolmentCheck(enrolmentJson.studentId))
-            return responseConflict(enrolmentJson)
+        val (enrollment, isEnroll) = enrolmentService.studentEnrolmentCheck(enrolmentJson.studentId, enrolmentJson.year)
+        if (isEnroll)
+            return responseConflict(enrollment!!)
 
         val _student: Student = studentService.findById(enrolmentJson.studentId)
         val _course: Course = classService.findById(enrolmentJson.classId)

@@ -20,7 +20,7 @@
                 </tr>
                 <tr>
                     <td>Date of Birth</td>
-                    <td th:text="${studentDob}"></td>
+                    <td th:text="${#dates.format(student.person.dateOfBirth, 'dd-MMM-yyyy')}"></td>
 
                 </tr>
                 <tr>
@@ -75,6 +75,8 @@
             <a th:href="|/student/${student.id}/update|">Update Personal Information</a>
             <br/>
             <a th:href="|/student/${student.id}/addContactInformation|"> Add Contact Info</a>
+            <br/>
+            <a th:href="|/subject/student/${student.id}/list|">Subject List</a>
         </div>
     </div>
 </div>

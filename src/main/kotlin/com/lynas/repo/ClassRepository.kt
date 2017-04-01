@@ -22,7 +22,7 @@ interface ClassRepository : GraphRepository<Course> {
     fun findByProperty(className: String?, shift: String, section: String, orgName: String?): Course?
 
     @Query("match (p:Person) -[:studentIsAPerson]- (s:Student) -[e:Enrolment]- (c:Class) where ID(c) = {0}   " +
-            "return ID(s) as studentId, p.firstName as studentName, e.roleNumber as roleNumber Order By e.roleNumber")
+            "return ID(s) as studentId, (p.firstName +' '+ p.lastName) as studentName, e.roleNumber as roleNumber Order By e.roleNumber")
     fun findStudentsByClass(classId: Long?): Collection<ClassDetailQueryResult>
 
 

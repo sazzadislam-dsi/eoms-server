@@ -1,11 +1,9 @@
 package com.lynas.model.request
 
-import com.lynas.model.util.ExamType
-
+/**
+ * Created by seal on 2/16/2017.
+ */
 data class ExamJson (
-    var examType: ExamType? = null,
-    var totalNumber: Long? = null,
-    var obtainedNumber: Long? = null
-
-
+        val mark: Double = 0.0,
+        val studentId: Long = 0
 )

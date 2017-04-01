@@ -8,7 +8,6 @@ import com.lynas.model.request.StudentJson
 import com.lynas.model.response.ErrorObject
 import com.lynas.service.StudentService
 import com.lynas.util.*
-import org.apache.log4j.Logger
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -20,13 +19,14 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("students")
-class StudentRestController(val studentService: StudentService, val logger: Logger) {
-
+class StudentRestController(val studentService: StudentService) {
+    private val logger = getLogger(StudentRestController::class.java)
 
     @PostMapping
     fun post(@RequestBody studentJson: StudentJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.warn("received student " + studentJson.toString())
-        var _dateOfBirth = Date()
+
+        val _dateOfBirth: Date
         try {
             _dateOfBirth = studentJson.dateOfBirth.convertToDate()
         } catch (ex: Exception) {
@@ -64,7 +64,7 @@ class StudentRestController(val studentService: StudentService, val logger: Logg
 
     @PatchMapping
     fun studentUpdate(@RequestBody studentJson: StudentJson): ResponseEntity<*> {
-        logger.info("Hit student update controller with id {} && {} $studentJson.studentId, studentJson")
+        logger.info("Hit student update controller with id {} && {}", studentJson.studentId, studentJson)
         val student = studentService.findById(studentJson.studentId)
         if (student?.person == null) return responseError(studentJson)
 
@@ -119,13 +119,6 @@ class StudentRestController(val studentService: StudentService, val logger: Logg
             })
         }
         return studentService.save(student)
-    }
-
-
-    @GetMapping("{id}")
-    fun getById(@PathVariable id: Long): Student {
-        val student: Student = studentService.findById(id)
-        return student
     }
 
 

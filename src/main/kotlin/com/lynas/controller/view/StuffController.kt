@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("stuff")
-class StuffController(val stuffService: StuffService) {
+class StuffController (val stuffService: StuffService) {
 
     @RequestMapping("/home")
     fun classHome(): String {

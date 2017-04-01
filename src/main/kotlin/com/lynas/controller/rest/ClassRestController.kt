@@ -7,7 +7,7 @@ import com.lynas.util.AppConstant
 import com.lynas.util.responseConflict
 import com.lynas.util.responseOK
 import com.lynas.util.verifyClassOrganization
-import org.apache.log4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -20,18 +20,20 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("classes")
-class ClassRestController(val classService: ClassService, val logger: Logger) {
+open class ClassRestController (val classService: ClassService) {
+
+    private val logger = LoggerFactory.getLogger(ClassRestController::class.java)
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun post(@RequestBody cls: Course, request: HttpServletRequest): ResponseEntity<*> {
+    open fun post(@RequestBody cls: Course, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Received Class :: " + cls.toString())
         var createdClass = cls
         createdClass.organization = request.session.getAttribute(AppConstant.organization) as Organization?
 
         try {
             createdClass = classService.save(createdClass)
-        } catch (ex: DuplicateKeyException) {
+        }catch (ex: DuplicateKeyException){
             return responseConflict(cls)
         }
         logger.info("Saved Class :: " + createdClass.toString())
@@ -41,7 +43,7 @@ class ClassRestController(val classService: ClassService, val logger: Logger) {
 
     @PatchMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun patch(@RequestBody cls: Course, request: HttpServletRequest): Course {
+    open fun patch(@RequestBody cls: Course, request: HttpServletRequest): Course {
         val previousClass = classService.findById(cls.id!!)
 
         println(cls.toString())
@@ -61,32 +63,4 @@ class ClassRestController(val classService: ClassService, val logger: Logger) {
         return classService.findListByOrganizationName(name)
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun getById(@PathVariable id: Long): Course {
-        return classService.findById(id)
-    }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("organizations")
-class OrganizationRestController(val organizationService: OrganizationService) {
+class OrganizationRestController (val organizationService: OrganizationService) {
 
     val logger = getLogger(OrganizationRestController::class.java)
 
@@ -24,6 +24,7 @@ class OrganizationRestController(val organizationService: OrganizationService) {
         organizationService.save(organization)
         return organization
     }
+
 
 
 }

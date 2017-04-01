@@ -10,27 +10,27 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-class OrganizationService(val orgRepo: OrganizationRepository) {
+open class OrganizationService(val orgRepo: OrganizationRepository) {
 
     @Transactional
-    fun save(org: Organization) {
+    open fun save(org: Organization) {
         orgRepo.save(org)
     }
 
 
     @Transactional
-    fun readByID(id: Long): Organization? {
+    open fun readByID(id: Long): Organization? {
         return orgRepo.findOne(id)
     }
 
 
     @Transactional
-    fun readByOtherName(name: String): List<Organization> {
+    open fun readByOtherName(name: String): List<Organization> {
         return orgRepo.findListByName(name)
     }
 
     @Transactional
-    fun findByName(name: String): Organization? {
+    open fun findByName(name: String): Organization? {
         return orgRepo.findByName(name)
     }
 

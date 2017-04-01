@@ -10,7 +10,7 @@ import org.springframework.data.neo4j.repository.GraphRepository
 
 interface EnrolmentRepository : GraphRepository<Enrolment> {
 
-    @Query("match (s:Student) -[e:Enrolment]- (c:Class) where ID(s) = {0}  return count(e)")
-    fun countStudentEnrolment(studentId: Long): Int
+    @Query("match (s:Student) -[e:Enrolment {year: {1}}]- (c:Class) where ID(s) = {0}  return e")
+    fun findEnrollmentOfStudentByYear(studentId: Long, year: Int): Enrolment
 
 }

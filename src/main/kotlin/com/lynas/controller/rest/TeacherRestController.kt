@@ -16,10 +16,10 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("teachers")
-class TeacherRestController(val teacherService: TeacherService) {
+class TeacherRestController (val teacherService: TeacherService) {
 
     @PostMapping
-    fun post(@RequestBody teacher: Teacher, request: HttpServletRequest): Teacher {
+    fun post(@RequestBody teacher: Teacher,request : HttpServletRequest): Teacher {
         if (request.session.getAttribute(AppConstant.organization) == null) {
 
         }

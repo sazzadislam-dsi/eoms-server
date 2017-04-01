@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      layout:decorator="layout/secure"
+      lang="en">
+<head>
+    <title>
+        Class Detail
+    </title>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <div class="panel panel-default">
+        <div class="panel-body">
+    <form method="get" action="/attendance/studentList">
+        <div class="row">
+            <div class="col-lg-4">
+                <label class="control-label">Class</label>
+            </div>
+            <div class="col-lg-4">
+                <select name="classId" class="form-control">
+                    <option th:each="cls : ${classList}"
+                            th:value="${cls.id}"
+                            th:text="${cls.name}"></option>
+                </select>
+            </div>
+            <div class="col-lg-4">
+                <input type="submit" class="from-control" value="Select" />
+            </div>
+        </div>
+
+    </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

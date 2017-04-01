@@ -7,6 +7,4 @@ import org.springframework.data.neo4j.repository.GraphRepository
  * Created by sazzad on 8/17/16
  */
 
-interface PersonRepository : GraphRepository<Person> {
-
-}
+interface PersonRepository : GraphRepository<Person>

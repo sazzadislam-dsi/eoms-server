@@ -1,25 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns="http://www.w3.org/1999/xhtml"
-        lang="en">
-<head>
-    <title>E.O.M.S.</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-</head>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head></head>
 <body>
-<div th:if="${param.error}">
-    Invalid username or password.
-</div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
+<h1>Login</h1>
 <form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
+    <div><label> User Name <input class="form-control" type="text" name="username" value="sazzad"/>
+    </label></div>
+    <div><label> Password <input class="form-control" type="password" name="password" value="123456"/>
+    </label></div>
+    <div><input class="btn btn-primary" type="submit" value="Sign In"/></div>
 </form>
 </body>
 </html>

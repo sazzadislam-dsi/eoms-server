@@ -10,13 +10,13 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-class PersonService(val personRepository: PersonRepository) {
+open class PersonService (val personRepository: PersonRepository) {
 
     @Transactional
-    fun save(person: Person) {
+    open fun save(person: Person) {
         personRepository.save(person)
     }
 
     @Transactional
-    fun findPersonById(id: Long) = personRepository.findOne(id)
+    open fun findPersonById(id: Long) = personRepository.findOne(id)
 }

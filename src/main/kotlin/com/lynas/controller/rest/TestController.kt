@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("test")
-class TestController(val organizationService: OrganizationService) {
+class TestController (val organizationService: OrganizationService) {
 
     @GetMapping("/{id}")
     fun get(request: HttpServletRequest, @PathVariable id: Long): Test {

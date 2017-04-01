@@ -1,6 +1,7 @@
 package com.lynas.service
 
 import com.lynas.model.Student
+import com.lynas.model.query.result.StudentInfoQueryResult
 import com.lynas.repo.StudentRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -10,38 +11,38 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-class StudentService(val studentRepository: StudentRepository) {
+open class StudentService(val studentRepository: StudentRepository) {
 
     @Transactional
-    fun save(student: Student): Student {
+    open fun save(student: Student): Student {
         return studentRepository.save(student)
     }
 
     @Transactional
-    fun findById(id: Long): Student {
+    open fun findById(id: Long): Student {
         return studentRepository.findOne(id)
     }
 
     @Transactional
-    fun searchByFirstName(name: String): List<Student> {
+    open fun searchByFirstName(name: String) : List<Student> {
         return studentRepository.searchByFirstName(name)
     }
 
     @Transactional
-    fun findStudentByContactId(id: Long): Student {
+    open fun findStudentByContactId(id: Long): Student {
         return studentRepository.findStudentByContactId(id)
     }
 
     @Transactional
-    fun findAll(): MutableList<Student> {
+    open fun findAll(): MutableList<Student> {
         var studentList: MutableList<Student> = mutableListOf()
         studentRepository.findAll().forEach { i -> studentList.add(i) }
         return studentList
     }
 
     @Transactional
-    fun getTotalNumberOfStudents(): Int {
-        return studentRepository.getTotalNumberOfStudents()
+    open fun studentInfoByYear(id: Long, year: Int): StudentInfoQueryResult {
+        return studentRepository.studentInfoByYear(id, year)
     }
 
 }

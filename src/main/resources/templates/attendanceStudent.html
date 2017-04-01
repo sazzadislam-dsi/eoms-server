@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      layout:decorator="layout/secure"
+      lang="en">
+<head>
+    <title>
+        Class Detail
+    </title>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <div class="row est">
+        <div class="col-lg-8">
+            <h3 class="separator">Students</h3>
+            <input type="hidden" name="clsId" id="clsId" th:value="${clsId}"/>
+            <div>
+                <form id="form_submit" role="form" method="post" action="/attendances">
+                    <label>Date</label>
+                    <input th:required="required" type="text" class="form-control" id="date" name="date"
+                           placeholder="15-12-1989" />
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Role Number</th>
+                            <th style="width: 30%">Student Name</th>
+                            <th>Present</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="std, stat : ${studentList}" class="separator">
+                            <td th:text="${std.roleNumber}"></td>
+                            <td th:text="${std.studentName}"></td>
+                            <td><input type="checkbox" name="i" id="i" value="true"/></td>
+                            <td><input type="hidden" name="t" th:value="*{studentList[__${stat.index}__].studentId}"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <input type="submit" class="btn btn-primary esb" id="submit_btn" value="Save"/>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>
+
+<script type="application/javascript">
+    $("form").submit(function (event) {
+        var rows = [];
+        $('table tr').each(function (i, n) {
+            if (i != 0) {
+                var $row = $(n);
+                var val = $row.find('td:eq(2)').find('input').is(':checked');
+                console.log("val " + val);
+                rows.push({
+                    i: val,
+                    t: $row.find('td:eq(3)').find('input').val()
+                });
+            }
+        });
+        var data = "{\"attendanceJson\":" + JSON.stringify(rows) + "," + "\"classId\":" + $('#clsId').val() + "," + "\"date\":\"" + $('#date').val() + "\"}";
+        console.log(data);
+        $.ajax({
+            url: "/attendances",
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: data,
+            beforeSend: function (request) {
+                request.setRequestHeader("Accept", "application/json");
+            },
+            success: function (response) {
+                console.log("Ajax call success");
+                console.dir(response);
+                alert("Attendance save success");
+                location.reload();
+            },
+            error: function (xhr) {
+                alert(xhr.status + "Problem with ajax call");
+            }
+        });
+
+        return false;
+    });
+
+
+</script>

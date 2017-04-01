@@ -14,7 +14,7 @@ import java.util.*
 
 
 @NodeEntity
-class Person {
+open class Person {
     @GraphId
     var id: Long? = null
     var firstName: String? = null

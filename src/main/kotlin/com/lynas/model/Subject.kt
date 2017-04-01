@@ -15,7 +15,4 @@ class Subject {
     var subjectName: String? = null
     var subjectDescription: String? = null
     var subjectBookAuthor: String? = null
-
-    @Relationship(type = "subjectOfAClass", direction = Relationship.OUTGOING)
-    var course: Course? = null
 }

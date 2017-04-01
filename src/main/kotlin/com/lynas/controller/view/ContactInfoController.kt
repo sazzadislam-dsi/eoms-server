@@ -34,7 +34,7 @@ class ContactInfoController constructor(val contactInfoService: ContactInformati
     }
 
     @GetMapping("/{contactId}/update/{studentId}/student")
-    fun contactUpdate(@PathVariable contactId: Long, @PathVariable studentId: Long, model: Model): String {
+    fun contactUpdate(@PathVariable contactId: Long,@PathVariable studentId: Long, model: Model): String {
         var contact = contactInfoService.findById(contactId)
         logger.info("return for update contact info for id {}", contactId)
         model.addAttribute("contact", contact)

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("persons")
-class PersonRestController(val personService: PersonService) {
+class PersonRestController (val personService: PersonService) {
 
     @PostMapping
     fun post(@RequestBody person: Person, request: HttpServletRequest): Person {

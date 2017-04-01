@@ -9,12 +9,14 @@ import org.neo4j.ogm.annotation.Relationship
  * Created by sazzad on 8/31/16
  */
 @NodeEntity
-class Exam {
+class   Exam {
     @GraphId
     var id: Long? = null
     var examType: ExamType? = null
-    var totalNumber: Long? = null
-    var obtainedNumber: Long? = null
+    var year: Int? = null
+    var totalNumber: Double? = null
+    var obtainedNumber: Double? = null
+    var percentile: Double? = 100.0
 
     @Relationship(type = "examOfClass", direction = Relationship.OUTGOING)
     var cls: Course? = null

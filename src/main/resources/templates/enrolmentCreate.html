@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
       layout:decorator="layout/secure"
       lang="en">
 <body>
@@ -14,75 +14,33 @@
         </div>
     </div>
     <div class="row separator">
-        <div class="col-lg-4 est esb">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6 est esb">
             <form class="enrolmentCreate" role="form" method="post" action="/enrolments">
                 <div>
                     <div>
                         <label>Student ID</label>
-                        <input th:required="required" type="text" class="form-control" id="studentId" name="studentId"
-                               placeholder=""/>
+                        <input th:required="required" type="text" class="form-control"  id="studentId" name="studentId" placeholder=""/>
                     </div>
                     <div>
                         <label>Class ID</label>
-                        <input th:required="required" type="text" class="form-control" name="classId" id="classId"
-                               placeholder=""/>
+                        <input th:required="required" type="text" class="form-control" name="classId" id="classId" placeholder=""/>
                     </div>
                     <div>
                         <label>Role Number</label>
-                        <input th:required="required" type="text" class="form-control" id="roleNumber" name="roleNumber"
-                               placeholder=""/>
+                        <input th:required="required" type="text" class="form-control" id="roleNumber" name="roleNumber" placeholder=""/>
                     </div>
                     <div>
                         <label>Year</label>
-                        <input th:required="required" type="text" class="form-control" id="year" name="year"
-                               placeholder=""/>
+                        <input th:required="required" type="text" class="form-control" id="year" name="year" placeholder=""/>
                     </div>
+
                 </div>
-                <input type="submit" value="Complete Enrolment" class="btn btn-primary est"/>
+                <input type="submit" value="Create Class" class="btn btn-primary est"/>
+
             </form>
         </div>
-        <div class="col-lg-1">
-            <div class="est esb">
-                <p></p>
-                <input id="studentIdDetails" type="button" class="btn btn-primary est" value="Details"/>
-                <p></p>
-                <input id="classDetails" class="btn btn-primary est" type="button" value="Details"/>
-            </div>
-        </div>
-        <div class="col-lg-7">
-            <div class="row">
-                <div class="col-lg-6">
-                    <p>Student Details</p>
-                    <table class="table table-striped">
-                        <tr>
-                            <td>name</td>
-                            <td class="stName"></td>
-                        </tr>
-                        <tr>
-                            <td>D.O.B</td>
-                            <td class="stDob"></td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col-lg-6">
-                    <p>Class Details</p>
-                    <table class="table table-striped">
-                        <tr>
-                            <td>Name</td>
-                            <td class="clsName"></td>
-                        </tr>
-                        <tr>
-                            <td>Section</td>
-                            <td class="clsSection"></td>
-                        </tr>
-                        <tr>
-                            <td>Shift</td>
-                            <td class="clsShift"></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <div class="col-lg-3"></div>
     </div>
 </div>
 </body>

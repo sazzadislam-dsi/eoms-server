@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorator="layout/secure"
+      lang="en">
+<body>
+<div layout:fragment="page-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>
+                Create a new Student
+            </h1>
+        </div>
+    </div>
+    <div class="row separator">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6 est esb">
+            <form class="subjectCreate" role="form" method="post" action="/subjects">
+                <input type="hidden" name="classId" th:value="${classId}" />
+                <div>
+                    <div>
+                        <label>Subject Name</label>
+                        <input th:required="required" type="text" class="form-control"  id="subjectName" name="subjectName" placeholder="">
+                    </div>
+                    <div>
+                        <label>Subject Description</label>
+                        <input th:required="required" type="text" class="form-control" name="subjectDescription" id="subjectDescription" placeholder="">
+                    </div>
+                    <div>
+                        <label>Subject Book Author</label>
+                        <input th:required="required" type="text" class="form-control" id="subjectBookAuthor" name="subjectBookAuthor" placeholder="">
+                    </div>
+                </div>
+                <input type="submit" value="Create Subject" class="btn btn-primary est"/>
+
+            </form>
+        </div>
+        <div class="col-lg-3"></div>
+    </div>
+</div>
+</body>
+</html>

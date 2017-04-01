@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 */
 
 @Component
-class SpringUtil(environment: Environment) {
+open class SpringUtil(environment: Environment) {
 
 
     val appOrgName: String = environment.getProperty("app.org.name")

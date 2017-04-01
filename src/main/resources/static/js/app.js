@@ -13,6 +13,7 @@
         });
         var params = {};
         params["data"] = JSON.stringify(data);
+        console.log(params["data"]);
         return params;
     };
 
@@ -111,63 +112,12 @@
         //alert(xhr.responseText);
     });
 
-    function prettyDate(date) {
-        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-        return months[date.getUTCMonth()] + ' ' + date.getUTCDate() + ', ' + date.getUTCFullYear();
-    }
-
-    $("#studentIdDetails").click(function () {
-        const studentId = $('#studentId').val();
-        const url = "/students/" + studentId;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            contentType: "application/json",
-            dataType: "json",
-            beforeSend: function (request) {
-                request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
-                request.setRequestHeader("Accept", "application/json");
-            },
-            success: function (response) {
-                const name = response.person.firstName + " " + response.person.lastName;
-                var dob = new Date(response.person.dateOfBirth);
-                $(".stName").html(name);
-                $(".stDob").html(prettyDate(dob));
-
-            },
-            error: function (error) {
-                console.dir(error);
-                alert("Error getting student with given Id");
-            }
-        });
-    });
-
-
-    $("#classDetails").click(function () {
-        const classId = $('#classId').val();
-        const url = "/classes/" + classId;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            contentType: "application/json",
-            dataType: "json",
-            beforeSend: function (request) {
-                request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
-                request.setRequestHeader("Accept", "application/json");
-            },
-            success: function (response) {
-                console.dir(response);
-                $(".clsName").html(response.name);
-                $(".clsSection").html(response.section);
-                $(".clsShift").html(response.shift);
-            },
-            error: function (error) {
-                console.dir(error);
-                alert("Error getting class with given Id");
-            }
-        });
+    bindFormSubmits('subjectCreate', function (response) {
+        alert("Subject added to class id" + response.classId);
+        location.reload();
+    }, function (xhr) {
+        alert(xhr.status + " Subject cannot add to class");
+        //alert(xhr.responseText);
     });
 
 })(jQuery);

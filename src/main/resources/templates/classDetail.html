@@ -14,45 +14,47 @@
 
     <div class="row est">
         <div class="col-lg-8">
-            <h3 class="separator">Students</h3>
+            <a class="btn btn-primary" th:href="|/subject/class/${cls.id}/create|">Add Subject</a>
+            <a class="btn btn-primary" th:href="|/subject/class/${cls.id}/list|">Subject List</a>
+            <h3 class="separator">Class Information</h3>
 
-            <div>
-                <table class="table table-striped">
-                    <tr>
-                        <td>Class</td>
-                        <td th:text="${cls.name}"></td>
-                    </tr>
-                    <tr>
-                        <td>Shift</td>
-                        <td th:text="${cls.shift}"></td>
-                    </tr>
-                    <tr>
-                        <td>Section</td>
-                        <td th:text="${cls.section}"></td>
-                    </tr>
-                    <tr>
-                        <td>Student Number</td>
-                        <td th:text="${clsSize}"></td>
-                    </tr>
-                </table>
-            </div>
-            <div>
-                <table class="table table-striped">
-
-                    <th style="width: 30%">Student Name</th>
-                    <th>Role Number</th>
-                    <th>Detail</th>
-
-
-                    <div th:each="cls : ${classDetails}" class="separator">
+                <div>
+                    <table class="table table-striped">
                         <tr>
-                            <td th:text="${cls.studentName}"></td>
-                            <td th:text="${cls.roleNumber}"></td>
-                            <td><a th:href="|/student/${cls.studentId}/details|">Details</a></td>
+                            <td>Class</td>
+                            <td th:text="${cls.name}"></td>
                         </tr>
-                    </div>
-                </table>
-            </div>
+                        <tr>
+                            <td>Shift</td>
+                            <td th:text="${cls.shift}"></td>
+                        </tr>
+                        <tr>
+                            <td>Section</td>
+                            <td th:text="${cls.section}"></td>
+                        </tr>
+                        <tr>
+                            <td>Student Number</td>
+                            <td th:text="${clsSize}"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <table class="table table-striped">
+
+                        <th style="width: 30%">Student Name</th>
+                        <th>Role Number</th>
+                        <th>Detail</th>
+
+
+                        <div th:each="cls : ${classDetails}" class="separator">
+                            <tr>
+                                <td th:text="${cls.studentName}"></td>
+                                <td th:text="${cls.roleNumber}"></td>
+                                <td><a th:href="|/student/${cls.studentId}/details|">Details</a></td>
+                            </tr>
+                        </div>
+                    </table>
+                </div>
         </div>
         <div class="col-lg-4">
             <!--<a th:href="|/student/${student.id}/update|">Update Personal Information</a>-->

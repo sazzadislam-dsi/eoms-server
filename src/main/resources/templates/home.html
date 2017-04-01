@@ -1,40 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml"
       layout:decorator="layout/secure"
       lang="en">
 <body>
 <div layout:fragment="page-content">
-
-    <div style="padding-bottom: 512px">
-        homePage
-
-        <div class="row">
-            <div class="col-lg-4">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>Total number of classes</td>
-                        <td th:text="${totalNumberOfClasses}"></td>
-                    </tr>
-                    <tr>
-                        <td>Total number of students</td>
-                        <td th:text="${totalNumberOfStudents}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+    <h3>Organization Add New</h3>
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+        <form class="organizationCreate" action="/organizations" method="post">
+            <div>
+                <label>Organization Name</label>
+                <input type="text" value="" name="name"/>
             </div>
-            <div class="col-lg-8">
+            <div>
+                <label>Establishment Year</label>
+                <input type="number" value="" name="establishmentYear"/>
             </div>
-        </div>
+            <div>
+                <label>Founder Name</label>
+                <input type="text" value="" name="organizationInfo.founderName"/>
+            </div>
+            <div>
+                <label>Founder Description</label>
+                <input type="text" value="" name="organizationInfo.founderDescription"/>
+            </div>
+            <input type="submit" value="Save"/>
+        </form>
     </div>
+    This is main Content section<br/>
+    Date: 14-08-2016<br/>
+    <table>
+        <tr>
+            <td>Total Student</td>
+            <td>100</td>
+        </tr>
+        <tr>
+            <td>Total Teacher</td>
+            <td>10</td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

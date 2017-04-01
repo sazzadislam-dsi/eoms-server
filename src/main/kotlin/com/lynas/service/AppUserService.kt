@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @ComponentScan(scopedProxy = ScopedProxyMode.INTERFACES)
-class AppUserService(val appUserRepository: AppUserRepository) {
+open class AppUserService(val appUserRepository: AppUserRepository) {
 
     @Transactional
-    fun save(appUser: AppUser): AppUser? = appUserRepository.save(appUser)
+    open fun save(appUser: AppUser): AppUser? = appUserRepository.save(appUser)
 
     @Transactional
-    fun findByUserName(username: String): AppUser? = appUserRepository.findByUsername(username)
+    open fun findByUserName(username: String): AppUser? = appUserRepository.findByUsername(username)
 }

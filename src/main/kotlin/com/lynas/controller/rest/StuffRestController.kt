@@ -16,10 +16,10 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("stuffs")
-class StuffRestController(val stuffService: StuffService) {
+class StuffRestController (val stuffService: StuffService) {
 
     @PostMapping
-    fun post(@RequestBody stuff: Stuff, request: HttpServletRequest): Stuff {
+    fun post(@RequestBody stuff: Stuff,request : HttpServletRequest): Stuff {
         stuff.person?.organization = request.session.getAttribute(AppConstant.organization) as Organization
         stuffService.save(stuff)
         return stuff

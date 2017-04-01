@@ -1,6 +1,5 @@
 package com.lynas.model.query.result
 
-import com.lynas.model.Student
 import org.springframework.data.neo4j.annotation.QueryResult
 
 /**
