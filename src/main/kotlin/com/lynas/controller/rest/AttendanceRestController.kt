@@ -42,7 +42,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
     }
 
     @GetMapping("/ofClass/{className}/onDay/{day}")
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
     fun getAttendanceOfAClassOnDate(
             request: HttpServletRequest,
             @PathVariable className: String,
