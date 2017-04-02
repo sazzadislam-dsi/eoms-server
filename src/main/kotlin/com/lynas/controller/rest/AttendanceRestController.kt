@@ -2,6 +2,7 @@ package com.lynas.controller.rest
 
 import com.lynas.model.AttendanceBook
 import com.lynas.model.Organization
+import com.lynas.model.StudentAttendance
 import com.lynas.model.request.AttendanceJsonWrapper
 import com.lynas.model.response.ErrorObject
 import com.lynas.service.AttendanceService
@@ -62,7 +63,9 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
         val result = attendanceService.getAttendanceOfAClassOnDate(
                 dateOf.time,
                 className,
-                organization?.name)
+                organization?.name).studentAttendances.map(StudentAttendance::id)
+
+
         print("")
         return responseOK(result)
     }

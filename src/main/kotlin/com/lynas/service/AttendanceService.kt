@@ -36,8 +36,9 @@ open class AttendanceService constructor(val studentService: StudentService,
 
 
     @Transactional
-    open fun getAttendanceOfAClassOnDate(date: Long, className: String, organizationName: String?): List<AttendanceBook> {
-        return attendanceRepository.findAttendanceBookOfClass(date, className, organizationName)
+    open fun getAttendanceOfAClassOnDate(date: Long, className: String, organizationName: String?): AttendanceBook {
+        val attendanceBook = attendanceRepository.findAttendanceBookOfClass(date, className, organizationName)
+        return attendanceRepository.findOne(attendanceBook[0].id)
     }
 
 
