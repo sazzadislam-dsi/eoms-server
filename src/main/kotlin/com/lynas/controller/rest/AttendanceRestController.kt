@@ -7,6 +7,7 @@ import com.lynas.model.response.ErrorObject
 import com.lynas.service.AttendanceService
 import com.lynas.util.*
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import javax.servlet.http.HttpServletRequest
@@ -22,6 +23,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
     val logger = getLogger(AttendanceRestController::class.java)
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
     fun postAttendance(@RequestBody attendanceJson: AttendanceJsonWrapper): ResponseEntity<*> {
         logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
         try {
@@ -40,6 +42,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
     }
 
     @GetMapping("/ofClass/{className}/onDay/{day}")
+    @PreAuthorize("hasAnyRole('USER')")
     fun getAttendanceOfAClassOnDate(
             request: HttpServletRequest,
             @PathVariable className: String,
