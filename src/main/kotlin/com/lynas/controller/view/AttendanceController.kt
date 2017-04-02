@@ -1,7 +1,6 @@
 package com.lynas.controller.view
 
 import com.lynas.model.Organization
-import com.lynas.model.request.StudentJson
 import com.lynas.service.ClassService
 import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
@@ -27,6 +26,14 @@ class AttendanceController constructor(val classService: ClassService) {
         model.addAttribute("classList", classService.findListByOrganizationName(organization.name).sortedBy { it.name })
         logger.info("return attenClassSelect page with classList")
         return "attenClassSelect"
+    }
+
+    @RequestMapping("/view")
+    fun attendanceBookView(model: Model, request: HttpServletRequest): String {
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        model.addAttribute("classList", classService.findListByOrganizationName(organization.name).sortedBy { it.name })
+        logger.info("return attenClassSelect page with classList")
+        return "attendanceView"
     }
 
     @RequestMapping("/studentList")

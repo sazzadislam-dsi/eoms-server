@@ -2,7 +2,7 @@
     var getCsrf = function () {
         return $('[name=_csrf]').val();
     };
-    var genFormSubmitParams = function (context) {
+    var generateFormSubmitParams = function (context) {
         var _this = $(context),
             data = {};
         _this.find('[name]').each(function (index, value) {
@@ -19,7 +19,7 @@
 
     var bindFormSubmits = function (formName, onSuccess, onError) {
         $('form.' + formName).on('submit', function () {
-            var params = genFormSubmitParams(this);
+            var params = generateFormSubmitParams(this);
             var $form = $(this);
             $.ajax({
                 url: $form.attr('action'),
@@ -118,6 +118,34 @@
     }, function (xhr) {
         alert(xhr.status + " Subject cannot add to class");
         //alert(xhr.responseText);
+    });
+
+    var bindFormSubmitsWithUrl = function (formName, onSuccess, onError) {
+        $('form.' + formName).on('submit', function () {
+            const className = $(".className").val();
+            const attendanceDate = $("#date").val();
+            const url = "/attendances/ofClass/" + className + "/onDay/" + attendanceDate;
+            console.log(url);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: "application/json",
+                dataType: "json",
+                beforeSend: function (request) {
+                    request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
+                    request.setRequestHeader("Accept", "application/json");
+                },
+                success: onSuccess,
+                error: onError
+            });
+            return false;
+        })
+    };
+
+    bindFormSubmitsWithUrl('showAttendance', function (response) {
+        console.dir(response);
+    }, function (xhr) {
+        console.dir(xhr);
     });
 
 })(jQuery);

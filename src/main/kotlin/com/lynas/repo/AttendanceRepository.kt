@@ -1,6 +1,7 @@
 package com.lynas.repo
 
 import com.lynas.model.AttendanceBook
+import org.springframework.data.neo4j.annotation.Depth
 import org.springframework.data.neo4j.annotation.Query
 import org.springframework.data.neo4j.repository.GraphRepository
 import org.springframework.stereotype.Repository
@@ -13,5 +14,6 @@ interface AttendanceRepository : GraphRepository<AttendanceBook> {
 
     @Query("match (ab:AttendanceBook{attendanceDate:{0}})<-[:attendanceBookOfAClass]-(cl:Class{name:{1}})" +
             "-[:classBelongsToAnOrganization]->(org:Organization{name:{2}}) return ab,cl")
+    @Depth(2)
     fun findAttendanceBookOfClass(date: Long, className: String, organizationName: String?): List<AttendanceBook>
 }

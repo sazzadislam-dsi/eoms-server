@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 /**
- * Created by seal on 2/8/2017.
+ * Created by seal on 2/8/2017
  */
 @Service
 open class AttendanceService constructor(val studentService: StudentService,

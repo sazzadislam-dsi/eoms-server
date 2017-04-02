@@ -13,7 +13,7 @@ import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 /**
- * Created by seal on 1/13/2017.
+ * Created by seal on 1/13/2017
  */
 
 @RestController
@@ -68,10 +68,6 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
     }
 
 }
-
-
-//match (ab:AttendanceBook{attendanceDate:1488304800000})<-[:attendanceBookOfAClass]-(cl:Class{id:58})-[:classBelongsToAnOrganization]->(org:Organization{name:"Baitul Mokaddem"}) return ab
-
 
 
 
