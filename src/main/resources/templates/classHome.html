@@ -19,6 +19,7 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Class</th>
                     <th>Section</th>
                     <th>Shift</th>
@@ -29,6 +30,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="cls: ${classList}">
+                    <td th:text="${cls.id}">ID</td>
                     <td th:text="${cls.name}">Class</td>
                     <td th:text="${cls.section}">Section</td>
                     <td th:text="${cls.shift}">Shift</td>
