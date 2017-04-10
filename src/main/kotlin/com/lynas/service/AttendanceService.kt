@@ -2,6 +2,7 @@ package com.lynas.service
 
 import com.lynas.model.AttendanceBook
 import com.lynas.model.StudentAttendance
+import com.lynas.model.query.result.AttendanceViewQueryResult
 import com.lynas.model.request.AttendanceJsonWrapper
 import com.lynas.repo.AttendanceRepository
 import com.lynas.util.convertToDate
@@ -36,9 +37,8 @@ open class AttendanceService constructor(val studentService: StudentService,
 
 
     @Transactional
-    open fun getAttendanceOfAClassOnDate(date: Long, className: String, organizationName: String?): AttendanceBook {
-        val attendanceBook = attendanceRepository.findAttendanceBookOfClass(date, className, organizationName)
-        return attendanceRepository.findOne(attendanceBook[0].id)
+    open fun getAttendanceOfAClassOnDate(date: Long, className: String, organizationName: String?): List<AttendanceViewQueryResult> {
+        return attendanceRepository.findAttendanceBookOfClass(date, className, organizationName)
     }
 
 
