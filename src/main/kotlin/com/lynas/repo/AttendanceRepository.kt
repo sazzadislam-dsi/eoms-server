@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AttendanceRepository : GraphRepository<AttendanceBook> {
 
-    @Query("match (ab:AttendanceBook{attendanceDate:{0}})<-[:attendanceBookOfAClass]-(cl:Class{name:{1}})" +
+    @Query("match (ab:AttendanceBook{attendanceDate:{0}})<-[:attendanceBookOfAClass]-(cl:Class)" +
             "-[:classBelongsToAnOrganization]->(org:Organization{name:{2}})," +
             " (ab)-[sa:studentsAttendance]->(sa1:StudentAttendance), (sa1)-[ofstudent:ofAStudent]->(student:Student)," +
             " (student)-[person:studentIsAPerson]-(p:Person), " +
-            " (student) -[e:Enrolment]- (cl) " +
+            " (student) -[e:Enrolment]- (cl) where ID(cl) = {1}" +
             " return ID(student) as studentId, (p.firstName +' '+ p.lastName) as studentName," +
             " e.roleNumber as roleNumber, sa1.attendanceStatus as isPresent Order By e.roleNumber")
-    fun findAttendanceBookOfClass(date: Long, className: String, organizationName: String?): List<AttendanceViewQueryResult>
+    fun findAttendanceBookOfClass(date: Long, classId: Long, organizationName: String?): List<AttendanceViewQueryResult>
 }

@@ -22,7 +22,7 @@
                                placeholder="15-12-1989"/>
                         <select name="className" class="form-control esb className">
                             <option th:each="cls : ${classList}"
-                                    th:value="${cls.name}"
+                                    th:value="${cls.id}"
                                     th:text="${cls.name}"></option>
                         </select>
                         <input style="width: 100%" type="submit" class="esb from-control btn btn-primary"

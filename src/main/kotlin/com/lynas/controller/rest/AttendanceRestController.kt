@@ -41,11 +41,11 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
         return responseOK(attendanceJson)
     }
 
-    @GetMapping("/ofClass/{className}/onDay/{day}")
+    @GetMapping("/ofClass/{classId}/onDay/{day}")
     @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
     fun getAttendanceOfAClassOnDate(
             request: HttpServletRequest,
-            @PathVariable className: String,
+            @PathVariable classId: Long,
             @PathVariable day: String): ResponseEntity<*> {
         val dateOf: Date
         try {
@@ -61,7 +61,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
         val organization = request.session.getAttribute(AppConstant.organization) as Organization?
         val result = attendanceService.getAttendanceOfAClassOnDate(
                 dateOf.time,
-                className,
+                classId,
                 organization?.name)
 
         return responseOK(result)

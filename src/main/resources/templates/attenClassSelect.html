@@ -13,24 +13,29 @@
 <div layout:fragment="page-content">
     <div class="panel panel-default">
         <div class="panel-body">
-    <form method="get" action="/attendance/studentList">
-        <div class="row">
-            <div class="col-lg-4">
-                <label class="control-label">Class</label>
-            </div>
-            <div class="col-lg-4">
-                <select name="classId" class="form-control">
-                    <option th:each="cls : ${classList}"
-                            th:value="${cls.id}"
-                            th:text="${cls.name}"></option>
-                </select>
-            </div>
-            <div class="col-lg-4">
-                <input type="submit" class="from-control" value="Select" />
-            </div>
-        </div>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <form method="get" action="/attendance/studentList">
+                        <div class="form-group">
+                            <label>Year</label>
+                            <input th:required="required" type="text" class="form-control" id="year" name="year"
+                                   placeholder="2017"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Class</label>
+                            <select name="classId" class="form-control">
+                                <option th:each="cls : ${classList}"
+                                        th:value="${cls.id}"
+                                        th:text="${cls.name}"></option>
+                            </select>
+                        </div>
+                        <input type="submit" class="from-control" value="Select"/>
 
-    </form>
+                    </form>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
         </div>
     </div>
 

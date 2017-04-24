@@ -18,5 +18,6 @@ class AttendanceBook {
     var course: Course? = null
     @DateLong
     var attendanceDate: Date? = null
+    @Relationship(type = "studentsAttendance", direction = Relationship.OUTGOING)
     var studentAttendances: MutableSet<StudentAttendance> = mutableSetOf()
 }

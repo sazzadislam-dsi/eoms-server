@@ -25,6 +25,9 @@ interface ClassRepository : GraphRepository<Course> {
             "return ID(s) as studentId, (p.firstName +' '+ p.lastName) as studentName, e.roleNumber as roleNumber Order By e.roleNumber")
     fun findStudentsByClass(classId: Long?): Collection<ClassDetailQueryResult>
 
+    @Query("match (p:Person) -[:studentIsAPerson]- (s:Student) -[e:Enrolment {year: {1}}]- (c:Class) where ID(c) = {0}   " +
+            "return ID(s) as studentId, (p.firstName +' '+ p.lastName) as studentName, e.roleNumber as roleNumber Order By e.roleNumber")
+    fun findStudentsByClass(classId: Long?, year: Int?): Collection<ClassDetailQueryResult>
 
     @Query("match (cl:Class)-[:classBelongsToAnOrganization]->(org:Organization {name:{0}} ) return count(cl)")
     fun findListCountByOrganizationName(name: String?): Int
