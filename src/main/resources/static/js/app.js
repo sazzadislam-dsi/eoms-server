@@ -143,7 +143,20 @@
     };
 
     bindFormSubmitsWithUrl('showAttendance', function (response) {
-        console.dir(response);
+        $("#show").empty()
+        var table = "";
+        $.each(response, function (i, itr) {
+            table += '<tr>';
+            table += '<td>' + itr.roleNumber + '</td>';
+            table += '<td>' + itr.studentName + '</td>';
+            if (itr.present == true) {
+                table += '<td>' + 'Present'+ '</td>';
+            } else {
+                table += '<td>' + 'Absent'+ '</td>';
+            }
+            table += '</tr>';
+        });
+        $("#show").append(table);
     }, function (xhr) {
         console.dir(xhr);
     });

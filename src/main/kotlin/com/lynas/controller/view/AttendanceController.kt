@@ -23,7 +23,7 @@ class AttendanceController constructor(val classService: ClassService) {
     @RequestMapping("/book")
     fun attendanceBook(model: Model, request: HttpServletRequest): String {
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
-        model.addAttribute("classList", classService.findListByOrganizationName(organization.name).sortedBy { it.name })
+        model.addAttribute("classList", classService.findClassListByOrganizationName(organization.name).sortedBy { it.name })
         logger.info("return attenClassSelect page with classList")
         return "attenClassSelect"
     }
@@ -31,15 +31,17 @@ class AttendanceController constructor(val classService: ClassService) {
     @RequestMapping("/view")
     fun attendanceBookView(model: Model, request: HttpServletRequest): String {
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
-        model.addAttribute("classList", classService.findListByOrganizationName(organization.name).sortedBy { it.name })
+        model.addAttribute("classList", classService.findClassListByOrganizationName(organization.name).sortedBy { it.name })
         logger.info("return attenClassSelect page with classList")
         return "attendanceView"
     }
 
     @RequestMapping("/studentList")
-    fun studentListByClass(@RequestParam classId: Long, model: Model): String {
+    fun studentListByClass(@RequestParam classId: Long,
+                           @RequestParam year: Int,
+                           model: Model): String {
         logger.info("hit in studentListByClass with class id {}", classId)
-        val studentList = classService.findStudentsByClassId(classId)
+        val studentList = classService.findStudentsByClassId(classId, year)
         model.addAttribute("studentList", studentList)
         model.addAttribute("clsId", classId)
         return "attendanceStudent"

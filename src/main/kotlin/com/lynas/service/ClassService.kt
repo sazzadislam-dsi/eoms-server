@@ -23,6 +23,15 @@ open class ClassService(val classRepo: ClassRepository) {
         return classRepo.findListByOrganizationName(name)
     }
 
+    data class CourseInfo (var id: Long?, var name: String?)
+    open fun findClassListByOrganizationName(name: String?): List<CourseInfo> {
+        return findListByOrganizationName(name).map {
+            CourseInfo( id = it.id,
+                    name = it.name + " " + it.section + " " + it.shift
+            )
+        }
+    }
+
     @Transactional
     open fun findById(id: Long): Course {
         return classRepo.findById(id)
@@ -37,6 +46,11 @@ open class ClassService(val classRepo: ClassRepository) {
     @Transactional
     open fun findStudentsByClassId(classID: Long): Collection<ClassDetailQueryResult> {
         return classRepo.findStudentsByClass(classID)
+    }
+
+    @Transactional
+    open fun findStudentsByClassId(classID: Long, year: Int): Collection<ClassDetailQueryResult> {
+        return classRepo.findStudentsByClass(classID, year)
     }
 
     @Transactional

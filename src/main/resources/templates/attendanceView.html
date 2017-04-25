@@ -22,7 +22,7 @@
                                placeholder="15-12-1989"/>
                         <select name="className" class="form-control esb className">
                             <option th:each="cls : ${classList}"
-                                    th:value="${cls.name}"
+                                    th:value="${cls.id}"
                                     th:text="${cls.name}"></option>
                         </select>
                         <input style="width: 100%" type="submit" class="esb from-control btn btn-primary"
@@ -32,6 +32,23 @@
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div>
+                <table  class="table table-striped">
+                    <thead>
+                        <th>Role Number</th>
+                        <th style="width: 30%">Student Name</th>
+                        <th>Present</th>
+                    </thead>
+                    <tbody id="show">
+
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

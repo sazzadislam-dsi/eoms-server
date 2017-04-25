@@ -2,7 +2,6 @@ package com.lynas.controller.rest
 
 import com.lynas.model.AttendanceBook
 import com.lynas.model.Organization
-import com.lynas.model.StudentAttendance
 import com.lynas.model.request.AttendanceJsonWrapper
 import com.lynas.model.response.ErrorObject
 import com.lynas.service.AttendanceService
@@ -42,11 +41,11 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
         return responseOK(attendanceJson)
     }
 
-    @GetMapping("/ofClass/{className}/onDay/{day}")
+    @GetMapping("/ofClass/{classId}/onDay/{day}")
     @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
     fun getAttendanceOfAClassOnDate(
             request: HttpServletRequest,
-            @PathVariable className: String,
+            @PathVariable classId: Long,
             @PathVariable day: String): ResponseEntity<*> {
         val dateOf: Date
         try {
@@ -62,11 +61,9 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
         val organization = request.session.getAttribute(AppConstant.organization) as Organization?
         val result = attendanceService.getAttendanceOfAClassOnDate(
                 dateOf.time,
-                className,
-                organization?.name).studentAttendances.map(StudentAttendance::id)
+                classId,
+                organization?.name)
 
-
-        print("")
         return responseOK(result)
     }
 
