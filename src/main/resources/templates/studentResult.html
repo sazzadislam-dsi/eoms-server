@@ -16,10 +16,11 @@
             <div class="row">
                 <div class="col-md-4"></div>
                 <div class="col-md-4">
-                    <form method="get" action="/attendance/studentList">
+                    <form method="get" action="#">
                         <div class="form-group">
                             <label>Student Id</label>
-                            <input th:required="required" type="text" class="form-control" id="studentId" name="studentId"
+                            <input th:required="required" type="text" class="form-control" id="studentId"
+                                   name="studentId"
                                    placeholder="2017"/>
                         </div>
                         <div class="form-group">
@@ -29,7 +30,7 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label">Class</label>
-                            <select name="classId" class="form-control">
+                            <select id="clsId" name="classId" class="form-control">
                                 <option th:each="cls : ${classList}"
                                         th:value="${cls.id}"
                                         th:text="${cls.name}"></option>
@@ -44,6 +45,105 @@
         </div>
     </div>
 
+    <div class="panel panel-default">
+        <div id="show" class="panel-body">
+            <div class="form-group">
+                <label>Name</label>
+                <div id="name"></div>
+            </div>
+            <div class="form-group">
+                <label>Roll Number</label>
+                <div id="roll"></div>
+            </div>
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                    <th>Subject</th>
+                    <th>QUIZ_1</th>
+                    <th>QUIZ_2</th>
+                    <th>FIRST_TERM</th>
+                    <th>SECOND_TERM</th>
+                    <th>FINAL</th>
+                    </thead>
+                    <tbody id="result">
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
 </div>
+
 </body>
 </html>
+
+<script type="text/javascript">
+    <![CDATA[
+    var getCsrf = function () {
+        return $('[name=_csrf]').val();
+    };
+    var findExam = function (examList, examType) {
+        return $.grep(examList, function (n, i) {
+            return n.examType == examType ? n.examType : null;
+        });
+    };
+
+
+    $("form").submit(function (event) {
+        var u = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/student/" + $('#studentId').val() + "/year/" + $('#year').val() + "/results";
+        console.log(u);
+        var h = ['QUIZ_1', 'QUIZ_2', 'FIRST_TERM', 'SECOND_TERM', 'FINAL'];
+
+        $.ajax({
+            url: u,
+            type: "GET",
+            beforeSend: function (request) {
+                request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
+            },
+            success: function (data) {
+                $("#name").append(data.studentName);
+                $("#roll").append(data.rollNumber);
+
+//                $("#show").empty();
+                var table = "";
+
+                for (var subject in data.examBySubject) {
+                    table += '<tr>';
+                    console.log(subject);
+                    table += '<td>' + subject + '</td>'; // subject name
+                    for (var i = 0; i < data.examBySubject[subject].length; i++) {
+                        console.log(data.examBySubject[subject][i].examType);
+                    }
+
+                    table += '</tr>';
+                }
+
+                /*                $.each(data.examBySubject, function (i, itr) {
+                 table += '<tr>';
+                 table += '<td>' + Object.keys(itr) + '</td>'; // subject name
+                 console.log(Object.keys(itr)[0]);
+                 //                    table += '<td>' + itr[i].key + '</td>'; // subject name
+                 $.each(h, function (index, value) {
+                 if (findExam(itr, value) == true) {
+                 table += '<td>' + findExam(itr, value).obtainMark + '</td>';
+                 } else {
+                 table += '<td>' + '0' + '</td>';
+                 }
+                 });
+                 table += '</tr>';
+                 });*/
+                $("#result").append(table);
+            },
+            error: function (xhr) {
+                alert(xhr.status + "Problem with ajax call");
+            }
+        });
+
+        return false;
+    });
+    ]]>
+
+
+</script>
+
