@@ -161,4 +161,64 @@
         console.dir(xhr);
     });
 
+    var bindFormSubmitsWithUrl2 = function (formName, onSuccess, onError) {
+        $('form.' + formName).on('submit', function () {
+            const url = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/student/" + $('#studentId').val() + "/year/" + $('#year').val() + "/results";
+            console.log(url);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: "application/json",
+                dataType: "json",
+                beforeSend: function (request) {
+                    request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
+                    request.setRequestHeader("Accept", "application/json");
+                },
+                success: onSuccess,
+                error: onError
+            });
+            return false;
+        })
+    };
+
+    bindFormSubmitsWithUrl2('studentResult', function (data) {
+        var h = ['QUIZ_1', 'QUIZ_2', 'FIRST_TERM', 'SECOND_TERM', 'FINAL'];
+
+        $("#name").append(data.studentName);
+        $("#roll").append(data.rollNumber);
+
+//                $("#show").empty();
+        var table = "";
+
+        for (var subject in data.examBySubject) {
+            table += '<tr>';
+            console.log(subject);
+            table += '<td>' + subject + '</td>'; // subject name
+            for (var j = 0; j < h.length; j++) {
+                var flag = false;
+                var obtainMark;
+                for (var i = 0; i < data.examBySubject[subject].length; i++) {
+                    if (data.examBySubject[subject][i].examType === h[j]) {
+                        flag = true;
+                        obtainMark = data.examBySubject[subject][i].obtainMark;
+                    }
+                }
+                if (flag) {
+                    table += '<td>' + obtainMark + '</td>';
+                } else {
+                    table += '<td>' + '0' + '</td>';
+
+                }
+            }
+            var totalmark = data.resultBySubject[subject];
+            table += '<td>' + totalmark + '</td>';
+            table += '</tr>';
+        }
+        $("#result").append(table);
+    }, function (xhr) {
+        console.dir(xhr);
+    });
+
+
+
 })(jQuery);
