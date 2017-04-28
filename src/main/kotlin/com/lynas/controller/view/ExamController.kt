@@ -54,4 +54,12 @@ class ExamController constructor(val classService: ClassService,
 
         return ""
     }
+
+    @RequestMapping("/student/result")
+    fun resultOfStudentByYear(request: HttpServletRequest, model: Model): String {
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        model.addAttribute("classList", classService.findClassListByOrganizationName(organization.name).sortedBy { it.name })
+
+        return "studentResult"
+    }
 }

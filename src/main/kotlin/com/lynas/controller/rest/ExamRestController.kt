@@ -1,16 +1,19 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.Exam
+import com.lynas.model.Organization
 import com.lynas.model.request.ExamJsonWrapper
 import com.lynas.model.response.ExamResponse
 import com.lynas.service.ClassService
 import com.lynas.service.ExamService
 import com.lynas.service.StudentService
 import com.lynas.service.SubjectService
+import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by sazzad on 8/15/16
@@ -58,8 +61,10 @@ class ExamRestController(val examService: ExamService,
     @GetMapping("/class/{classId}/student/{studentId}/year/{_year}/results")
     fun resultOfStudentByYear(@PathVariable classId: Long,
                                @PathVariable studentId: Long,
-                               @PathVariable _year: Int): ResponseEntity<*> {
+                               @PathVariable _year: Int,
+                              request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, studentId, _year)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
         return responseOK(examService.resultOfStudentByYear(classId, studentId, _year))
     }
 }
