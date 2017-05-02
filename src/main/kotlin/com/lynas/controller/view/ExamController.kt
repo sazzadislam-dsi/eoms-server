@@ -45,14 +45,13 @@ class ExamController constructor(val classService: ClassService,
         return "exmStudentList"
     }
 
-    @RequestMapping("/class/{classId}/subject/{subjectId}/year/{year}/results")
-    fun resultOfClassBySubject(@PathVariable classId: Long,
-                               @PathVariable subjectId: Long,
-                               @PathVariable year: Int): String {
-        logger.info("return result of class id {} and subject id {} and year {}", classId, subjectId, year)
-        val resultList = examService.resultOfSubjectByYear(classId, subjectId, year)
+    @RequestMapping("/subject/result")
+    fun resultOfClassBySubject(request: HttpServletRequest, model: Model): String {
+        logger.info("return subjectResult")
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        model.addAttribute("classList", classService.findClassListByOrganizationName(organization.name).sortedBy { it.name })
 
-        return ""
+        return "subjectResult"
     }
 
     @RequestMapping("/student/result")
