@@ -184,15 +184,14 @@
     bindFormSubmitsWithUrl2('studentResult', function (data) {
         var h = ['QUIZ_1', 'QUIZ_2', 'FIRST_TERM', 'SECOND_TERM', 'FINAL'];
 
-        $("#name").append(data.studentName);
-        $("#roll").append(data.rollNumber);
+        $("#name").empty().append(data.studentName);
+        $("#roll").empty().append(data.rollNumber);
 
-//                $("#show").empty();
+        $("#result").empty();
         var table = "";
 
         for (var subject in data.examBySubject) {
             table += '<tr>';
-            console.log(subject);
             table += '<td>' + subject + '</td>'; // subject name
             for (var j = 0; j < h.length; j++) {
                 var flag = false;
@@ -255,7 +254,6 @@
                 var flag = false;
                 var obtainMark = 0;
                 $.each(obj.exams, function (index, obj) {
-                    console.dir(obj);
                     if (obj.examType === h[i]) {
                         flag = true;
                         obtainMark = Number(obj.obtainMark).toFixed(2);
