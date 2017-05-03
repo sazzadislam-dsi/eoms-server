@@ -292,7 +292,36 @@
     };
 
     bindFormSubmitsWithUrl4('classResult', function (data) {
-        console.dir(data);
+        if (data.length <= 0) return;
+        $("#result").empty();
+        var h = [];
+
+        var table = "<table class=\"table table-striped\">";
+        table += "<thead>";
+        table += "<th>Roll No</th>";
+        table += "<th>Student</th>";
+        for ( property in data[0].resultOfSubjects) {
+            var val =  property;
+            h.push(val);
+            table += "<th>" + val + "</th>";
+        }
+        table += "</thead>";
+        console.dir(h);
+
+        $.each(data, function (index, obj) {
+            table += "<tr>";
+            table += "<td>" + obj.roll + "</td>";
+            table += "<td>" + obj.name + "</td>";
+            Object.keys(h).forEach(function (key) {
+                console.log();
+                table += '<td>' + obj.resultOfSubjects[h[key]] + '</td>';
+            });
+            table += "</tr>";
+        });
+
+        table += '</table>';
+        $("#result").append(table);
+
     }, function (xhr) {
         console.dir(xhr);
     });

@@ -93,11 +93,11 @@ open class ExamService(val examRepository: ExamRepository,
     }
 
     @Transactional
-    open fun resultOfClass(classId: Long, _year: Int): Map<Int?, List<ExamQueryResult>> {
+    open fun resultOfClass(classId: Long, _year: Int): List<ExamQueryResult> {
         val resultList = examRepository.resultOfClassByYear(classId, _year)
         val resultMap = resultList.groupBy { it.roleNumber }
 
-       return resultMap
+       return resultList
 
     }
 }
