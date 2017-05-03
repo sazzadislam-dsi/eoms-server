@@ -150,9 +150,9 @@
             table += '<td>' + itr.roleNumber + '</td>';
             table += '<td>' + itr.studentName + '</td>';
             if (itr.present == true) {
-                table += '<td>' + 'Present'+ '</td>';
+                table += '<td>' + 'Present' + '</td>';
             } else {
-                table += '<td>' + 'Absent'+ '</td>';
+                table += '<td>' + 'Absent' + '</td>';
             }
             table += '</tr>';
         });
@@ -160,5 +160,116 @@
     }, function (xhr) {
         console.dir(xhr);
     });
+
+    var bindFormSubmitsWithUrl2 = function (formName, onSuccess, onError) {
+        $('form.' + formName).on('submit', function () {
+            const url = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/student/" + $('#studentId').val() + "/year/" + $('#year').val() + "/results";
+            console.log(url);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: "application/json",
+                dataType: "json",
+                beforeSend: function (request) {
+                    request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
+                    request.setRequestHeader("Accept", "application/json");
+                },
+                success: onSuccess,
+                error: onError
+            });
+            return false;
+        })
+    };
+
+    bindFormSubmitsWithUrl2('studentResult', function (data) {
+        var h = ['QUIZ_1', 'QUIZ_2', 'FIRST_TERM', 'SECOND_TERM', 'FINAL'];
+
+        $("#name").empty().append(data.studentName);
+        $("#roll").empty().append(data.rollNumber);
+
+        $("#result").empty();
+        var table = "";
+
+        for (var subject in data.examBySubject) {
+            table += '<tr>';
+            table += '<td>' + subject + '</td>'; // subject name
+            for (var j = 0; j < h.length; j++) {
+                var flag = false;
+                var obtainMark;
+                for (var i = 0; i < data.examBySubject[subject].length; i++) {
+                    if (data.examBySubject[subject][i].examType === h[j]) {
+                        flag = true;
+                        obtainMark = data.examBySubject[subject][i].obtainMark;
+                    }
+                }
+                if (flag) {
+                    table += '<td>' + obtainMark + '</td>';
+                } else {
+                    table += '<td>' + '0' + '</td>';
+
+                }
+            }
+            var totalmark = data.resultBySubject[subject];
+            table += '<td>' + totalmark + '</td>';
+            table += '</tr>';
+        }
+        $("#result").append(table);
+    }, function (xhr) {
+        console.dir(xhr);
+    });
+
+    var bindFormSubmitsWithUrl3 = function (formName, onSuccess, onError) {
+        $('form.' + formName).on('submit', function () {
+            const url = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/subject/" + $('#subjectId').val() + "/year/" + $('#year').val() + "/results";
+            console.log(url);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: "application/json",
+                dataType: "json",
+                beforeSend: function (request) {
+                    request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
+                    request.setRequestHeader("Accept", "application/json");
+                },
+                success: onSuccess,
+                error: onError
+            });
+            return false;
+        })
+    };
+
+    bindFormSubmitsWithUrl3('subjectResult', function (data) {
+        var h = ['QUIZ_1', 'QUIZ_2', 'FIRST_TERM', 'SECOND_TERM', 'FINAL'];
+
+        $("#subjectName").empty().append(data.subjectName);
+
+        $("#result").empty();
+        var table = "";
+
+        $.each(data.student, function (index, obj) {
+            table += '<tr>';
+            table += '<td>' + obj.rollNumber + '</td>';
+            table += '<td>' + obj.name + '</td>';
+            for (var i = 0; i < h.length; i++) {
+                var flag = false;
+                var obtainMark = 0;
+                $.each(obj.exams, function (index, obj) {
+                    if (obj.examType === h[i]) {
+                        flag = true;
+                        obtainMark = Number(obj.obtainMark).toFixed(2);
+                    }
+                });
+                table += '<td>' + obtainMark + '</td>';
+            }
+            table += '<td>' + Number(obj.result).toFixed(2) + '</td>';
+            table += '</tr>';
+
+        });
+
+        $("#result").append(table);
+    }, function (xhr) {
+        console.dir(xhr);
+    });
+
 
 })(jQuery);

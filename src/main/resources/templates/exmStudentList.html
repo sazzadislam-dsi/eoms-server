@@ -101,6 +101,9 @@
 </html>
 
 <script type="application/javascript">
+    var getCsrf = function () {
+        return $('[name=_csrf]').val();
+    };
     $( "form" ).submit(function( event ) {
         var rows = [];
         $('table tr').each(function(i, n){
@@ -130,6 +133,7 @@
             data: data,
             beforeSend: function (request) {
                 request.setRequestHeader("Accept", "application/json");
+                request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
             },
             success: function () {
                 console.log("Ajax call success");
