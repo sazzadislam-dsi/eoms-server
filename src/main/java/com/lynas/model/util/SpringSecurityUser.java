@@ -90,22 +90,18 @@ public class SpringSecurityUser implements UserDetails {
     return this.accountNonExpired;
   }
 
-  public void setAccountNonExpired(Boolean accountNonExpired) {
-    this.accountNonExpired = accountNonExpired;
-  }
-
   @Override
   public boolean isAccountNonExpired() {
     return this.getAccountNonExpired();
   }
 
+    public void setAccountNonExpired(Boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+
   @JsonIgnore
   public Boolean getAccountNonLocked() {
     return this.accountNonLocked;
-  }
-
-  public void setAccountNonLocked(Boolean accountNonLocked) {
-    this.accountNonLocked = accountNonLocked;
   }
 
   @Override
@@ -113,13 +109,13 @@ public class SpringSecurityUser implements UserDetails {
     return this.getAccountNonLocked();
   }
 
+    public void setAccountNonLocked(Boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
   @JsonIgnore
   public Boolean getCredentialsNonExpired() {
     return this.credentialsNonExpired;
-  }
-
-  public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
-    this.credentialsNonExpired = credentialsNonExpired;
   }
 
   @Override
@@ -127,18 +123,22 @@ public class SpringSecurityUser implements UserDetails {
     return this.getCredentialsNonExpired();
   }
 
+    public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+    }
+
   @JsonIgnore
   public Boolean getEnabled() {
     return this.enabled;
-  }
-
-  public void setEnabled(Boolean enabled) {
-    this.enabled = enabled;
   }
 
   @Override
   public boolean isEnabled() {
     return this.getEnabled();
   }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
 
 }
