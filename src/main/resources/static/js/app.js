@@ -271,5 +271,31 @@
         console.dir(xhr);
     });
 
+    var bindFormSubmitsWithUrl4 = function (formName, onSuccess, onError) {
+        $('form.' + formName).on('submit', function () {
+            const url = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/year/" + $('#year').val() + "/results";
+            console.log(url);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: "application/json",
+                dataType: "json",
+                beforeSend: function (request) {
+                    request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
+                    request.setRequestHeader("Accept", "application/json");
+                },
+                success: onSuccess,
+                error: onError
+            });
+            return false;
+        })
+    };
+
+    bindFormSubmitsWithUrl4('classResult', function (data) {
+        console.dir(data);
+    }, function (xhr) {
+        console.dir(xhr);
+    });
+
 
 })(jQuery);

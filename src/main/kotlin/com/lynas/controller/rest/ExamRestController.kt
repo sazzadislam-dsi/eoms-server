@@ -67,4 +67,13 @@ class ExamRestController(val examService: ExamService,
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
         return responseOK(examService.resultOfStudentByYear(classId, studentId, _year))
     }
+
+    @GetMapping("/class/{classId}/year/{_year}/results")
+    fun resultOfClassByYear(@PathVariable classId: Long,
+                               @PathVariable _year: Int,
+                              request: HttpServletRequest): ResponseEntity<*> {
+        logger.info("return result of class id {} and student id {} and year {}", classId, _year)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        return responseOK(examService.resultOfClass(classId, _year))
+    }
 }

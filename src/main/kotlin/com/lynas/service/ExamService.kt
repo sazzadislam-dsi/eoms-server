@@ -1,6 +1,7 @@
 package com.lynas.service
 
 import com.lynas.model.Exam
+import com.lynas.model.query.result.ExamQueryResult
 import com.lynas.model.response.ExamResponse
 import com.lynas.model.response.ExamStudentResponse
 import com.lynas.repo.ExamRepository
@@ -89,5 +90,14 @@ open class ExamService(val examRepository: ExamRepository,
                 })
 
         return response
+    }
+
+    @Transactional
+    open fun resultOfClass(classId: Long, _year: Int): Map<Int?, List<ExamQueryResult>> {
+        val resultList = examRepository.resultOfClassByYear(classId, _year)
+        val resultMap = resultList.groupBy { it.roleNumber }
+
+       return resultMap
+
     }
 }

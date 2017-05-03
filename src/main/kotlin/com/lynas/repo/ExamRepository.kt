@@ -23,4 +23,11 @@ interface ExamRepository : GraphRepository<Exam> {
            "where ID(cc) = {0} and ID(s) = {1} return collect(exam) as exam, sb.subjectName as subject, p.firstName as person, e.roleNumber as roleNumber, cc.name as courseName")
     fun resultOfStudentByYear(classId: Long, studentId: Long, year: Int): List<ExamQueryResult>
 
+
+    @Query("match (s:Student) -[ e:Enrolment {year: {1}} ]- (cc:Class)" +
+           " - [c:curriculum]-> (sb:Subject) <- [ex:examOfSubject] -(exam:Exam{year: {1}})," +
+           " (exam) -[info:examInfoOfPerson]-> (s) -[ss:studentIsAPerson]- (p:Person)" +
+           "where ID(cc) = {0} return collect(exam) as exam, sb.subjectName as subject, p.firstName as person, e.roleNumber as roleNumber, cc.name as courseName")
+    fun resultOfClassByYear(classId: Long, year: Int): List<ExamQueryResult>
+
 }
