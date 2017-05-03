@@ -67,6 +67,6 @@ class ExamController constructor(val classService: ClassService,
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
         model.addAttribute("classList", classService.findClassListByOrganizationName(organization.name).sortedBy { it.name })
 
-        return "studentResult"
+        return "classResult"
     }
 }
