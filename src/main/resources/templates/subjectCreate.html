@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml"
       layout:decorator="layout/secure"
       lang="en">
 <body>
@@ -20,15 +20,18 @@
                 <div>
                     <div>
                         <label>Subject Name</label>
-                        <input th:required="required" type="text" class="form-control"  id="subjectName" name="subjectName" placeholder="">
+                        <input th:required="required" type="text" class="form-control" id="subjectName"
+                               name="subjectName" placeholder=""/>
                     </div>
                     <div>
                         <label>Subject Description</label>
-                        <input th:required="required" type="text" class="form-control" name="subjectDescription" id="subjectDescription" placeholder="">
+                        <input th:required="required" type="text" class="form-control" name="subjectDescription"
+                               id="subjectDescription" placeholder=""/>
                     </div>
                     <div>
                         <label>Subject Book Author</label>
-                        <input th:required="required" type="text" class="form-control" id="subjectBookAuthor" name="subjectBookAuthor" placeholder="">
+                        <input th:required="required" type="text" class="form-control" id="subjectBookAuthor"
+                               name="subjectBookAuthor" placeholder=""/>
                     </div>
                 </div>
                 <input type="submit" value="Create Subject" class="btn btn-primary est"/>
