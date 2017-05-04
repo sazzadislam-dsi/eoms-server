@@ -23,6 +23,7 @@
                 <table class="table table-striped">
 
                     <th style="width: 30%">Subject Name</th>
+                    <th>Subject Id</th>
                     <th>Subject Description</th>
                     <th>Book Author</th>
                     <th>Result</th>
@@ -32,6 +33,7 @@
                     <div th:each="sub : ${list}" >
                         <tr>
                             <td th:text="${sub.subjectName}"></td>
+                            <td th:text="${sub.id}"></td>
                             <td th:text="${sub.subjectDescription}"></td>
                             <td th:text="${sub.subjectBookAuthor}"></td>
                             <td><a id="i"  th:href="|/exam/class/${classId}/subject/${sub.id}/|">Result</a></td>
