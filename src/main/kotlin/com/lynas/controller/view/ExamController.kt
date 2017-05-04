@@ -29,7 +29,7 @@ class ExamController constructor(val classService: ClassService,
     @RequestMapping("/class/select")
     fun attendanceBook(model: Model, request: HttpServletRequest): String {
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
-        model.addAttribute("classList", classService.findListByOrganizationName(organization.name).sortedBy { it.name })
+        model.addAttribute("classList", classService.findClassListByOrganizationName(organization.name).sortedBy { it.name })
         logger.info("return examClassSelect page")
         return "exmClassSelect"
     }
@@ -46,7 +46,7 @@ class ExamController constructor(val classService: ClassService,
     }
 
     @RequestMapping("/subject/result")
-    fun resultOfClassBySubject(request: HttpServletRequest, model: Model): String {
+    fun resultOfSubject(request: HttpServletRequest, model: Model): String {
         logger.info("return subjectResult")
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
         model.addAttribute("classList", classService.findClassListByOrganizationName(organization.name).sortedBy { it.name })
@@ -55,10 +55,18 @@ class ExamController constructor(val classService: ClassService,
     }
 
     @RequestMapping("/student/result")
-    fun resultOfStudentByYear(request: HttpServletRequest, model: Model): String {
+    fun resultOfStudent(request: HttpServletRequest, model: Model): String {
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
         model.addAttribute("classList", classService.findClassListByOrganizationName(organization.name).sortedBy { it.name })
 
         return "studentResult"
+    }
+
+    @RequestMapping("/class/result")
+    fun resultOfClass(request: HttpServletRequest, model: Model): String {
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        model.addAttribute("classList", classService.findClassListByOrganizationName(organization.name).sortedBy { it.name })
+
+        return "classResult"
     }
 }

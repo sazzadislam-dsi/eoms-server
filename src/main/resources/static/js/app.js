@@ -271,5 +271,60 @@
         console.dir(xhr);
     });
 
+    var bindFormSubmitsWithUrl4 = function (formName, onSuccess, onError) {
+        $('form.' + formName).on('submit', function () {
+            const url = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/year/" + $('#year').val() + "/results";
+            console.log(url);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: "application/json",
+                dataType: "json",
+                beforeSend: function (request) {
+                    request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
+                    request.setRequestHeader("Accept", "application/json");
+                },
+                success: onSuccess,
+                error: onError
+            });
+            return false;
+        })
+    };
+
+    bindFormSubmitsWithUrl4('classResult', function (data) {
+        if (data.length <= 0) return;
+        $("#result").empty();
+        var h = [];
+
+        var table = "<table class=\"table table-striped\">";
+        table += "<thead>";
+        table += "<th>Roll No</th>";
+        table += "<th>Student</th>";
+        for ( property in data[0].resultOfSubjects) {
+            var val =  property;
+            h.push(val);
+            table += "<th>" + val + "</th>";
+        }
+        table += "</thead>";
+        console.dir(h);
+
+        $.each(data, function (index, obj) {
+            table += "<tr>";
+            table += "<td>" + obj.roll + "</td>";
+            table += "<td>" + obj.name + "</td>";
+            Object.keys(h).forEach(function (key) {
+                console.log();
+                table += '<td>' + obj.resultOfSubjects[h[key]] + '</td>';
+            });
+            table += "</tr>";
+        });
+
+        table += '</table>';
+        $("#result").append(table);
+
+    }, function (xhr) {
+        console.dir(xhr);
+    });
+
 
 })(jQuery);

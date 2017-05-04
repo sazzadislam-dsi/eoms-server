@@ -3,7 +3,7 @@ package com.lynas.controller.rest
 import com.lynas.model.Exam
 import com.lynas.model.Organization
 import com.lynas.model.request.ExamJsonWrapper
-import com.lynas.model.response.ExamResponse
+import com.lynas.model.response.ExamClassResponse
 import com.lynas.service.ClassService
 import com.lynas.service.ExamService
 import com.lynas.service.StudentService
@@ -66,5 +66,25 @@ class ExamRestController(val examService: ExamService,
         logger.info("return result of class id {} and student id {} and year {}", classId, studentId, _year)
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
         return responseOK(examService.resultOfStudentByYear(classId, studentId, _year))
+    }
+
+    @GetMapping("/class/{classId}/year/{_year}/results")
+    fun resultOfClassByYear(@PathVariable classId: Long,
+                               @PathVariable _year: Int,
+                              request: HttpServletRequest): ResponseEntity<*> {
+        logger.info("return result of class id {} and student id {} and year {}", classId, _year)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val result = examService.resultOfClass(classId, _year).groupBy { it.roleNumber }
+                .map { ExamClassResponse().apply {
+                    roll = it.key
+                    name = it.value[0].person
+                    resultOfSubjects = it.value.associateBy({it.subject}, {
+                        it.exam
+                                .map { (it.percentile!! * it.obtainedNumber!!) / 100 }
+                                .sum()
+                    })
+                } }
+
+        return responseOK(result)
     }
 }
