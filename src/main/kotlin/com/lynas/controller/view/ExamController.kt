@@ -1,7 +1,6 @@
 package com.lynas.controller.view
 
 import com.lynas.model.Organization
-import com.lynas.model.util.ExamType
 import com.lynas.service.ClassService
 import com.lynas.service.ExamService
 import com.lynas.service.SubjectService
@@ -9,7 +8,6 @@ import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import javax.servlet.http.HttpServletRequest
@@ -35,10 +33,11 @@ class ExamController constructor(val classService: ClassService,
     }
 
     @RequestMapping("/studentList")
-    fun studentListByClass(@RequestParam classId: Long, model: Model): String {
+    fun studentListByClass(@RequestParam classId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("hit in studentListByClass with class id {}", classId)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
         val studentList = classService.findStudentsByClassId(classId)
-        val subjectList = subjectService.findAllByClassId(classId)
+        val subjectList = subjectService.findAllByClassId(classId, organization.name)
         model.addAttribute("studentList", studentList)
         model.addAttribute("subjectList", subjectList)
         model.addAttribute("clsId", classId)
