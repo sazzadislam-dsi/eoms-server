@@ -2,20 +2,19 @@ package com.lynas.controller.rest
 
 import com.lynas.model.Course
 import com.lynas.model.Enrolment
+import com.lynas.model.Organization
 import com.lynas.model.Student
 import com.lynas.model.request.EnrolmentJson
 import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
 import com.lynas.service.StudentService
-import com.lynas.util.getLogger
-import com.lynas.util.responseConflict
-import com.lynas.util.responseError
-import com.lynas.util.responseOK
+import com.lynas.util.*
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by sazzad on 8/15/16
@@ -30,9 +29,10 @@ class EnrolmentRestController (val enrolmentService: EnrolmentService,
     val logger = getLogger(EnrolmentRestController::class.java)
 
     @PostMapping
-    fun post(@RequestBody enrolmentJson: EnrolmentJson): ResponseEntity<*> {
-        logger.info("Hit in enrolment post method with {}", enrolmentJson)
-        val (enrollment, isEnroll) = enrolmentService.studentEnrolmentCheck(enrolmentJson.studentId, enrolmentJson.year)
+    fun post(@RequestBody enrolmentJson: EnrolmentJson, request: HttpServletRequest): ResponseEntity<*> {
+        logger.info("Hit in enrolment post method with {}", enrolmentJson.toString())
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val (enrollment, isEnroll) = enrolmentService.studentEnrolmentCheck(enrolmentJson.studentId, enrolmentJson.year, organization.name)
         if (isEnroll)
             return responseConflict(enrollment!!)
 

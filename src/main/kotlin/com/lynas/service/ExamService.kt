@@ -24,8 +24,8 @@ open class ExamService(val examRepository: ExamRepository,
     }
 
     @Transactional
-    open fun resultOfSubjectByYear(classId: Long, subjectId: Long, _year: Int): ExamResponse {
-        val resultList = examRepository.resultOfSubjectByYear(classId, subjectId, _year)
+    open fun resultOfSubjectByYear(classId: Long, subjectId: Long, _year: Int, organization: String): ExamResponse {
+        val resultList = examRepository.resultOfSubjectByYear(classId, subjectId, _year, organization)
         val examResponse = ExamResponse().apply {
             className = classService.findById(classId).name
             subjectName = subjectService.findById(subjectId).subjectName
@@ -62,8 +62,8 @@ open class ExamService(val examRepository: ExamRepository,
     }
 
     @Transactional
-    open fun resultOfStudentByYear(classId: Long, studentId: Long, _year: Int): ExamStudentResponse {
-        val resultList = examRepository.resultOfStudentByYear(classId, studentId, _year)
+    open fun resultOfStudentByYear(classId: Long, studentId: Long, _year: Int, organization: String): ExamStudentResponse {
+        val resultList = examRepository.resultOfStudentByYear(classId, studentId, _year, organization)
         val studentInfo = studentService.studentInfoByYear(studentId, _year)
         val response = ExamStudentResponse().apply {
             studentName = studentInfo.firstName
@@ -93,8 +93,8 @@ open class ExamService(val examRepository: ExamRepository,
     }
 
     @Transactional
-    open fun resultOfClass(classId: Long, _year: Int): List<ExamQueryResult> {
-        val resultList = examRepository.resultOfClassByYear(classId, _year)
+    open fun resultOfClass(classId: Long, _year: Int, organization: String): List<ExamQueryResult> {
+        val resultList = examRepository.resultOfClassByYear(classId, _year, organization)
         val resultMap = resultList.groupBy { it.roleNumber }
 
        return resultList

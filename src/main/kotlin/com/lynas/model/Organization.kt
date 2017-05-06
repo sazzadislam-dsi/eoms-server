@@ -11,7 +11,7 @@ import org.neo4j.ogm.annotation.Relationship
 class Organization {
     @GraphId
     var id: Long? = null
-    var name: String? = null
+    var name: String = ""
     var establishmentYear: Int? = null
     @Relationship(type = "organizationHasOrganizationInfo", direction = Relationship.OUTGOING)
     var organizationInfo: OrganizationInfo? = null

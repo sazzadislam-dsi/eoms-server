@@ -53,9 +53,11 @@ class ExamRestController(val examService: ExamService,
     @GetMapping("/class/{classId}/subject/{subjectId}/year/{_year}/results")
     fun resultOfClassBySubject(@PathVariable classId: Long,
                                @PathVariable subjectId: Long,
-                               @PathVariable _year: Int): ResponseEntity<*> {
+                               @PathVariable _year: Int,
+                               request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and subject id {} and year {}", classId, subjectId, _year)
-        return responseOK(examService.resultOfSubjectByYear(classId, subjectId, _year))
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        return responseOK(examService.resultOfSubjectByYear(classId, subjectId, _year, organization.name))
     }
 
     @GetMapping("/class/{classId}/student/{studentId}/year/{_year}/results")
@@ -65,7 +67,7 @@ class ExamRestController(val examService: ExamService,
                               request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, studentId, _year)
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
-        return responseOK(examService.resultOfStudentByYear(classId, studentId, _year))
+        return responseOK(examService.resultOfStudentByYear(classId, studentId, _year, organization.name))
     }
 
     @GetMapping("/class/{classId}/year/{_year}/results")
@@ -74,7 +76,7 @@ class ExamRestController(val examService: ExamService,
                               request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, _year)
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
-        val result = examService.resultOfClass(classId, _year).groupBy { it.roleNumber }
+        val result = examService.resultOfClass(classId, _year, organization.name).groupBy { it.roleNumber }
                 .map { ExamClassResponse().apply {
                     roll = it.key
                     name = it.value[0].person
