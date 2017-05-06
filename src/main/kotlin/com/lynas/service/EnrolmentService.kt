@@ -29,8 +29,8 @@ open class EnrolmentService (val enrolmentRepository: EnrolmentRepository) {
      */
     data class Result(val enrolment: Enrolment?, val isEnroll: Boolean)
     @Transactional
-    open fun studentEnrolmentCheck(studentId: Long, year: Int): Result {
-        val enrolment: Enrolment? = enrolmentRepository.findEnrollmentOfStudentByYear(studentId, year)
+    open fun studentEnrolmentCheck(studentId: Long, year: Int, organization: String): Result {
+        val enrolment: Enrolment? = enrolmentRepository.findEnrollmentOfStudentByYear(studentId, year, organization)
         return Result(enrolment, Objects.nonNull(enrolment))
     }
 }
