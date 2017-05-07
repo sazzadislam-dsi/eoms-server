@@ -24,8 +24,11 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
 
     @PostMapping
     @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
-    fun postAttendance(@RequestBody attendanceJson: AttendanceJsonWrapper): ResponseEntity<*> {
+    fun postAttendance(@RequestBody attendanceJson: AttendanceJsonWrapper,
+                       request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+
         try {
             attendanceJson.date.convertToDate()
         } catch (ex: Exception) {
@@ -36,7 +39,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
                     Constants.INVALID_DATE_FORMAT,
                     Constants.EXPECTED_DATE_FORMAT))
         }
-        val attendanceBook: AttendanceBook = attendanceService.post(attendanceJson)
+        val attendanceBook: AttendanceBook = attendanceService.post(attendanceJson, organization.name)
         logger.info("Post successfully attendance book {}", attendanceBook)
         return responseOK(attendanceJson)
     }
