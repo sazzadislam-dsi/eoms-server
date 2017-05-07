@@ -1,6 +1,7 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.ContactInformation
+import com.lynas.model.Organization
 import com.lynas.model.Person
 import com.lynas.model.Student
 import com.lynas.model.request.StudentContact
@@ -63,9 +64,12 @@ class StudentRestController(val studentService: StudentService) {
     }
 
     @PatchMapping
-    fun studentUpdate(@RequestBody studentJson: StudentJson): ResponseEntity<*> {
+    fun studentUpdate(@RequestBody studentJson: StudentJson,
+                      request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit student update controller with id {} && {}", studentJson.studentId, studentJson)
-        val student = studentService.findById(studentJson.studentId)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+
+        val student = studentService.findById(studentJson.studentId, organization.name)
         if (student?.person == null) return responseError(studentJson)
 
         var _dateOfBirth = Date()
@@ -94,8 +98,11 @@ class StudentRestController(val studentService: StudentService) {
     }
 
     @PostMapping("/add_contact_info")
-    fun postStudentContactInformation(@RequestBody studentContact: StudentContact): Student {
-        val student = studentService.findById(studentContact.studentId)
+    fun postStudentContactInformation(@RequestBody studentContact: StudentContact,
+                                      request: HttpServletRequest): Student {
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+
+        val student = studentService.findById(studentContact.studentId, organization.name)
         if (null == student.person?.contactInformationList) {
             student.person?.contactInformationList = mutableListOf(
                     ContactInformation().apply {

@@ -36,7 +36,7 @@ class EnrolmentRestController (val enrolmentService: EnrolmentService,
         if (isEnroll)
             return responseConflict(enrollment!!)
 
-        val _student: Student = studentService.findById(enrolmentJson.studentId)
+        val _student: Student = studentService.findById(enrolmentJson.studentId, organization.name)
         val _course: Course = classService.findById(enrolmentJson.classId)
         val enrolment: Enrolment = Enrolment().apply {
             year = enrolmentJson.year

@@ -64,7 +64,7 @@ open class ExamService(val examRepository: ExamRepository,
     @Transactional
     open fun resultOfStudentByYear(classId: Long, studentId: Long, _year: Int, organization: String): ExamStudentResponse {
         val resultList = examRepository.resultOfStudentByYear(classId, studentId, _year, organization)
-        val studentInfo = studentService.studentInfoByYear(studentId, _year)
+        val studentInfo = studentService.studentInfoByYear(studentId, _year, organization)
         val response = ExamStudentResponse().apply {
             studentName = studentInfo.firstName
             className = studentInfo.firstName

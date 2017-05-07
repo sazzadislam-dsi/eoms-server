@@ -19,30 +19,30 @@ open class StudentService(val studentRepository: StudentRepository) {
     }
 
     @Transactional
-    open fun findById(id: Long): Student {
-        return studentRepository.findOne(id)
+    open fun findById(id: Long, organization: String): Student {
+        return studentRepository.findOne(id, organization)
     }
 
     @Transactional
-    open fun searchByFirstName(name: String) : List<Student> {
-        return studentRepository.searchByFirstName(name)
+    open fun searchByFirstName(name: String, organization: String) : List<Student> {
+        return studentRepository.searchByFirstName(name, organization)
     }
 
     @Transactional
-    open fun findStudentByContactId(id: Long): Student {
-        return studentRepository.findStudentByContactId(id)
+    open fun findStudentByContactId(id: Long, organization: String): Student {
+        return studentRepository.findStudentByContactId(id, organization)
     }
 
     @Transactional
-    open fun findAll(): MutableList<Student> {
+    open fun findAll(organization: String): MutableList<Student> {
         var studentList: MutableList<Student> = mutableListOf()
-        studentRepository.findAll().forEach { i -> studentList.add(i) }
+        studentRepository.findAll(organization).forEach { i -> studentList.add(i) }
         return studentList
     }
 
     @Transactional
-    open fun studentInfoByYear(id: Long, year: Int): StudentInfoQueryResult {
-        return studentRepository.studentInfoByYear(id, year)
+    open fun studentInfoByYear(id: Long, year: Int, organization: String): StudentInfoQueryResult {
+        return studentRepository.studentInfoByYear(id, year, organization)
     }
 
 }

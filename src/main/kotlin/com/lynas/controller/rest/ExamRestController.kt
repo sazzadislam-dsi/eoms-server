@@ -29,8 +29,9 @@ class ExamRestController(val examService: ExamService,
     val logger = getLogger(ExamRestController::class.java)
 
     @PostMapping
-    fun post(@RequestBody examJson: ExamJsonWrapper): ResponseEntity<*> {
+    fun post(@RequestBody examJson: ExamJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("hit in post controller with {}", examJson)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
         val course = classService.findById(examJson.classId)
         val _subject = subjectService.findById(examJson.subjectId)
         val listOfExam = examJson.examJson.map {
@@ -43,7 +44,7 @@ class ExamRestController(val examService: ExamService,
                 cls = course
                 subject = _subject
                 obtainedNumber = i.mark
-                student = studentService.findById(i.studentId)
+                student = studentService.findById(i.studentId, organization.name)
             }
         }
         examService.save(listOfExam)
