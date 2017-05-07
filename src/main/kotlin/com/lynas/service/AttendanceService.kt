@@ -18,11 +18,11 @@ open class AttendanceService constructor(val studentService: StudentService,
                                          val attendanceRepository: AttendanceRepository) {
 
     @Transactional
-    open fun post(attendanceJsonWrapper: AttendanceJsonWrapper): AttendanceBook {
+    open fun post(attendanceJsonWrapper: AttendanceJsonWrapper, organization: String): AttendanceBook {
         val set = attendanceJsonWrapper.attendanceJson.map {
             i ->
             StudentAttendance().apply {
-                student = studentService.findById(i.t)
+                student = studentService.findById(i.t, organization)
                 attendanceStatus = i.i
             }
         }.toMutableSet()
