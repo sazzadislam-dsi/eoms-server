@@ -35,7 +35,7 @@ class ExamRestController(val examService: ExamService,
         val course = classService.findById(examJson.classId)
         val _subject = subjectService.findById(examJson.subjectId)
         val listOfExam = examJson.examJson.map {
-            i ->
+            (mark, studentId) ->
             Exam().apply {
                 examType = examJson.examType
                 totalNumber = examJson.totalMark
@@ -43,8 +43,8 @@ class ExamRestController(val examService: ExamService,
                 year = examJson.year
                 cls = course
                 subject = _subject
-                obtainedNumber = i.mark
-                student = studentService.findById(i.studentId, organization.name)
+                obtainedNumber = mark
+                student = studentService.findById(studentId, organization.name)
             }
         }
         examService.save(listOfExam)
