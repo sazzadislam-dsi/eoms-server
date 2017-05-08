@@ -15,19 +15,24 @@ interface ClassRepository : GraphRepository<Course> {
     @Query("match (cl:Class)-[:classBelongsToAnOrganization]->(org:Organization {name:{0}} ) return cl")
     fun findListByOrganizationName(name: String?): List<Course>
 
-    @Query("MATCH (s) WHERE ID(s) = {0} RETURN s")
-    fun findById(id:Long): Course
+    @Query("MATCH (cl:Class)-[:classBelongsToAnOrganization]->(org:Organization {name:{1}} )" +
+            "where ID(cl) = {0} RETURN cl")
+    fun findById(id:Long, organization: String): Course
 
     @Query("match (cl:Class{ name:{0},shift:{1}, section:{2}})-[:classBelongsToAnOrganization]->(org:Organization {name:{3}} ) return cl")
     fun findByProperty(className: String?, shift: String, section: String, orgName: String?): Course?
 
-    @Query("match (p:Person) -[:studentIsAPerson]- (s:Student) -[e:Enrolment]- (c:Class) where ID(c) = {0}   " +
+    @Query("match (p:Person) -[:studentIsAPerson]- (s:Student) -[e:Enrolment]- (c:Class)," +
+            "(c)-[:classBelongsToAnOrganization]->(org:Organization {name:{1}})" +
+            "where ID(c) = {0}" +
             "return ID(s) as studentId, (p.firstName +' '+ p.lastName) as studentName, e.roleNumber as roleNumber Order By e.roleNumber")
-    fun findStudentsByClass(classId: Long?): Collection<ClassDetailQueryResult>
+    fun findStudentsByClass(classId: Long?, organization: String): Collection<ClassDetailQueryResult>
 
-    @Query("match (p:Person) -[:studentIsAPerson]- (s:Student) -[e:Enrolment {year: {1}}]- (c:Class) where ID(c) = {0}   " +
+    @Query("match (p:Person) -[:studentIsAPerson]- (s:Student) -[e:Enrolment {year: {1}}]- (c:Class)" +
+            "-[:classBelongsToAnOrganization]->(org:Organization {name:{2}})" +
+            " where ID(c) = {0}" +
             "return ID(s) as studentId, (p.firstName +' '+ p.lastName) as studentName, e.roleNumber as roleNumber Order By e.roleNumber")
-    fun findStudentsByClass(classId: Long?, year: Int?): Collection<ClassDetailQueryResult>
+    fun findStudentsByClass(classId: Long?, year: Int?, organization: String): Collection<ClassDetailQueryResult>
 
     @Query("match (cl:Class)-[:classBelongsToAnOrganization]->(org:Organization {name:{0}} ) return count(cl)")
     fun findListCountByOrganizationName(name: String?): Int

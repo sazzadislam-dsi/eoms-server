@@ -36,7 +36,7 @@ class ExamController constructor(val classService: ClassService,
     fun studentListByClass(@RequestParam classId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("hit in studentListByClass with class id {}", classId)
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
-        val studentList = classService.findStudentsByClassId(classId)
+        val studentList = classService.findStudentsByClassId(classId, organization.name)
         val subjectList = subjectService.findAllByClassId(classId, organization.name)
         model.addAttribute("studentList", studentList)
         model.addAttribute("subjectList", subjectList)

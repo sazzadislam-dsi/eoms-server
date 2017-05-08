@@ -32,7 +32,7 @@ class ExamRestController(val examService: ExamService,
     fun post(@RequestBody examJson: ExamJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("hit in post controller with {}", examJson)
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
-        val course = classService.findById(examJson.classId)
+        val course = classService.findById(examJson.classId, organization.name)
         val _subject = subjectService.findById(examJson.subjectId)
         val listOfExam = examJson.examJson.map {
             (mark, studentId) ->

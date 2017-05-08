@@ -27,7 +27,7 @@ open class ExamService(val examRepository: ExamRepository,
     open fun resultOfSubjectByYear(classId: Long, subjectId: Long, _year: Int, organization: String): ExamResponse {
         val resultList = examRepository.resultOfSubjectByYear(classId, subjectId, _year, organization)
         val examResponse = ExamResponse().apply {
-            className = classService.findById(classId).name
+            className = classService.findById(classId, organization).name
             subjectName = subjectService.findById(subjectId).subjectName
             year = _year
         }

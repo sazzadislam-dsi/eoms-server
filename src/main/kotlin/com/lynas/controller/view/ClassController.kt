@@ -38,8 +38,9 @@ class ClassController constructor(val classService: ClassService) {
     }
 
     @RequestMapping("/updateClass/{classId}")
-    fun updateClass(model: Model, @PathVariable classId: Long): String {
-        val course = classService.findById(classId)
+    fun updateClass(model: Model, @PathVariable classId: Long, request: HttpServletRequest): String {
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val course = classService.findById(classId, organization.name)
         logger.warn("Received Course : " + course.toString())
         model.addAttribute("course", course)
         return "updateClass"
@@ -53,10 +54,11 @@ class ClassController constructor(val classService: ClassService) {
     }
 
     @RequestMapping("/detail/{classId}")
-    fun detail(@PathVariable classId: Long, model: Model): String {
+    fun detail(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("Hit in detail with class id {}", classId)
-        val classDetails: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId)
-        val cls: Course = classService.findById(classId)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val classDetails: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId, organization.name)
+        val cls: Course = classService.findById(classId, organization.name)
         logger.info("class student number {}", classDetails.size)
         model.addAttribute("classDetails", classDetails)
         model.addAttribute("cls", cls)

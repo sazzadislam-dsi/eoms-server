@@ -43,7 +43,7 @@ class EnrolmentRestController (val enrolmentService: EnrolmentService,
         }
 
         val _student: Student = studentService.findById(enrolmentJson.studentId, organization.name)
-        val _course: Course = classService.findById(enrolmentJson.classId)
+        val _course: Course = classService.findById(enrolmentJson.classId, organization.name)
         val enrolment: Enrolment = Enrolment().apply {
             year = enrolmentJson.year
             roleNumber = enrolmentJson.roleNumber

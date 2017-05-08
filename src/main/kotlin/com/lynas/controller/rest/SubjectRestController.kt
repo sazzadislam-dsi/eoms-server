@@ -1,10 +1,12 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.Course
+import com.lynas.model.Organization
 import com.lynas.model.Subject
 import com.lynas.model.request.SubjectPostJson
 import com.lynas.service.ClassService
 import com.lynas.service.SubjectService
+import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by seal on 2/7/2017.
@@ -25,8 +28,9 @@ class SubjectRestController constructor(val subjectService: SubjectService,
     val logger = getLogger(SubjectRestController::class.java)
 
     @PostMapping
-    fun post(@RequestBody subjectJson: SubjectPostJson): ResponseEntity<*> {
+    fun post(@RequestBody subjectJson: SubjectPostJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit post method with {}", subjectJson)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
         val subject: Subject = Subject().apply {
             subjectName = subjectJson.subjectName
             subjectDescription = subjectJson.subjectDescription
@@ -36,7 +40,7 @@ class SubjectRestController constructor(val subjectService: SubjectService,
 
         // Problem in save object
         subjectService.post(subject)
-        val cls: Course = classService.findById(subjectJson.classId as Long)
+        val cls: Course = classService.findById(subjectJson.classId as Long, organization.name)
         cls.subjects.add(subject)
         classService.save(cls)
         logger.info("Post successful")

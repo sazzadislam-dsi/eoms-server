@@ -30,7 +30,7 @@ open class AttendanceService constructor(val studentService: StudentService,
         val attendanceBook = AttendanceBook().apply {
             studentAttendances = set
             attendanceDate = attendanceJsonWrapper.date.convertToDate()
-            course = classService.findById(attendanceJsonWrapper.classId)
+            course = classService.findById(attendanceJsonWrapper.classId, organization)
         }
         return attendanceRepository.save(attendanceBook)
     }
