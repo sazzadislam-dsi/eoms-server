@@ -8,7 +8,10 @@ import com.lynas.model.request.EnrolmentJson
 import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
 import com.lynas.service.StudentService
-import com.lynas.util.*
+import com.lynas.util.AppConstant
+import com.lynas.util.getLogger
+import com.lynas.util.responseConflict
+import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -32,9 +35,12 @@ class EnrolmentRestController (val enrolmentService: EnrolmentService,
     fun post(@RequestBody enrolmentJson: EnrolmentJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit in enrolment post method with {}", enrolmentJson.toString())
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
-        val (enrollment, isEnroll) = enrolmentService.studentEnrolmentCheck(enrolmentJson.studentId, enrolmentJson.year, organization.name)
-        if (isEnroll)
+        val (enrollment, isEnroll) = enrolmentService.studentEnrolmentCheck(
+                enrolmentJson.studentId, enrolmentJson.year, organization.name)
+        if (isEnroll) {
+            // TODO need to change !! line below
             return responseConflict(enrollment!!)
+        }
 
         val _student: Student = studentService.findById(enrolmentJson.studentId, organization.name)
         val _course: Course = classService.findById(enrolmentJson.classId)
