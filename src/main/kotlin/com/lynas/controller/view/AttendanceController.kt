@@ -39,9 +39,11 @@ class AttendanceController constructor(val classService: ClassService) {
     @RequestMapping("/studentList")
     fun studentListByClass(@RequestParam classId: Long,
                            @RequestParam year: Int,
-                           model: Model): String {
+                           model: Model,
+                           request: HttpServletRequest): String {
         logger.info("hit in studentListByClass with class id {}", classId)
-        val studentList = classService.findStudentsByClassId(classId, year)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val studentList = classService.findStudentsByClassId(classId, year, organization.name)
         model.addAttribute("studentList", studentList)
         model.addAttribute("clsId", classId)
         return "attendanceStudent"

@@ -44,7 +44,8 @@ open class ClassRestController (val classService: ClassService) {
     @PatchMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     open fun patch(@RequestBody cls: Course, request: HttpServletRequest): Course {
-        val previousClass = classService.findById(cls.id!!)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val previousClass = classService.findById(cls.id!!, organization.name)
 
         println(cls.toString())
         println(verifyClassOrganization(previousClass, request))

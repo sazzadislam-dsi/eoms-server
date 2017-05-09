@@ -33,8 +33,8 @@ open class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    open fun findById(id: Long): Course {
-        return classRepo.findById(id)
+    open fun findById(id: Long, organization: String): Course {
+        return classRepo.findById(id, organization)
     }
 
 
@@ -44,13 +44,13 @@ open class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    open fun findStudentsByClassId(classID: Long): Collection<ClassDetailQueryResult> {
-        return classRepo.findStudentsByClass(classID)
+    open fun findStudentsByClassId(classID: Long,organization: String): Collection<ClassDetailQueryResult> {
+        return classRepo.findStudentsByClass(classID, organization)
     }
 
     @Transactional
-    open fun findStudentsByClassId(classID: Long, year: Int): Collection<ClassDetailQueryResult> {
-        return classRepo.findStudentsByClass(classID, year)
+    open fun findStudentsByClassId(classID: Long, year: Int, organization: String): Collection<ClassDetailQueryResult> {
+        return classRepo.findStudentsByClass(classID, year, organization)
     }
 
     @Transactional
