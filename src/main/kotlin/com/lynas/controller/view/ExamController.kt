@@ -19,8 +19,7 @@ import javax.servlet.http.HttpServletRequest
 @Controller
 @RequestMapping("exam")
 class ExamController constructor(val classService: ClassService,
-                                 val subjectService: SubjectService,
-                                 val examService: ExamService) {
+                                 val subjectService: SubjectService) {
 
     val logger = getLogger(ExamController::class.java)
 
