@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layout/secure"
+      lang="en">
+<body>
+<div layout:fragment="page-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>
+                Create a new Class
+            </h1>
+        </div>
+    </div>
+    <div class="row separator">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 est esb">
+            <form  class="classCreate"  role="form" method="post" action="/fees">
+                <br />
+                <br />
+                <div class="form-group">
+                    <label>Fee Type</label>
+                    <input th:required="required" type="text" class="form-control" name="type" placeholder="e.g. Exam fee" />
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input th:required="required" type="text" class="form-control" name="amount" placeholder="e.g. 500" />
+                </div>
+                <div class="form-group">
+                    <label>Year</label>
+                    <input th:required="required" type="text" class="form-control" name="year" placeholder="e.g. 2017" value="2017" />
+                </div>
+                <div class="form-group">
+                    <label>Last Date</label>
+                    <input th:required="required" type="text" class="form-control" name="lastDate" placeholder="e.g. 05/11/2017" />
+                </div>
+                <input type="submit" value="Create Class" class="btn btn-primary" />
+            </form>
+        </div>
+        <div class="col-md-4">
+
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
