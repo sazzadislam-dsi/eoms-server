@@ -20,6 +20,6 @@ class FeeInfo {
     var year: Int? = null
     var lastDate: Int? = null
 
-    @Relationship(type = "feeInfoOfOrganization", direction = Relationship.OUTGOING)
-    var organization: Organization? = null
+    @Relationship(type = "feeInfoOfCourse", direction = Relationship.OUTGOING)
+    var course: Course? = null
 }
