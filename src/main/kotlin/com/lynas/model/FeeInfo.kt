@@ -3,6 +3,7 @@ package com.lynas.model
 import org.neo4j.ogm.annotation.GraphId
 import org.neo4j.ogm.annotation.NodeEntity
 import org.neo4j.ogm.annotation.Relationship
+import java.util.*
 
 /**
  * Created by LynAs on 7/23/2016
@@ -18,7 +19,7 @@ class FeeInfo {
     var type: String? = null
     var amount: Double? = null
     var year: Int? = null
-    var lastDate: Int? = null
+    var lastDate: Date? = null
 
     @Relationship(type = "feeInfoOfCourse", direction = Relationship.OUTGOING)
     var course: Course? = null

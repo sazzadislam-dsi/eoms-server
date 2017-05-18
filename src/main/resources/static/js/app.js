@@ -48,6 +48,14 @@
         //alert(xhr.responseText);
     });
 
+    bindFormSubmits('feeInfoCreate', function (response) {
+        console.dir(response);
+        alert("Fee create successful !");
+        location.reload();
+    }, function (xhr) {
+        alert(xhr.status + "  Organization with given info exist");
+    });
+
     bindFormSubmits('classCreate', function (response) {
         console.log("newww");
         console.dir(response);

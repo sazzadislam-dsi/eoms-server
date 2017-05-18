@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
       layout:decorator="layout/secure"
       lang="en">
 <body>
@@ -16,12 +16,13 @@
     <div class="row separator">
         <div class="col-md-4"></div>
         <div class="col-md-4 est esb">
-            <form  class="classCreate"  role="form" method="post" action="/fees">
+            <form class="feeInfoCreate" role="form" method="post" action="/fees">
                 <br />
                 <br />
                 <div class="form-group">
                     <label>Fee of Class</label>
-                    <input th:required="required" type="text" class="form-control" name="courseId" th:value="${courseId}" th:disabled="true" />
+                    <input th:required="required" type="text" class="form-control" name="classId" th:value="${courseId}"
+                           th:disabled="true"/>
                 </div>
                 <div class="form-group">
                     <label>Fee Type</label>

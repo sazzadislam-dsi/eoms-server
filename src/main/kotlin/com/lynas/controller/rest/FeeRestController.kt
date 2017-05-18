@@ -2,7 +2,11 @@ package com.lynas.controller.rest
 
 import com.lynas.model.FeeInfo
 import com.lynas.model.Organization
+import com.lynas.model.request.FeeInfoJson
+import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
+import com.lynas.util.convertToDate
+import com.lynas.util.getOrganizationFromSession
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
@@ -12,10 +16,19 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("fees")
-class FeeRestController (val feeInfoService: FeeInfoService) {
+class FeeRestController(val feeInfoService: FeeInfoService, val classService: ClassService) {
 
     @PostMapping
-    fun post(@RequestBody feeInfo: FeeInfo, request: HttpServletRequest): FeeInfo {
+    fun post(@RequestBody feeInfoJson: FeeInfoJson, request: HttpServletRequest): FeeInfo {
+        val organization = getOrganizationFromSession(request)
+        val courseById = classService.findById(id = feeInfoJson.classId, organization = organization.name)
+        val feeInfo = FeeInfo().apply {
+            type = feeInfoJson.type
+            amount = feeInfoJson.amount
+            year = feeInfoJson.year
+            lastDate = feeInfoJson.lastDate?.convertToDate()
+            course = courseById
+        }
         return feeInfoService.save(feeInfo)
     }
 
