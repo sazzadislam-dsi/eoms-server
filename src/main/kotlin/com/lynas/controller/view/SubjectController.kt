@@ -4,6 +4,7 @@ import com.lynas.model.Organization
 import com.lynas.service.SubjectService
 import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
+import com.lynas.util.getOrganizationFromSession
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,7 +23,7 @@ class SubjectController constructor(val subjectService: SubjectService)  {
     @RequestMapping("/class/{classId}/list")
     fun subjectListOfClass(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("Return subject list for class id {}", classId)
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         model.addAttribute("list", subjectService.findAllByClassId(classId, organization.name))
         model.addAttribute("classId", classId)
         return "subjectOfClass"
@@ -31,7 +32,7 @@ class SubjectController constructor(val subjectService: SubjectService)  {
     @RequestMapping("/student/{stdId}/list")
     fun subjectListOfStudent(@PathVariable stdId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("Return subject list for student id {}", stdId)
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         model.addAttribute("list", subjectService.findAllByStudentId(stdId, organization.name))
         return "subjectOfClass"
     }

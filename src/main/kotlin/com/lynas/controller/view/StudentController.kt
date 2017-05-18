@@ -7,6 +7,7 @@ import com.lynas.model.Student
 import com.lynas.service.StudentService
 import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
+import com.lynas.util.getOrganizationFromSession
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -31,7 +32,7 @@ class StudentController(val studentService: StudentService, val personService: P
 
     @GetMapping("/{studentId}/update")
     fun studentUpdate(model: Model, @PathVariable studentId: Long, request: HttpServletRequest): String {
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         model.addAttribute("student", studentService.findById(studentId, organization.name))
         return "studentUpdate"
     }
@@ -45,7 +46,7 @@ class StudentController(val studentService: StudentService, val personService: P
     @GetMapping("/search/byFirstName")
     fun studentSearch(@RequestParam firstName: String, model: Model, request: HttpServletRequest): String {
         logger.info("Student first name {}", firstName)
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         val list: List<Student> = studentService.searchByFirstName(firstName, organization.name)
         model.addAttribute("studentList", list)
         return "studentSearch"
@@ -53,7 +54,7 @@ class StudentController(val studentService: StudentService, val personService: P
 
     @GetMapping("/{studentId}/details")
     fun viewDetails(@PathVariable studentId: Long, model: Model, request: HttpServletRequest): String {
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         val student = studentService.findById(studentId, organization.name)
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!).contactInformationList
         model.addAttribute("student", student)
@@ -70,7 +71,7 @@ class StudentController(val studentService: StudentService, val personService: P
 
     @GetMapping("/list")
     fun studentList(model: Model, request: HttpServletRequest): String {
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         model.addAttribute("studentList", studentService.findAll(organization.name))
         return "studentList"
     }

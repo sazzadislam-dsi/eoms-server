@@ -8,6 +8,7 @@ import com.lynas.service.ClassService
 import com.lynas.service.SubjectService
 import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
+import com.lynas.util.getOrganizationFromSession
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -30,7 +31,7 @@ class SubjectRestController constructor(val subjectService: SubjectService,
     @PostMapping
     fun post(@RequestBody subjectJson: SubjectPostJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit post method with {}", subjectJson)
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         val subject: Subject = Subject().apply {
             subjectName = subjectJson.subjectName
             subjectDescription = subjectJson.subjectDescription

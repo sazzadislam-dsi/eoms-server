@@ -3,10 +3,7 @@ package com.lynas.controller.rest
 import com.lynas.model.Course
 import com.lynas.model.Organization
 import com.lynas.service.ClassService
-import com.lynas.util.AppConstant
-import com.lynas.util.responseConflict
-import com.lynas.util.responseOK
-import com.lynas.util.verifyClassOrganization
+import com.lynas.util.*
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.http.ResponseEntity
@@ -29,7 +26,7 @@ open class ClassRestController (val classService: ClassService) {
     open fun post(@RequestBody cls: Course, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Received Class :: " + cls.toString())
         var createdClass = cls
-        createdClass.organization = request.session.getAttribute(AppConstant.organization) as Organization?
+        createdClass.organization = getOrganizationFromSession(request)
 
         try {
             createdClass = classService.save(createdClass)
@@ -44,7 +41,7 @@ open class ClassRestController (val classService: ClassService) {
     @PatchMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     open fun patch(@RequestBody cls: Course, request: HttpServletRequest): Course {
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         val previousClass = classService.findById(cls.id!!, organization.name)
 
         println(cls.toString())

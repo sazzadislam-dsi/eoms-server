@@ -67,7 +67,7 @@ class StudentRestController(val studentService: StudentService) {
     fun studentUpdate(@RequestBody studentJson: StudentJson,
                       request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit student update controller with id {} && {}", studentJson.studentId, studentJson)
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
 
         val student = studentService.findById(studentJson.studentId, organization.name)
         if (student?.person == null) return responseError(studentJson)
@@ -100,7 +100,7 @@ class StudentRestController(val studentService: StudentService) {
     @PostMapping("/add_contact_info")
     fun postStudentContactInformation(@RequestBody studentContact: StudentContact,
                                       request: HttpServletRequest): Student {
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
 
         val student = studentService.findById(studentContact.studentId, organization.name)
         if (null == student.person?.contactInformationList) {

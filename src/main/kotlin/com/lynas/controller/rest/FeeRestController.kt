@@ -34,7 +34,7 @@ class FeeRestController(val feeInfoService: FeeInfoService, val classService: Cl
 
     @GetMapping
     fun getAll(request: HttpServletRequest): List<FeeInfo>? {
-        val organization = request.session.getAttribute("organization") as Organization?
+        val organization = getOrganizationFromSession(request)
         // TODO need to add org check
         return feeInfoService.findAll()?.filter { it.id != null }
     }
@@ -42,7 +42,7 @@ class FeeRestController(val feeInfoService: FeeInfoService, val classService: Cl
 
     @DeleteMapping("/{feeId}")
     fun updatePersonContactInfo(@PathVariable feeId: Long, request: HttpServletRequest) : Boolean {
-        val organization = request.session.getAttribute("organization") as Organization?
+        val organization = getOrganizationFromSession(request)
         val feeInfo = feeInfoService.find(feeId)
 
 

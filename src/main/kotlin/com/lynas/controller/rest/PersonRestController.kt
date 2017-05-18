@@ -4,6 +4,7 @@ import com.lynas.model.Organization
 import com.lynas.model.Person
 import com.lynas.model.request.PersonContact
 import com.lynas.service.PersonService
+import com.lynas.util.getOrganizationFromSession
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
@@ -17,7 +18,7 @@ class PersonRestController (val personService: PersonService) {
 
     @PostMapping
     fun post(@RequestBody person: Person, request: HttpServletRequest): Person {
-        person.organization = request.session.getAttribute("organization") as Organization?
+        person.organization = getOrganizationFromSession(request)
         personService.save(person)
         return person
     }
