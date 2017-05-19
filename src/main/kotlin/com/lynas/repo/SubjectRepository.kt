@@ -16,7 +16,7 @@ interface SubjectRepository : GraphRepository<Subject> {
             "where ID(cls) = {0} return s")
     fun findAllByClassId(classId: Long, organization: String): List<Subject>
 
-    @Query("match (s:Student) -[e:Enrolment]- (cc:Class)" +
+    @Query("match (s:Student) -[e:Enrolment]- (cc:Class)," +
             "(cc)-[:classBelongsToAnOrganization]->(org:Organization {name: {1}})," +
             "(cc)-[c:curriculum]-> (sb:Subject)" +
             "where ID(s) = {0} return sb")

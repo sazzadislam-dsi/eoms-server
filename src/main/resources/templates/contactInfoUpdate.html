@@ -16,33 +16,33 @@
                         <div>
                             <label>Name : </label>
                             <input th:required="required" type="text" class="form-control" name="name" id="name"
-                                   th:value="${contact.name}">
+                                   th:value="${contact.name}"/>
                         </div>
                         <div>
                             <label>Address : </label>
                             <input th:required="required" type="text" class="form-control" name="address" id="address"
-                                   th:value="${contact.address}">
+                                   th:value="${contact.address}"/>
                         </div>
                         <div>
                             <label>Phone 1 : </label>
                             <input th:required="required" type="text" class="form-control" name="phone_1" id="phone_1"
-                                   th:value="${contact.phone_1}">
+                                   th:value="${contact.phone_1}"/>
                         </div>
                         <div>
                             <label>Phone 2 : </label>
                             <input th:required="required" type="text" class="form-control" name="phone_2" id="phone_2"
-                                   th:value="${contact.phone_2}">
+                                   th:value="${contact.phone_2}"/>
                         </div>
                         <div>
                             <label>Phone 3 : </label>
                             <input th:required="required" type="text" class="form-control" name="phone_3" id="phone_3"
-                                   th:value="${contact.phone_3}">
+                                   th:value="${contact.phone_3}"/>
                         </div>
                     </div>
                 </div>
 
-                <input type="hidden" class="form-control" name="id" th:value="${contact.id}">
-                <input type="hidden" class="form-control studentId" name="studentId" th:value="${studentId}">
+                <input type="hidden" class="form-control" name="id" th:value="${contact.id}"/>
+                <input type="hidden" class="form-control studentId" name="studentId" th:value="${studentId}"/>
                 <input type="submit" value="Update" class="btn btn-primary"/>
 
             </form>
