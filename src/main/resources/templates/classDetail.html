@@ -45,13 +45,15 @@
                         <th style="width: 30%">Student Name</th>
                         <th>Role Number</th>
                         <th>Detail</th>
+                        <th>Option</th>
 
 
-                        <div th:each="cls : ${classDetails}" class="separator">
+                        <div th:each="each : ${classDetails}" class="separator">
                             <tr>
-                                <td th:text="${cls.studentName}"></td>
-                                <td th:text="${cls.roleNumber}"></td>
-                                <td><a th:href="|/student/${cls.studentId}/details|">Details</a></td>
+                                <td th:text="${each.studentName}"></td>
+                                <td th:text="${each.roleNumber}"></td>
+                                <td><a th:href="|/student/${each.studentId}/details|">Details</a></td>
+                                <td><a th:href="|/fee/class/${cls.id}/student/${each.studentId}/|">Make Payment</a></td>
                             </tr>
                         </div>
                     </table>

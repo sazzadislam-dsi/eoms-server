@@ -35,7 +35,8 @@ class FeeRestController(val feeInfoService: FeeInfoService, val classService: Cl
     fun getAll(request: HttpServletRequest): List<FeeInfo>? {
         val organization = getOrganizationFromSession(request)
         // TODO need to add org check
-        return feeInfoService.findAll()?.filter { it.id != null }
+        //return feeInfoService.findAll()?.filter { it.id != null }
+        return null
     }
 
 

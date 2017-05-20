@@ -2,6 +2,8 @@ package com.lynas.service
 
 import com.lynas.model.FeeInfo
 import com.lynas.repo.FeeInfoRepository
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,12 +17,14 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository) {
 
     @Transactional
     open fun save(feeInfo : FeeInfo) : FeeInfo {
+        feeInfoRepository.findAll()
         return feeInfoRepository.save(feeInfo)
     }
 
     @Transactional
     open fun findAll(): MutableIterable<FeeInfo>? {
-        return feeInfoRepository.findAll(3)
+        val page = PageRequest(0, 100, Sort(Sort.Direction.DESC, "dateCreated"))
+        return feeInfoRepository.findAll(page, 2)
     }
 
     @Transactional
