@@ -1,7 +1,6 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.FeeInfo
-import com.lynas.model.Organization
 import com.lynas.model.request.FeeInfoJson
 import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
@@ -26,7 +25,7 @@ class FeeRestController(val feeInfoService: FeeInfoService, val classService: Cl
             type = feeInfoJson.type
             amount = feeInfoJson.amount
             year = feeInfoJson.year
-            lastDate = feeInfoJson.lastDate?.convertToDate()
+            lastDate = if (feeInfoJson.lastDate?.trim() == "") null else feeInfoJson.lastDate?.convertToDate()
             course = courseById
         }
         return feeInfoService.save(feeInfo)

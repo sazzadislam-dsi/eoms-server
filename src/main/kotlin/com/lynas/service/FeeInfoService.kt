@@ -20,7 +20,7 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository) {
 
     @Transactional
     open fun findAll(): MutableIterable<FeeInfo>? {
-        return feeInfoRepository.findAll()
+        return feeInfoRepository.findAll(3)
     }
 
     @Transactional
