@@ -3,8 +3,6 @@ package com.lynas.service
 import com.lynas.model.FeeInfo
 import com.lynas.repo.FeeInfoRepository
 import org.neo4j.ogm.session.Session
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -23,9 +21,8 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Sess
     }
 
     @Transactional
-    open fun findAll(): MutableIterable<FeeInfo>? {
-        val page = PageRequest(0, 100, Sort(Sort.Direction.DESC, "dateCreated"))
-        return feeInfoRepository.findAll(page, 2)
+    open fun findFeeInfoByClass(id: Long): List<FeeInfo>? {
+        return feeInfoRepository.findFeeInfoByClass(id)
     }
 
     @Transactional
@@ -45,7 +42,7 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Sess
 
     @Transactional
     open fun findFeeInfoByStudent(id: Long): List<FeeInfo>? {
-        return feeInfoRepository.findFeeInfo(studentId = id)
+        return feeInfoRepository.findFeeInfoByStudent(id = id)
     }
 
 }
