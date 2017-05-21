@@ -63,10 +63,9 @@ class StudentController(val studentService: StudentService,
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!).contactInformationList
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
-        val feeInfoList = feeInfoService.findFeeInfoByStudent(studentId)
-                ?.filter { it.course?.organization?.id == getOrganizationFromSession(request).id }
-        model.addAttribute("feeInfoList", feeInfoList)
-        println(student.toString())
+        val studentFeeList = feeInfoService.findStudentFeeInfoByStudent(studentId)
+                ?.filter { it.feeInfo?.course?.organization?.id == getOrganizationFromSession(request).id }
+        model.addAttribute("studentFeeList", studentFeeList)
         return "studentDetails"
     }
 

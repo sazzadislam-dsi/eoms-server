@@ -1,6 +1,7 @@
 package com.lynas.service
 
 import com.lynas.model.FeeInfo
+import com.lynas.model.StudentFee
 import com.lynas.repo.FeeInfoRepository
 import org.neo4j.ogm.session.Session
 import org.springframework.stereotype.Service
@@ -23,6 +24,16 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Sess
     @Transactional
     open fun findFeeInfoByClass(id: Long): List<FeeInfo>? {
         return feeInfoRepository.findFeeInfoByClass(id)
+    }
+
+    @Transactional
+    open fun findStudentFeeInfoByClass(id: Long): List<StudentFee>? {
+        return feeInfoRepository.findStudentFeeInfoByClass(id)
+    }
+
+    @Transactional
+    open fun findStudentFeeInfoByStudent(id: Long): List<StudentFee>? {
+        return feeInfoRepository.findStudentFeeInfoByStudent(id)
     }
 
     @Transactional

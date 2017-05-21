@@ -39,8 +39,19 @@
         <div class="col-lg-6">
             <h4>Payment Paid</h4>
             <table class="table table-striped">
-                <tr th:each="each : ${feeInfoList}">
-                    <td th:text="${each.type}"></td>
+                <thead>
+                <tr>
+                    <th>
+                        Type
+                    </th>
+                    <th>
+                        Payment Date
+                    </th>
+                </tr>
+                </thead>
+                <tr th:each="each : ${studentFeeList}">
+                    <td th:text="${each.feeInfo.type}"></td>
+                    <td th:text="${each.paymentDate}"></td>
                 </tr>
             </table>
 
