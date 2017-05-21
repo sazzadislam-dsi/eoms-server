@@ -2,11 +2,15 @@ package com.lynas.controller.rest
 
 import com.lynas.model.FeeInfo
 import com.lynas.model.request.FeeInfoJson
+import com.lynas.model.request.FeeStudentNew
 import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
 import com.lynas.util.convertToDate
 import com.lynas.util.getOrganizationFromSession
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -31,22 +35,10 @@ class FeeRestController(val feeInfoService: FeeInfoService, val classService: Cl
         return feeInfoService.save(feeInfo)
     }
 
-    @GetMapping
-    fun getAll(request: HttpServletRequest): List<FeeInfo>? {
-        val organization = getOrganizationFromSession(request)
-        // TODO need to add org check
-        //return feeInfoService.findAll()?.filter { it.id != null }
+    @PostMapping("/student/new")
+    fun studentPayment(request: HttpServletRequest, @RequestBody feeStudentNew: FeeStudentNew): List<FeeInfo>? {
+        println()
         return null
-    }
-
-
-    @DeleteMapping("/{feeId}")
-    fun updatePersonContactInfo(@PathVariable feeId: Long, request: HttpServletRequest) : Boolean {
-        val organization = getOrganizationFromSession(request)
-        val feeInfo = feeInfoService.find(feeId)
-
-
-        return false
     }
 }
 

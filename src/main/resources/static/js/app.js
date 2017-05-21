@@ -11,6 +11,7 @@
                 value = _this.val();
             data[name] = value;
         });
+        data["feeInfoId"] = $(".feeInfoId").val();
         var params = {};
         params["data"] = JSON.stringify(data);
         console.log(params["data"]);
@@ -49,6 +50,14 @@
     });
 
     bindFormSubmits('feeInfoCreate', function (response) {
+        console.dir(response);
+        alert("Fee create successful !");
+        location.reload();
+    }, function (xhr) {
+        alert(xhr.status + "  Organization with given info exist");
+    });
+
+    bindFormSubmits('studentFeeNew', function (response) {
         console.dir(response);
         alert("Fee create successful !");
         location.reload();

@@ -34,6 +34,11 @@ class FeeController(val feeInfoService: FeeInfoService, val classService: ClassS
             @PathVariable studentId: Long): String {
         model.addAttribute("classId", classId)
         model.addAttribute("studentId", studentId)
+        val feeInfoList = feeInfoService.findAll()
+                ?.filter { it.course?.id == classId }
+                ?.filter { it.course?.organization?.id == getOrganizationFromSession(request).id }
+                ?.sortedBy { it.id }
+        model.addAttribute("feeInfoList", feeInfoList)
         return "makeStudentPayment"
     }
 
