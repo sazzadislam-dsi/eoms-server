@@ -30,7 +30,7 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Sess
 
     @Transactional
     open fun find(id: Long): FeeInfo? {
-        return feeInfoRepository.findOne(id)
+        return feeInfoRepository.findOne(id, 2)
     }
 
     @Transactional

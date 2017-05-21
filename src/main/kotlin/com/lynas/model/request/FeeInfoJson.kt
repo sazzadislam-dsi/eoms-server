@@ -14,6 +14,6 @@ data class FeeInfoJson(
 data class FeeStudentNew(
         val classId: Long = 9999,
         val studentId: Long = 9999,
-        val feeInfoId: String = "",
+        val feeInfoId: Long = 9999,
         val paymentDate: String = ""
 )

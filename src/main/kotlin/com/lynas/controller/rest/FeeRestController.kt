@@ -1,10 +1,13 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.FeeInfo
+import com.lynas.model.StudentFee
 import com.lynas.model.request.FeeInfoJson
 import com.lynas.model.request.FeeStudentNew
 import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
+import com.lynas.service.StudentFeeService
+import com.lynas.service.StudentService
 import com.lynas.util.convertToDate
 import com.lynas.util.getOrganizationFromSession
 import org.springframework.web.bind.annotation.PostMapping
@@ -19,7 +22,10 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("fees")
-class FeeRestController(val feeInfoService: FeeInfoService, val classService: ClassService) {
+class FeeRestController(val feeInfoService: FeeInfoService,
+                        val classService: ClassService,
+                        val studentService: StudentService,
+                        val studentFeeService: StudentFeeService) {
 
     @PostMapping
     fun post(@RequestBody feeInfoJson: FeeInfoJson, request: HttpServletRequest): FeeInfo {
@@ -37,7 +43,17 @@ class FeeRestController(val feeInfoService: FeeInfoService, val classService: Cl
 
     @PostMapping("/student/new")
     fun studentPayment(request: HttpServletRequest, @RequestBody feeStudentNew: FeeStudentNew): List<FeeInfo>? {
-        println()
+        val fee = feeInfoService.find(feeStudentNew.feeInfoId)
+        val studentOf = studentService.findById(feeStudentNew.studentId, getOrganizationFromSession(request).name)
+        val pDate = feeStudentNew.paymentDate.convertToDate()
+
+        val studentFee = StudentFee().apply {
+            student = studentOf
+            feeInfo = fee
+            paymentDate = pDate
+
+        }
+        studentFeeService.save(studentFee)
         return null
     }
 }
