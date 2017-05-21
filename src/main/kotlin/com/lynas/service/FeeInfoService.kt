@@ -43,4 +43,29 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Sess
         }
     }
 
+    @Transactional
+    open fun findFeeInfoByStudent(id: Long): List<FeeInfo>? {
+        return feeInfoRepository.findFeeInfo(studentId = id)
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

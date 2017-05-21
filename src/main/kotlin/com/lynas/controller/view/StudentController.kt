@@ -1,16 +1,18 @@
 package com.lynas.controller.view
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.lynas.model.Organization
-import com.lynas.service.PersonService
 import com.lynas.model.Student
+import com.lynas.service.FeeInfoService
+import com.lynas.service.PersonService
 import com.lynas.service.StudentService
-import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
 import com.lynas.util.getOrganizationFromSession
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -19,7 +21,9 @@ import javax.servlet.http.HttpServletRequest
 
 @Controller
 @RequestMapping("student")
-class StudentController(val studentService: StudentService, val personService: PersonService) {
+class StudentController(val studentService: StudentService,
+                        val personService: PersonService,
+                        val feeInfoService: FeeInfoService) {
 
     val logger = getLogger(StudentController::class.java)
 
@@ -59,6 +63,9 @@ class StudentController(val studentService: StudentService, val personService: P
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!).contactInformationList
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
+        val feeInfoList = feeInfoService.findFeeInfoByStudent(studentId)
+                ?.filter { it.course?.organization?.id == getOrganizationFromSession(request).id }
+        model.addAttribute("feeInfoList", feeInfoList)
         println(student.toString())
         return "studentDetails"
     }
