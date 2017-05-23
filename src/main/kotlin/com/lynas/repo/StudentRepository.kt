@@ -30,7 +30,7 @@ interface StudentRepository : GraphRepository<Student> {
     @Query("match (s:Student) -[:studentIsAPerson]- (p:Person), (s) -[ e:Enrolment {year: {1}} ]- (cc:Class), " +
             "(p)-[:personBelongsToAnOrganization]->(org:Organization {name:{2}})" +
             "where ID(s) = {0} " +
-            "return ID(s) as studentId, p.firstName as firstName, p.lastName as lastName, cc.name as className, e.roleNumber as rollNumber , e.year as year")
+            "return ID(s) as studentId, ID(cc) as classID, p.firstName as firstName, p.lastName as lastName, cc.name as className, e.roleNumber as rollNumber , e.year as year")
     fun studentInfoByYear(id: Long, year: Int, organization: String): StudentInfoQueryResult
 
     @Query("MATCH (s:Student)-[sp:studentIsAPerson]-> (p:Person)," +

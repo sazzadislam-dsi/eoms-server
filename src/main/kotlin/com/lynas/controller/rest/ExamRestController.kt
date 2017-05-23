@@ -14,6 +14,7 @@ import com.lynas.util.getOrganizationFromSession
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -60,6 +61,15 @@ class ExamRestController(val examService: ExamService,
         logger.info("return result of class id {} and subject id {} and year {}", classId, subjectId, _year)
         val organization = getOrganizationFromSession(request)
         return responseOK(examService.resultOfSubjectByYear(classId, subjectId, _year, organization.name))
+    }
+
+    @GetMapping("student/{studentId}/results")
+    fun resultOfStudentByYear(@PathVariable studentId: Long, request: HttpServletRequest): ResponseEntity<*> {
+        logger.info("return result for student id [{}]", studentId)
+        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val year = LocalDate.now().year
+        val studentInfo = studentService.studentInfoByYear(id = studentId, year = year, organization = organization.name)
+        return responseOK(examService.resultOfStudentByYear(studentInfo.classId, studentId, year, organization.name))
     }
 
     @GetMapping("/class/{classId}/student/{studentId}/year/{_year}/results")

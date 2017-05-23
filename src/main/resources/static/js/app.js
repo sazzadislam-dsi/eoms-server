@@ -231,9 +231,10 @@
         })
     };
 
-    bindFormSubmitsWithUrl2('studentResult', function (data) {
+    var studentResultOnSuccess = function (data) {
         hideLoader();
         var h = ['QUIZ_1', 'QUIZ_2', 'FIRST_TERM', 'SECOND_TERM', 'FINAL'];
+        console.log("Enter in Student Result On Success");
 
         $("#name").empty().append(data.studentName);
         $("#roll").empty().append(data.rollNumber);
@@ -265,7 +266,9 @@
             table += '</tr>';
         }
         $("#result").append(table);
-    }, function (xhr) {
+    };
+
+    bindFormSubmitsWithUrl2('studentResult', studentResultOnSuccess, function (xhr) {
         hideLoader();
         console.dir(xhr);
     });
@@ -357,8 +360,8 @@
         table += "<thead>";
         table += "<th>Roll No</th>";
         table += "<th>Student</th>";
-        for ( property in data[0].resultOfSubjects) {
-            var val =  property;
+        for (property in data[0].resultOfSubjects) {
+            var val = property;
             h.push(val);
             table += "<th>" + val + "</th>";
         }
@@ -382,6 +385,27 @@
     }, function (xhr) {
         hideLoader();
         console.dir(xhr);
+    });
+
+    $(document).ready(function () {
+        var studentId =  window.location.href.split("/")[4];
+        console.log(studentId);
+        const url = "http://localhost:8080/exams/student/" + studentId + "/results";
+        console.log(url);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            contentType: "application/json",
+            dataType: "json",
+            beforeSend: function (request) {
+                request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
+                request.setRequestHeader("Accept", "application/json");
+            },
+            success: studentResultOnSuccess,
+            error: function (data) {
+                console.dir(data);
+            }});
+
     });
 
 
