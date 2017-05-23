@@ -7,7 +7,10 @@
 <body>
 <div layout:fragment="page-content">
     <div class="row">
-        <div class="col-lg-8 ">
+        <div class="col-lg-6">
+            <a class="btn btn-primary" th:href="|/subject/student/${student.id}/list|">Subject List</a>
+            <a class="btn btn-primary" th:href="|/student/${student.id}/update|">Update Personal Information</a>
+            <a class="btn btn-primary" th:href="|/student/${student.id}/addContactInformation|"> Add Contact Info</a>
             <h3 class="esb">Personal Information</h3>
             <table class="table table-striped">
                 <tr>
@@ -33,9 +36,29 @@
                 </tr>
             </table>
         </div>
+        <div class="col-lg-6">
+            <h4>Payment Paid</h4>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>
+                        Type
+                    </th>
+                    <th>
+                        Payment Date
+                    </th>
+                </tr>
+                </thead>
+                <tr th:each="each : ${studentFeeList}">
+                    <td th:text="${each.feeInfo.type}"></td>
+                    <td th:text="${each.paymentDate}"></td>
+                </tr>
+            </table>
+
+        </div>
     </div>
     <div class="row est">
-        <div class="col-lg-8">
+        <div class="col-lg-6">
             <h3 class="separator">Contact Information</h3>
 
             <div th:each="contactInfo : ${student.person.contactInformationList}" class="separator">
@@ -68,12 +91,12 @@
                 <a th:href="|/contactInformation/${contactInfo.id}/update/${student.id}/student|">Update</a>
             </div>
         </div>
-        <div class="col-lg-4">
-            <a th:href="|/student/${student.id}/update|">Update Personal Information</a>
+        <div class="col-lg-6">
+
             <br/>
-            <a th:href="|/student/${student.id}/addContactInformation|"> Add Contact Info</a>
+
             <br/>
-            <a th:href="|/subject/student/${student.id}/list|">Subject List</a>
+
         </div>
     </div>
 

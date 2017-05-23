@@ -5,6 +5,7 @@ import com.lynas.model.Organization
 import com.lynas.service.AppUserService
 import com.lynas.util.AppConstant
 import com.lynas.util.encodePassword
+import com.lynas.util.getOrganizationFromSession
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
@@ -22,7 +23,7 @@ class AppUserController(val appUserService: AppUserService) {
 
         return appUserService.save(appUser.apply {
             password = encodePassword(appUser.password)
-            organization = request.session.getAttribute(AppConstant.organization) as Organization
+            organization = getOrganizationFromSession(request)
         })
     }
 

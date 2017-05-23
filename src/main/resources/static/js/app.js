@@ -2,6 +2,12 @@
     var getCsrf = function () {
         return $('[name=_csrf]').val();
     };
+    var showLoader = function () {
+        $(".loading-view").addClass('button_loader').attr("value", "");
+    };
+    var hideLoader = function () {
+        $(".loading-view").removeClass('button_loader');
+    };
     var generateFormSubmitParams = function (context) {
         var _this = $(context),
             data = {};
@@ -11,6 +17,7 @@
                 value = _this.val();
             data[name] = value;
         });
+        data["feeInfoId"] = $(".feeInfoId").val();
         var params = {};
         params["data"] = JSON.stringify(data);
         console.log(params["data"]);
@@ -21,6 +28,7 @@
         $('form.' + formName).on('submit', function () {
             var params = generateFormSubmitParams(this);
             var $form = $(this);
+            showLoader();
             $.ajax({
                 url: $form.attr('action'),
                 type: $form.attr('method'),
@@ -39,39 +47,67 @@
     };
 
     bindFormSubmits('organizationCreate', function (response) {
+        hideLoader();
         console.log("New Organization Create");
         console.dir(response);
         alert("Organization create successful !");
         location.reload();
     }, function (xhr) {
+        hideLoader();
         alert(xhr.status + "  Organization with given info exist");
         //alert(xhr.responseText);
     });
 
+    bindFormSubmits('feeInfoCreate', function (response) {
+        hideLoader();
+        console.dir(response);
+        alert("Fee create successful !");
+        location.reload();
+    }, function (xhr) {
+        hideLoader();
+        alert(xhr.status + "  Organization with given info exist");
+    });
+
+    bindFormSubmits('studentFeeNew', function (response) {
+        hideLoader();
+        console.dir(response);
+        alert("Fee create successful !");
+        location.reload();
+    }, function (xhr) {
+        hideLoader();
+        alert(xhr.status + "  Organization with given info exist");
+    });
+
     bindFormSubmits('classCreate', function (response) {
+        hideLoader();
         console.log("newww");
         console.dir(response);
         alert("Class create successful !");
         location.reload();
     }, function (xhr) {
+        hideLoader();
         alert(xhr.status + "  Class with given info exist");
         //alert(xhr.responseText);
     });
 
     bindFormSubmits('classUpdate', function (response) {
+        hideLoader();
         console.log("newww");
         console.dir(response);
         alert("Class updated successful !");
         location.reload();
     }, function (xhr) {
+        hideLoader();
         alert(xhr.status + "  Class with given info exist");
         //alert(xhr.responseText);
     });
 
     bindFormSubmits('studentCreate', function (response) {
+        hideLoader();
         //alert("Student create successful !")
         window.location.replace("/student/" + response.id + "/details");
     }, function (xhr) {
+        hideLoader();
         var responseError = JSON.parse(xhr.responseText);
         $('#errorField').html(responseError.errorField);
         $('#errorMessage').html(responseError.errorMessage);
@@ -80,16 +116,20 @@
     });
 
     bindFormSubmits('studentUpdate', function (response) {
+        hideLoader()
         window.location.replace("/student/" + response.id + "/details");
     }, function (xhr) {
+        hideLoader();
         alert(xhr.status + "Student Info Not Found !!!");
         //alert(xhr.responseText);
     });
 
     bindFormSubmits('studentAddContactInfo', function (response) {
+        hideLoader();
         //alert("Student create successful !")
         window.location.replace("/student/" + response.id + "/details");
     }, function (xhr) {
+        hideLoader();
         var responseError = JSON.parse(xhr.responseText);
         $('#errorField').html(responseError.errorField);
         $('#errorMessage').html(responseError.errorMessage);
@@ -98,24 +138,30 @@
     });
 
     bindFormSubmits('contactInfoUpdate', function (response) {
+        hideLoader();
         window.location.replace("/student/" + $(".studentId").val() + "/details");
     }, function (xhr) {
+        hideLoader();
         alert(xhr.status + "Student Contact Not Found !!!");
         //alert(xhr.responseText);
     });
 
     bindFormSubmits('enrolmentCreate', function (response) {
+        hideLoader();
         alert("Enrolled !!");
         location.reload();
     }, function (xhr) {
+        hideLoader();
         alert(xhr.status + " Student Enrolled Another Class !!!");
         //alert(xhr.responseText);
     });
 
     bindFormSubmits('subjectCreate', function (response) {
+        hideLoader();
         alert("Subject added to class id" + response.classId);
         location.reload();
     }, function (xhr) {
+        hideLoader();
         alert(xhr.status + " Subject cannot add to class");
         //alert(xhr.responseText);
     });
@@ -126,6 +172,7 @@
             const attendanceDate = $("#date").val();
             const url = "/attendances/ofClass/" + className + "/onDay/" + attendanceDate;
             console.log(url);
+            showLoader();
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -143,6 +190,7 @@
     };
 
     bindFormSubmitsWithUrl('showAttendance', function (response) {
+        hideLoader();
         $("#show").empty()
         var table = "";
         $.each(response, function (i, itr) {
@@ -158,6 +206,7 @@
         });
         $("#show").append(table);
     }, function (xhr) {
+        hideLoader();
         console.dir(xhr);
     });
 
@@ -165,6 +214,7 @@
         $('form.' + formName).on('submit', function () {
             const url = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/student/" + $('#studentId').val() + "/year/" + $('#year').val() + "/results";
             console.log(url);
+            showLoader();
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -182,6 +232,7 @@
     };
 
     var studentResultOnSuccess = function (data) {
+        hideLoader();
         var h = ['QUIZ_1', 'QUIZ_2', 'FIRST_TERM', 'SECOND_TERM', 'FINAL'];
         console.log("Enter in Student Result On Success");
 
@@ -218,6 +269,7 @@
     };
 
     bindFormSubmitsWithUrl2('studentResult', studentResultOnSuccess, function (xhr) {
+        hideLoader();
         console.dir(xhr);
     });
 
@@ -225,6 +277,7 @@
         $('form.' + formName).on('submit', function () {
             const url = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/subject/" + $('#subjectId').val() + "/year/" + $('#year').val() + "/results";
             console.log(url);
+            showLoader();
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -242,6 +295,7 @@
     };
 
     bindFormSubmitsWithUrl3('subjectResult', function (data) {
+        hideLoader();
         var h = ['QUIZ_1', 'QUIZ_2', 'FIRST_TERM', 'SECOND_TERM', 'FINAL'];
 
         $("#subjectName").empty().append(data.subjectName);
@@ -271,6 +325,7 @@
 
         $("#result").append(table);
     }, function (xhr) {
+        hideLoader();
         console.dir(xhr);
     });
 
@@ -278,6 +333,7 @@
         $('form.' + formName).on('submit', function () {
             const url = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/year/" + $('#year').val() + "/results";
             console.log(url);
+            showLoader();
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -295,6 +351,7 @@
     };
 
     bindFormSubmitsWithUrl4('classResult', function (data) {
+        hideLoader();
         if (data.length <= 0) return;
         $("#result").empty();
         var h = [];
@@ -326,6 +383,7 @@
         $("#result").append(table);
 
     }, function (xhr) {
+        hideLoader();
         console.dir(xhr);
     });
 

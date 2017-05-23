@@ -10,6 +10,7 @@ import com.lynas.service.StudentService
 import com.lynas.service.SubjectService
 import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
+import com.lynas.util.getOrganizationFromSession
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -32,7 +33,7 @@ class ExamRestController(val examService: ExamService,
     @PostMapping
     fun post(@RequestBody examJson: ExamJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("hit in post controller with {}", examJson)
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         val course = classService.findById(examJson.classId, organization.name)
         val _subject = subjectService.findById(examJson.subjectId)
         val listOfExam = examJson.examJson.map {
@@ -58,7 +59,7 @@ class ExamRestController(val examService: ExamService,
                                @PathVariable _year: Int,
                                request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and subject id {} and year {}", classId, subjectId, _year)
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         return responseOK(examService.resultOfSubjectByYear(classId, subjectId, _year, organization.name))
     }
 
@@ -77,7 +78,7 @@ class ExamRestController(val examService: ExamService,
                                @PathVariable _year: Int,
                               request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, studentId, _year)
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         return responseOK(examService.resultOfStudentByYear(classId, studentId, _year, organization.name))
     }
 
@@ -86,7 +87,7 @@ class ExamRestController(val examService: ExamService,
                                @PathVariable _year: Int,
                               request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, _year)
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         val result = examService.resultOfClass(classId, _year, organization.name).groupBy { it.roleNumber }
                 .map { ExamClassResponse().apply {
                     roll = it.key

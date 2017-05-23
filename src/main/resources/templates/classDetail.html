@@ -13,9 +13,10 @@
 <div layout:fragment="page-content">
 
     <div class="row est">
-        <div class="col-lg-8">
+        <div class="col-lg-6">
             <a class="btn btn-primary" th:href="|/subject/class/${cls.id}/create|">Add Subject</a>
             <a class="btn btn-primary" th:href="|/subject/class/${cls.id}/list|">Subject List</a>
+            <a class="btn btn-primary" th:href="|/fee/new/class/${cls.id}|">New Fee</a>
             <h3 class="separator">Class Information</h3>
 
                 <div>
@@ -44,22 +45,43 @@
                         <th style="width: 30%">Student Name</th>
                         <th>Role Number</th>
                         <th>Detail</th>
+                        <th>Option</th>
 
 
-                        <div th:each="cls : ${classDetails}" class="separator">
+                        <div th:each="each : ${classDetails}" class="separator">
                             <tr>
-                                <td th:text="${cls.studentName}"></td>
-                                <td th:text="${cls.roleNumber}"></td>
-                                <td><a th:href="|/student/${cls.studentId}/details|">Details</a></td>
+                                <td th:text="${each.studentName}"></td>
+                                <td th:text="${each.roleNumber}"></td>
+                                <td><a th:href="|/student/${each.studentId}/details|">Details</a></td>
+                                <td><a th:href="|/fee/class/${cls.id}/student/${each.studentId}/|">Make Payment</a></td>
                             </tr>
                         </div>
                     </table>
                 </div>
         </div>
-        <div class="col-lg-4">
-            <!--<a th:href="|/student/${student.id}/update|">Update Personal Information</a>-->
-            <br/>
-            <!--<a th:href="|/student/${student.id}/addContactInformation|"> Add Contact Info</a>-->
+        <div class="col-lg-6">
+            <div>
+                <h4>Fee Information</h4>
+            </div>
+            <table class="table table-striped">
+
+                <th>ID</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Year</th>
+                <th>Last Date</th>
+
+
+                <div th:each="feeInfo : ${feeList}" class="separator">
+                    <tr>
+                        <td th:text="${feeInfo.id}"></td>
+                        <td th:text="${feeInfo.type}"></td>
+                        <td th:text="${feeInfo.amount}"></td>
+                        <td th:text="${feeInfo.year}"></td>
+                        <td th:text="${feeInfo.lastDate}"></td>
+                    </tr>
+                </div>
+            </table>
         </div>
     </div>
 </div>

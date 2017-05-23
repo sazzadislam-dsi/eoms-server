@@ -27,7 +27,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
     fun postAttendance(@RequestBody attendanceJson: AttendanceJsonWrapper,
                        request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
 
         try {
             attendanceJson.date.convertToDate()
@@ -61,11 +61,11 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
                     Constants.INVALID_DATE_FORMAT,
                     Constants.EXPECTED_DATE_FORMAT))
         }
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization?
+        val organization = getOrganizationFromSession(request)
         val result = attendanceService.getAttendanceOfAClassOnDate(
                 dateOf.time,
                 classId,
-                organization?.name)
+                organization.name)
 
         return responseOK(result)
     }
