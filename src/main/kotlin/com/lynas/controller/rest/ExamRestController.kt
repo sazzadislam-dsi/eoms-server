@@ -99,6 +99,6 @@ class ExamRestController(val examService: ExamService,
                     })
                 } }
 
-        return responseOK(result)
+        return responseOK(examService.courseResult(classId, _year, organization.name))
     }
 }
