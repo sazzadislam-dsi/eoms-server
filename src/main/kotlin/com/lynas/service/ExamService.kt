@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-open class ExamService(val examRepository: ExamRepository,
-                       val classService: ClassService,
-                       val subjectService: SubjectService,
-                       val studentService: StudentService) {
+open class ExamService(private val examRepository: ExamRepository,
+                       private val classService: ClassService,
+                       private val subjectService: SubjectService,
+                       private val studentService: StudentService) {
 
     @Transactional
     open fun save(exam: Collection<Exam>) {
