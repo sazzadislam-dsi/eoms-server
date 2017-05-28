@@ -12,5 +12,6 @@ data class ExamQueryResult (
         var exam: List<Exam> = mutableListOf(),
         var subject: String? = null,
         var person: String? = null,
-        var roleNumber: Int? = null
+        var roleNumber: Int? = null,
+        var studentId: Long? = null
 )
