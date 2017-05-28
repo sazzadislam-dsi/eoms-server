@@ -4,10 +4,7 @@ import com.lynas.model.Exam
 import com.lynas.model.Organization
 import com.lynas.model.request.ExamJsonWrapper
 import com.lynas.model.response.ExamClassResponse
-import com.lynas.service.ClassService
-import com.lynas.service.ExamService
-import com.lynas.service.StudentService
-import com.lynas.service.SubjectService
+import com.lynas.service.*
 import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
 import com.lynas.util.getOrganizationFromSession
@@ -15,6 +12,8 @@ import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.temporal.ChronoUnit
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -26,7 +25,8 @@ import javax.servlet.http.HttpServletRequest
 class ExamRestController(val examService: ExamService,
                          val classService: ClassService,
                          val subjectService: SubjectService,
-                         val studentService: StudentService) {
+                         val studentService: StudentService,
+                         val examServiceJava: ExamServiceJava) {
 
     val logger = getLogger(ExamRestController::class.java)
 
@@ -99,6 +99,19 @@ class ExamRestController(val examService: ExamService,
                     })
                 } }
 
-        return responseOK(examService.courseResult(classId, _year, organization.name))
+        return responseOK(examService.resultOfClass(classId, _year, organization.name))
+    }
+
+    @GetMapping("/class/{classId}/year/{_year}/results/new")
+    fun resultOfClass(@PathVariable classId: Long,
+                      @PathVariable _year: Int,
+                      request: HttpServletRequest): ResponseEntity<*> {
+        val orgName = getOrganizationFromSession(request).name
+        logger.info("Hit method with classId [{}], year [{}], organization [{}]", classId, _year, orgName)
+        val start = LocalTime.now()
+        val result = examServiceJava.getResultOfClass(classId, _year, orgName)
+        val end = LocalTime.now()
+        logger.info("Execution Time [{}] millisecond", ChronoUnit.MILLIS.between(start, end))
+        return responseOK(result)
     }
 }
