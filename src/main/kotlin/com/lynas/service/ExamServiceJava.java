@@ -5,7 +5,6 @@ import com.lynas.model.query.result.ExamQueryResult;
 import com.lynas.model.response.ExamClassResponse1;
 import com.lynas.model.util.ExamType;
 import com.lynas.repo.ExamRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +18,13 @@ import java.util.stream.Collectors;
 @Service
 public class ExamServiceJava {
 
-    @Autowired
+    private static final String GRAND_TOTAL = "GRAND_TOTAL";
+
     private ExamRepository examRepository;
+
+    public ExamServiceJava(ExamRepository examRepository) {
+        this.examRepository = examRepository;
+    }
 
     @Transactional
     public List<ExamClassResponse1> getResultOfClass(long classId, int year, String organization) {
@@ -29,7 +33,7 @@ public class ExamServiceJava {
         if (list == null) return new ArrayList<>();
 
         Map<String, Double> subjectTotalMark = calculateTotal(list);
-        double grandTotal = subjectTotalMark.get("grandTotal");
+        double grandTotal = subjectTotalMark.get(GRAND_TOTAL);
         List<ExamClassResponse1> examClassResponse1s = list
                 .stream()
                 .sorted(Comparator.comparingInt(ExamQueryResult::getRoleNumber))
@@ -82,22 +86,16 @@ public class ExamServiceJava {
     }
 
     private Map<String, Double> calculateTotal(List<ExamQueryResult> list) {
-        double grandTotal = 0.0;
-        Map<String, Double> map = new HashMap<>();
-        Set<String> set = new HashSet<>();
-        for (ExamQueryResult i : list) {
-            if (!set.contains(i.getSubject())) {
-                set.add(i.getSubject());
-                double subjectTotal = i.getExam()
+        Map<String, Double> map = list
+                .stream()
+                .collect(Collectors.toMap(ExamQueryResult::getSubject, p -> p, (p, q) -> p))
+                .values()
+                .stream()
+                .collect(Collectors.toMap(ExamQueryResult::getSubject, i -> i.getExam()
                         .stream()
-                        .mapToDouble(j -> (j.getTotalNumber() * j.getPercentile()) / 100)
-                        .sum();
-                map.put(i.getSubject(), subjectTotal);
-                grandTotal += subjectTotal;
-            }
-        }
-        map.put("grandTotal", grandTotal);
+                        .mapToDouble(j -> (j.getTotalNumber() * j.getPercentile()) / 100).sum()));
+
+        map.put(GRAND_TOTAL, map.entrySet().stream().mapToDouble(Map.Entry::getValue).sum());
         return map;
     }
-
 }
