@@ -1,6 +1,7 @@
 package com.lynas.model.response
 
 import com.lynas.model.Exam
+import com.lynas.model.util.ExamType
 
 /**
  * Created by seal on 5/26/2017.
@@ -10,6 +11,15 @@ class ExamClassResponse1 {
     var classId = 0L
     var rollNumber = 0
     var year = 0
+
+    constructor(studentId: Long, classId: Long, rollNumber: Int, year: Int, grandTotal: GrandTotal, subjects: List<Subjects>) {
+        this.studentId = studentId
+        this.classId = classId
+        this.rollNumber = rollNumber
+        this.year = year
+        this.grandTotal = grandTotal
+        this.subjects = subjects
+    }
 
     data class GrandTotal(
             var total: Double = 0.0,
@@ -22,7 +32,7 @@ class ExamClassResponse1 {
             var subjectName: String = "N/A",
             var total: Double = 0.0,
             var obtained: Double = 0.0,
-            var exams: List<Exam> = listOf()
+            var exams: Map<ExamType, Exam> = mutableMapOf()
     )
 
     var subjects: List<Subjects> = mutableListOf()
