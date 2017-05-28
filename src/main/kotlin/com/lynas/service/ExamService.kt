@@ -94,7 +94,7 @@ open class ExamService(private val examRepository: ExamRepository,
         return response
     }
 
-    @Transactional
+    /*@Transactional
     open fun courseResult(classId: Long, _year: Int, organization: String): List<() ->ExamClassResponse1> {
         val classResultList = examRepository
                 .resultOfClassByYear(classId, _year, organization)
@@ -125,8 +125,7 @@ open class ExamService(private val examRepository: ExamRepository,
                 }
                 .toList()
         return classResultList
-
-    }
+    }*/
 
     @Transactional
     open fun resultOfClass(classId: Long, _year: Int, organization: String): List<ExamQueryResult> {
