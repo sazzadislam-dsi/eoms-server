@@ -2,6 +2,8 @@ package com.lynas.controller.view
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lynas.model.Student
+import com.lynas.model.response.ExamClassResponse1
+import com.lynas.service.ExamServiceJava
 import com.lynas.service.FeeInfoService
 import com.lynas.service.PersonService
 import com.lynas.service.StudentService
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import java.time.LocalTime
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -23,7 +26,8 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("student")
 class StudentController(val studentService: StudentService,
                         val personService: PersonService,
-                        val feeInfoService: FeeInfoService) {
+                        val feeInfoService: FeeInfoService,
+                        val examServiceJava: ExamServiceJava) {
 
     val logger = getLogger(StudentController::class.java)
 
@@ -66,6 +70,27 @@ class StudentController(val studentService: StudentService,
         val studentFeeList = feeInfoService.findStudentFeeInfoByStudent(studentId)
                 ?.filter { it.feeInfo?.course?.organization?.id == getOrganizationFromSession(request).id }
         model.addAttribute("studentFeeList", studentFeeList)
+        return "studentDetails"
+    }
+
+    @GetMapping("/{studentId}/details/class/{classId}")
+    fun studentViewDetails(@PathVariable studentId: Long, @PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
+        val organization = getOrganizationFromSession(request)
+        val student = studentService.findById(studentId, organization.name)
+        student.person?.contactInformationList = personService.findPersonById(student.person?.id!!).contactInformationList
+        model.addAttribute("student", student)
+        model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
+        val studentFeeList = feeInfoService.findStudentFeeInfoByStudent(studentId)
+                ?.filter { it.feeInfo?.course?.organization?.id == getOrganizationFromSession(request).id }
+        model.addAttribute("studentFeeList", studentFeeList)
+
+
+        val orgName = getOrganizationFromSession(request).name
+        val result: ExamClassResponse1 = examServiceJava.getResultOfClass(classId, 2017, orgName)
+                .filter { it.studentId == studentId }
+                .first()
+        model.addAttribute("result", result)
+
         return "studentDetails"
     }
 

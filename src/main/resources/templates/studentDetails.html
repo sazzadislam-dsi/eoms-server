@@ -99,38 +99,46 @@
 
         </div>
     </div>
+    <div class="row est">
+        <div class="col-lg-12">
+            <h2>Result Information</h2>
+            <p>
+                Total marks of all subject : <span th:text="${result.grandTotal.total}"></span>
+            </p>
+            <p>
+                Total marks obtained : <span th:text="${result.grandTotal.obtained}"></span>
+            </p>
 
-    <div>
-        <div class="panel panel-default">
-            <div id="show" class="panel-body">
-                <div class="form-group">
-                    <label>Name</label>
-                    <div id="name"></div>
-                </div>
-                <div class="form-group">
-                    <label>Roll Number</label>
-                    <div id="roll"></div>
-                </div>
-                <div>
-                    <table class="table table-striped">
-                        <thead>
-                        <th>Subject</th>
-                        <th>QUIZ_1</th>
-                        <th>QUIZ_2</th>
-                        <th>FIRST_TERM</th>
-                        <th>SECOND_TERM</th>
-                        <th>FINAL</th>
-                        <th>Total</th>
-                        </thead>
-                        <tbody id="result">
+            <h3 class="est">Result by Subject</h3>
+            <p th:each="subject : ${result.subjects}" style="border: 1px solid red">
+            <h4 th:text="${subject.subjectName}"></h4>
+            <p>
+                Total Marks : <span th:text="${subject.total}"></span>
+            </p>
+            <p>
+                Obtained Marks : <span th:text="${subject.obtained}"></span>
+            </p>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Exam Name</th>
+                    <th>totalNumber</th>
+                    <th>obtainedNumber</th>
+                    <th>percentile</th>
+                    <th>ID</th>
+                </tr>
+                </thead>
+                <tr th:each="exam : ${subject.exams}">
+                    <td th:text="${exam.key}"></td>
+                    <td th:text="${exam.value.totalNumber}"></td>
+                    <td th:text="${exam.value.obtainedNumber}"></td>
+                    <td th:text="${exam.value.percentile}"></td>
+                    <td th:text="${(exam.value.obtainedNumber * exam.value.percentile)/100}"></td>
+                </tr>
+            </table>
 
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
+            </p>
         </div>
-
     </div>
 </div>
 </body>

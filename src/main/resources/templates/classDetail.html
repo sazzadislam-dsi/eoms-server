@@ -52,7 +52,7 @@
                             <tr>
                                 <td th:text="${each.studentName}"></td>
                                 <td th:text="${each.roleNumber}"></td>
-                                <td><a th:href="|/student/${each.studentId}/details|">Details</a></td>
+                                <td><a th:href="|/student/${each.studentId}/details/class/${cls.id}|">Details</a></td>
                                 <td><a th:href="|/fee/class/${cls.id}/student/${each.studentId}/|">Make Payment</a></td>
                             </tr>
                         </div>

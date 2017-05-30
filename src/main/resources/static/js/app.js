@@ -386,27 +386,4 @@
         hideLoader();
         console.dir(xhr);
     });
-
-    $(document).ready(function () {
-        var studentId =  window.location.href.split("/")[4];
-        console.log(studentId);
-        const url = "http://localhost:8080/exams/student/" + studentId + "/results";
-        console.log(url);
-        $.ajax({
-            url: url,
-            type: 'GET',
-            contentType: "application/json",
-            dataType: "json",
-            beforeSend: function (request) {
-                request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
-                request.setRequestHeader("Accept", "application/json");
-            },
-            success: studentResultOnSuccess,
-            error: function (data) {
-                console.dir(data);
-            }});
-
-    });
-
-
 })(jQuery);
