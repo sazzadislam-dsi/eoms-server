@@ -55,11 +55,11 @@ class ClassController constructor(val classService: ClassService, val feeInfoSer
         return "redirect:/class/home"
     }
 
-    @RequestMapping("/detail/{classId}")
-    fun detail(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
+    @RequestMapping("/detail/{classId}/year/{year}")
+    fun detail(@PathVariable classId: Long, @PathVariable year: Int, model: Model, request: HttpServletRequest): String {
         logger.info("Hit in detail with class id {}", classId)
         val organization = getOrganizationFromSession(request)
-        val classDetails: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId, organization.name)
+        val classDetails: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId, organization.name, year)
         val cls: Course = classService.findById(classId, organization.name)
         logger.info("class student number {}", classDetails.size)
         model.addAttribute("classDetails", classDetails)

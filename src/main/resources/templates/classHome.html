@@ -35,7 +35,7 @@
                     <td th:text="${cls.section}">Section</td>
                     <td th:text="${cls.shift}">Shift</td>
                     <td>
-                        <a th:href="|/class/detail/${cls.id}|">Details</a>
+                        <a th:href="|/class/detail/${cls.id}/year/${session.currentYear}|">Details</a>
                     </td>
                     <td>
                         <a th:href="|/class/updateClass/${cls.id}|">Update</a>

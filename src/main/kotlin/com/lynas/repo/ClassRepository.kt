@@ -22,11 +22,11 @@ interface ClassRepository : GraphRepository<Course> {
     @Query("match (cl:Class{ name:{0},shift:{1}, section:{2}})-[:classBelongsToAnOrganization]->(org:Organization {name:{3}} ) return cl")
     fun findByProperty(className: String?, shift: String, section: String, orgName: String?): Course?
 
-    @Query("match (p:Person) -[:studentIsAPerson]- (s:Student) -[e:Enrolment]- (c:Class)," +
+    @Query("match (p:Person) -[:studentIsAPerson]- (s:Student) -[e:Enrolment{year:{2}}]- (c:Class)," +
             "(c)-[:classBelongsToAnOrganization]->(org:Organization {name:{1}})" +
             "where ID(c) = {0}" +
             "return ID(s) as studentId, (p.firstName +' '+ p.lastName) as studentName, e.roleNumber as roleNumber Order By e.roleNumber")
-    fun findStudentsByClass(classId: Long?, organization: String): Collection<ClassDetailQueryResult>
+    fun findStudentsByClass(classId: Long?, organization: String, year: Int): Collection<ClassDetailQueryResult>
 
     @Query("match (p:Person) -[:studentIsAPerson]- (s:Student) -[e:Enrolment {year: {1}}]- (c:Class)" +
             "-[:classBelongsToAnOrganization]->(org:Organization {name:{2}})" +

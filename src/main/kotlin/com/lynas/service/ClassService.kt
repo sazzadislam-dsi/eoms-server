@@ -44,8 +44,8 @@ open class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    open fun findStudentsByClassId(classID: Long,organization: String): Collection<ClassDetailQueryResult> {
-        return classRepo.findStudentsByClass(classID, organization)
+    open fun findStudentsByClassId(classID: Long, organization: String, year: Int): Collection<ClassDetailQueryResult> {
+        return classRepo.findStudentsByClass(classID, organization, year)
     }
 
     @Transactional
