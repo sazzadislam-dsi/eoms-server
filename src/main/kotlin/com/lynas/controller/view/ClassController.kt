@@ -10,8 +10,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
-import java.time.LocalDate
-import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -69,7 +67,6 @@ class ClassController constructor(val classService: ClassService, val feeInfoSer
                 ?.filter { it.course?.organization?.id == getOrganizationFromSession(request).id }
                 ?.sortedBy { it.type }
         model.addAttribute("feeList", feeInfoList)
-        model.addAttribute("currentYear", LocalDate.now().year)
         return "classDetail"
     }
 
