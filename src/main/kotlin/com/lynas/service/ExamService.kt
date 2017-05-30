@@ -2,21 +2,23 @@ package com.lynas.service
 
 import com.lynas.model.Exam
 import com.lynas.model.query.result.ExamQueryResult
+import com.lynas.model.response.ExamClassResponse1
 import com.lynas.model.response.ExamResponse
 import com.lynas.model.response.ExamStudentResponse
 import com.lynas.repo.ExamRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.streams.toList
 
 /**
  * Created by sazzad on 7/19/16
  */
 
 @Service
-open class ExamService(val examRepository: ExamRepository,
-                       val classService: ClassService,
-                       val subjectService: SubjectService,
-                       val studentService: StudentService) {
+open class ExamService(private val examRepository: ExamRepository,
+                       private val classService: ClassService,
+                       private val subjectService: SubjectService,
+                       private val studentService: StudentService) {
 
     @Transactional
     open fun save(exam: Collection<Exam>) {
@@ -92,12 +94,45 @@ open class ExamService(val examRepository: ExamRepository,
         return response
     }
 
+    /*@Transactional
+    open fun courseResult(classId: Long, _year: Int, organization: String): List<() ->ExamClassResponse1> {
+        val classResultList = examRepository
+                .resultOfClassByYear(classId, _year, organization)
+                .sortedBy { it.roleNumber }
+                .groupBy { it.roleNumber }
+                .entries
+                .parallelStream()
+                .map { (_rollNumber, queryResult) ->
+                    {
+                        ExamClassResponse1().apply {
+                            rollNumber = _rollNumber!!
+                            year = _year
+                            subjects =  queryResult.
+                                    map {
+                                        ExamClassResponse1
+                                                .Subjects()
+                                                .apply {
+                                                    subjectName = it.courseName!!
+                                                    obtained = it.exam
+                                                            .map { (it.percentile!! * it.obtainedNumber!!) / 100 }
+                                                            .sum()
+                                                    exams = it.exam
+                                                }
+                                    }
+                                    .toList()
+                        }
+                    }
+                }
+                .toList()
+        return classResultList
+    }*/
+
     @Transactional
     open fun resultOfClass(classId: Long, _year: Int, organization: String): List<ExamQueryResult> {
         val resultList = examRepository.resultOfClassByYear(classId, _year, organization)
         val resultMap = resultList.groupBy { it.roleNumber }
 
-       return resultList
+        return resultList
 
     }
 }
