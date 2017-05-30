@@ -73,8 +73,11 @@ class StudentController(val studentService: StudentService,
         return "studentDetails"
     }
 
-    @GetMapping("/{studentId}/details/class/{classId}")
-    fun studentViewDetails(@PathVariable studentId: Long, @PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
+    @GetMapping("/{studentId}/details/class/{classId}/year/{year}")
+    fun studentViewDetails(model: Model, request: HttpServletRequest,
+                           @PathVariable studentId: Long,
+                           @PathVariable year: Int,
+                           @PathVariable classId: Long): String {
         val organization = getOrganizationFromSession(request)
         val student = studentService.findById(studentId, organization.name)
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!).contactInformationList
@@ -86,7 +89,7 @@ class StudentController(val studentService: StudentService,
 
 
         val orgName = getOrganizationFromSession(request).name
-        val result: ExamClassResponse1 = examServiceJava.getResultOfClass(classId, 2017, orgName)
+        val result: ExamClassResponse1 = examServiceJava.getResultOfClass(classId, year, orgName)
                 .filter { it.studentId == studentId }
                 .first()
         model.addAttribute("result", result)
