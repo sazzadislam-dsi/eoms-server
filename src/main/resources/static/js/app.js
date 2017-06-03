@@ -1,4 +1,14 @@
 (function ($) {
+
+    $(".date").datepicker(
+        {
+            dateFormat: 'dd-mm-yy',
+            changeYear: true,
+            changeMonth: true,
+            yearRange: '-50:+0'
+        }
+        );
+
     var getCsrf = function () {
         return $('[name=_csrf]').val();
     };
