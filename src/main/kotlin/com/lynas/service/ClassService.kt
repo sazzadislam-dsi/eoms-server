@@ -1,5 +1,6 @@
 package com.lynas.service
 
+import com.lynas.exception.DuplicateCourseException
 import com.lynas.model.Course
 import com.lynas.model.query.result.ClassDetailQueryResult
 import com.lynas.repo.ClassRepository
@@ -15,6 +16,17 @@ open class ClassService(val classRepo: ClassRepository) {
 
     @Transactional
     open fun save(course: Course): Course {
+        val foundDuplicate = classRepo.findListByOrganizationName(course.organization?.name)
+                .filter {
+                    it.name == course.name
+                    it.section == course.section
+                    it.shift == course.shift
+                }
+                .isEmpty()
+                .not()
+        if (foundDuplicate) {
+            throw DuplicateCourseException("Duplicate Class Found")
+        }
         return classRepo.save(course)
     }
 

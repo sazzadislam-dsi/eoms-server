@@ -49,8 +49,6 @@ fun String.convertToDate() : Date {
     var pattern: String? = null
     if (this.matches(kotlin.text.Regex("[A-Za-z]+ [A-Za-z]+ \\d?\\d \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3} \\d{4}"))) {
         pattern = "EEE MMM dd HH:mm:ss Z yyyy"
-    } else if (this.matches(kotlin.text.Regex("^[0-3]?[0-9].[0-3]?[0-9].(?:[0-9]{2})?[0-9]{2}$"))) {
-        pattern = "dd/MM/yyyy"
     } else {
         pattern = "dd-MM-yyyy"
     }

@@ -1,7 +1,7 @@
 package com.lynas.controller.rest
 
+import com.lynas.exception.DuplicateCourseException
 import com.lynas.model.Course
-import com.lynas.model.Organization
 import com.lynas.service.ClassService
 import com.lynas.util.*
 import org.slf4j.LoggerFactory
@@ -30,6 +30,10 @@ open class ClassRestController (val classService: ClassService) {
 
         try {
             createdClass = classService.save(createdClass)
+        }
+        catch (ex: DuplicateCourseException) {
+            logger.warn("Duplicate class info found, class name [{}], shift [{}], section [{}]", cls.name, cls.shift, cls.section)
+            return responseConflict(cls)
         }catch (ex: DuplicateKeyException){
             return responseConflict(cls)
         }
