@@ -17,7 +17,7 @@ interface ClassRepository : GraphRepository<Course> {
 
     @Query("MATCH (cl:Class)-[:classBelongsToAnOrganization]->(org:Organization {name:{1}} )" +
             "where ID(cl) = {0} RETURN cl")
-    fun findById(id:Long, organization: String): Course
+    fun findById(id: Long, organization: String): Course
 
     @Query("match (cl:Class{ name:{0},shift:{1}, section:{2}})-[:classBelongsToAnOrganization]->(org:Organization {name:{3}} ) return cl")
     fun findByProperty(className: String?, shift: String, section: String, orgName: String?): Course?
@@ -36,5 +36,8 @@ interface ClassRepository : GraphRepository<Course> {
 
     @Query("match (cl:Class)-[:classBelongsToAnOrganization]->(org:Organization {name:{0}} ) return count(cl)")
     fun findListCountByOrganizationName(name: String?): Int
+
+    @Query("MATCH (n:Class{name:{0},shift:{1},section:{2}})-[:classBelongsToAnOrganization]->(org:Organization) where ID(org)={3} RETURN n LIMIT 1")
+    fun findByPropAndOrg(name: String, shift: String, section: String, orgId: Long): Course?
 
 }

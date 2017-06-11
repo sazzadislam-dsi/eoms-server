@@ -1,11 +1,12 @@
 package com.lynas.controller.rest
 
-import com.lynas.exception.DuplicateCourseException
 import com.lynas.model.Course
 import com.lynas.service.ClassService
-import com.lynas.util.*
+import com.lynas.util.getOrganizationFromSession
+import com.lynas.util.responseConflict
+import com.lynas.util.responseOK
+import com.lynas.util.verifyClassOrganization
 import org.slf4j.LoggerFactory
-import org.springframework.dao.DuplicateKeyException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
@@ -27,16 +28,10 @@ open class ClassRestController (val classService: ClassService) {
         logger.info("Received Class :: " + cls.toString())
         var createdClass = cls
         createdClass.organization = getOrganizationFromSession(request)
-
-        try {
-            createdClass = classService.save(createdClass)
-        }
-        catch (ex: DuplicateCourseException) {
-            logger.warn("Duplicate class info found, class name [{}], shift [{}], section [{}]", cls.name, cls.shift, cls.section)
-            return responseConflict(cls)
-        }catch (ex: DuplicateKeyException){
+        if (classService.checkClassAlreadyExist(cls, getOrganizationFromSession(request).id!!)) {
             return responseConflict(cls)
         }
+        createdClass = classService.save(createdClass)
         logger.info("Saved Class :: " + createdClass.toString())
         return responseOK(createdClass)
     }

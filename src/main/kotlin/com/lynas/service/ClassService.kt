@@ -1,6 +1,5 @@
 package com.lynas.service
 
-import com.lynas.exception.DuplicateCourseException
 import com.lynas.model.Course
 import com.lynas.model.query.result.ClassDetailQueryResult
 import com.lynas.repo.ClassRepository
@@ -16,17 +15,6 @@ open class ClassService(val classRepo: ClassRepository) {
 
     @Transactional
     open fun save(course: Course): Course {
-        val foundDuplicate = classRepo.findListByOrganizationName(course.organization?.name)
-                .filter {
-                    it.name == course.name
-                    it.section == course.section
-                    it.shift == course.shift
-                }
-                .isEmpty()
-                .not()
-        if (foundDuplicate) {
-            throw DuplicateCourseException("Duplicate Class Found")
-        }
         return classRepo.save(course)
     }
 
@@ -35,10 +23,11 @@ open class ClassService(val classRepo: ClassRepository) {
         return classRepo.findListByOrganizationName(name)
     }
 
-    data class CourseInfo (var id: Long?, var name: String?)
+    data class CourseInfo(var id: Long?, var name: String?)
+
     open fun findClassListByOrganizationName(name: String?): List<CourseInfo> {
         return findListByOrganizationName(name).map {
-            CourseInfo( id = it.id,
+            CourseInfo(id = it.id,
                     name = it.name + " " + it.section + " " + it.shift
             )
         }
@@ -68,5 +57,15 @@ open class ClassService(val classRepo: ClassRepository) {
     @Transactional
     fun findListCountByOrganizationName(name: String?): Int {
         return classRepo.findListCountByOrganizationName(name)
+    }
+
+
+    fun checkClassAlreadyExist(course: Course, orgId: Long): Boolean {
+        val cc = classRepo.findByPropAndOrg(
+                course.name!!,
+                course.shift.toString(),
+                course.section.toString(),
+                orgId)
+        return cc != null
     }
 }
