@@ -69,4 +69,13 @@ open class ClassService(val classRepo: ClassRepository) {
     fun findListCountByOrganizationName(name: String?): Int {
         return classRepo.findListCountByOrganizationName(name)
     }
+
+    fun checkClassAlreadyExist(course: Course, orgId: Long): Boolean {
+        val cc = classRepo.findByPropAndOrg(
+                course.name!!,
+                course.shift.toString(),
+                course.section.toString(),
+                orgId)
+        return cc != null
+    }
 }
