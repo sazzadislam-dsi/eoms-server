@@ -19,15 +19,8 @@ class UserDetailService(val appUserService: AppUserService) : UserDetailsService
 
 
     override fun loadUserByUsername(userName: String): UserDetails {
-        // todo uncomment following in production
-        //val appUser:AppUser? = appUserService.findByUserName(userName)
-        val appUser: AppUser? = AppUser().apply {
-            username = userName
-            password = "$2a$10$3mUSOw6gya8AeNnzL7qiaO2p9qeko.rWVpRpRdZQ4SoICglyGQVHa"
-            authorities = "ROLE_USER, ROLE_ADMIN"
-        }
-
-        if (null == appUser) {
+        val appUser:AppUser? = appUserService.findByUserName(userName)
+        if (appUser == null) {
             throw UsernameNotFoundException(String.format("No user found with username '%s'" + userName))
         } else {
             return SpringSecurityUser(
