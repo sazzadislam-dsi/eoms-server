@@ -12,13 +12,13 @@ import org.springframework.stereotype.Repository
 interface SubjectRepository : GraphRepository<Subject> {
 
     @Query("match (s:Subject) <- [c:curriculum] - (cls:Class)," +
-            "(cls)-[:classBelongsToAnOrganization]->(org:Organization {name: {1}})" +
-            "where ID(cls) = {0} return s")
-    fun findAllByClassId(classId: Long, organization: String): List<Subject>
+            "(cls)-[:classBelongsToAnOrganization]->(org:Organization)" +
+            "where ID(cls) = {0}  and ID(org) = {1} return s")
+    fun findAllByClassId(classId: Long, orgId: Long): List<Subject>
 
     @Query("match (s:Student) -[e:Enrolment]- (cc:Class)," +
-            "(cc)-[:classBelongsToAnOrganization]->(org:Organization {name: {1}})," +
+            "(cc)-[:classBelongsToAnOrganization]->(org:Organization)," +
             "(cc)-[c:curriculum]-> (sb:Subject)" +
-            "where ID(s) = {0} return sb")
-    fun findAllByStudentId(stdId: Long, organization: String): List<Subject>
+            "where ID(s) = {0} and ID(org) = {1} return sb")
+    fun findAllByStudentId(stdId: Long, orgId: Long): List<Subject>
 }

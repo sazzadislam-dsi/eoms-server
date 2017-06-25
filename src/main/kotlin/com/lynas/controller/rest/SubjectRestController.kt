@@ -41,7 +41,7 @@ class SubjectRestController constructor(val subjectService: SubjectService,
 
         // Problem in save object
         subjectService.post(subject)
-        val cls: Course = classService.findById(subjectJson.classId as Long, organization.name)
+        val cls: Course = classService.findById(subjectJson.classId as Long, organization.id!!)
         cls.subjects.add(subject)
         classService.save(cls)
         logger.info("Post successful")

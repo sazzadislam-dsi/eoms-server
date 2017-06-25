@@ -26,7 +26,7 @@ class ClassController constructor(val classService: ClassService, val feeInfoSer
     @RequestMapping("/home")
     fun classHome(model: Model, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
-        model.addAttribute("classList", classService.findListByOrganizationName(organization.name).sortedBy { it.name })
+        model.addAttribute("classList", classService.findListByOrganizationId(organization.id!!).sortedBy { it.name })
         return "classHome"
     }
 
@@ -40,7 +40,7 @@ class ClassController constructor(val classService: ClassService, val feeInfoSer
     @RequestMapping("/updateClass/{classId}")
     fun updateClass(model: Model, @PathVariable classId: Long, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
-        val course = classService.findById(classId, organization.name)
+        val course = classService.findById(classId, organization.id!!)
         logger.warn("Received Course : " + course.toString())
         model.addAttribute("course", course)
         return "updateClass"
@@ -57,8 +57,8 @@ class ClassController constructor(val classService: ClassService, val feeInfoSer
     fun detail(@PathVariable classId: Long, @PathVariable year: Int, model: Model, request: HttpServletRequest): String {
         logger.info("Hit in detail with class id {}", classId)
         val organization = getOrganizationFromSession(request)
-        val classDetails: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId, organization.name, year)
-        val cls: Course = classService.findById(classId, organization.name)
+        val classDetails: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId, organization.id!!, year)
+        val cls: Course = classService.findById(classId, organization.id!!)
         logger.info("class student number {}", classDetails.size)
         model.addAttribute("classDetails", classDetails)
         model.addAttribute("cls", cls)

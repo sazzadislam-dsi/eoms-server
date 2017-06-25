@@ -1,8 +1,6 @@
 package com.lynas.controller.view
 
-import com.lynas.model.Organization
 import com.lynas.service.ClassService
-import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
 import com.lynas.util.getOrganizationFromSession
 import org.slf4j.Logger
@@ -24,7 +22,7 @@ class AttendanceController constructor(val classService: ClassService) {
     @RequestMapping("/book")
     fun attendanceBook(model: Model, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
-        model.addAttribute("classList", classService.findClassListByOrganizationName(organization.name).sortedBy { it.name })
+        model.addAttribute("classList", classService.findClassListByOrganizationId(organization.id!!).sortedBy { it.name })
         logger.info("return attenClassSelect page with classList")
         return "attenClassSelect"
     }
@@ -32,7 +30,7 @@ class AttendanceController constructor(val classService: ClassService) {
     @RequestMapping("/view")
     fun attendanceBookView(model: Model, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
-        model.addAttribute("classList", classService.findClassListByOrganizationName(organization.name).sortedBy { it.name })
+        model.addAttribute("classList", classService.findClassListByOrganizationId(organization.id!!).sortedBy { it.name })
         logger.info("return attenClassSelect page with classList")
         return "attendanceView"
     }
@@ -44,7 +42,7 @@ class AttendanceController constructor(val classService: ClassService) {
                            request: HttpServletRequest): String {
         logger.info("hit in studentListByClass with class id {}", classId)
         val organization = getOrganizationFromSession(request)
-        val studentList = classService.findStudentsByClassId(classId, year, organization.name)
+        val studentList = classService.findStudentsByClassId(classId, year, organization.id!!)
         model.addAttribute("studentList", studentList)
         model.addAttribute("clsId", classId)
         return "attendanceStudent"

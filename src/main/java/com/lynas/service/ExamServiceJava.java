@@ -27,8 +27,8 @@ public class ExamServiceJava {
     }
 
     @Transactional
-    public List<ExamClassResponse1> getResultOfClass(long classId, int year, String organization) {
-        List<ExamQueryResult> list = examRepository.resultOfClassByYear(classId, year, organization);
+    public List<ExamClassResponse1> getResultOfClass(long classId, int year, long orgId) {
+        List<ExamQueryResult> list = examRepository.resultOfClassByYear(classId, year, orgId);
 
         if (list == null) return new ArrayList<>();
 

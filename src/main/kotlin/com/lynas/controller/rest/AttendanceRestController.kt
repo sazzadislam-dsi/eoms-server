@@ -39,7 +39,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
                     Constants.INVALID_DATE_FORMAT,
                     Constants.EXPECTED_DATE_FORMAT))
         }
-        val attendanceBook: AttendanceBook = attendanceService.post(attendanceJson, organization.name)
+        val attendanceBook: AttendanceBook = attendanceService.post(attendanceJson, organization.id!!)
         logger.info("Post successfully attendance book {}", attendanceBook)
         return responseOK(attendanceJson)
     }
@@ -65,7 +65,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
         val result = attendanceService.getAttendanceOfAClassOnDate(
                 dateOf.time,
                 classId,
-                organization.name)
+                organization.id!!)
 
         return responseOK(result)
     }

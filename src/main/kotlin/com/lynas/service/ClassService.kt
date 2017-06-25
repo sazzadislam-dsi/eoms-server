@@ -1,5 +1,6 @@
 package com.lynas.service
 
+import com.lynas.exception.DuplicateCourseException
 import com.lynas.model.Course
 import com.lynas.model.query.result.ClassDetailQueryResult
 import com.lynas.repo.ClassRepository
@@ -15,27 +16,37 @@ open class ClassService(val classRepo: ClassRepository) {
 
     @Transactional
     open fun save(course: Course): Course {
+        val foundDuplicate = classRepo.findListByOrganizationId(course.organization!!.id!!)
+                .filter {
+                    it.name == course.name
+                    it.section == course.section
+                    it.shift == course.shift
+                }
+                .isEmpty()
+                .not()
+        if (foundDuplicate) {
+            throw DuplicateCourseException("Duplicate Class Found")
+        }
         return classRepo.save(course)
     }
 
     @Transactional
-    open fun findListByOrganizationName(name: String?): List<Course> {
-        return classRepo.findListByOrganizationName(name)
+    open fun findListByOrganizationId(orgId: Long): List<Course> {
+        return classRepo.findListByOrganizationId(orgId)
     }
 
-    data class CourseInfo(var id: Long?, var name: String?)
-
-    open fun findClassListByOrganizationName(name: String?): List<CourseInfo> {
-        return findListByOrganizationName(name).map {
-            CourseInfo(id = it.id,
+    data class CourseInfo (var id: Long?, var name: String?)
+    open fun findClassListByOrganizationId(orgId: Long): List<CourseInfo> {
+        return findListByOrganizationId(orgId).map {
+            CourseInfo( id = it.id,
                     name = it.name + " " + it.section + " " + it.shift
             )
         }
     }
 
     @Transactional
-    open fun findById(id: Long, organization: String): Course {
-        return classRepo.findById(id, organization)
+    open fun findById(id: Long, orgId: Long): Course {
+        return classRepo.findById(id, orgId)
     }
 
 
@@ -45,20 +56,19 @@ open class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    open fun findStudentsByClassId(classID: Long, organization: String, year: Int): Collection<ClassDetailQueryResult> {
-        return classRepo.findStudentsByClass(classID, organization, year)
+    open fun findStudentsByClassId(classID: Long, orgId: Long, year: Int): Collection<ClassDetailQueryResult> {
+        return classRepo.findStudentsByClass(classID, orgId, year)
     }
 
     @Transactional
-    open fun findStudentsByClassId(classID: Long, year: Int, organization: String): Collection<ClassDetailQueryResult> {
-        return classRepo.findStudentsByClass(classID, year, organization)
+    open fun findStudentsByClassId(classID: Long, year: Int, orgId: Long): Collection<ClassDetailQueryResult> {
+        return classRepo.findStudentsByClass(classID, year, orgId)
     }
 
     @Transactional
-    fun findListCountByOrganizationName(name: String?): Int {
-        return classRepo.findListCountByOrganizationName(name)
+    fun findListCountByOrganizationName(orgId: Long): Int {
+        return classRepo.findListCountByOrganizationName(orgId)
     }
-
 
     fun checkClassAlreadyExist(course: Course, orgId: Long): Boolean {
         val cc = classRepo.findByPropAndOrg(
