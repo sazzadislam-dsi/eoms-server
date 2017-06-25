@@ -22,13 +22,13 @@ open class SubjectService constructor(val subjectRepository: SubjectRepository) 
     }
 
     @Transactional
-    open fun findAllByClassId(classId: Long, organization: String): List<Subject> {
-        return subjectRepository.findAllByClassId(classId, organization)
+    open fun findAllByClassId(classId: Long, orgId : Long): List<Subject> {
+        return subjectRepository.findAllByClassId(classId, orgId)
     }
 
     @Transactional
-    open fun findAllByStudentId(stdId: Long, organization: String): List<Subject> {
-        return subjectRepository.findAllByStudentId(stdId, organization)
+    open fun findAllByStudentId(stdId: Long, orgId : Long): List<Subject> {
+        return subjectRepository.findAllByStudentId(stdId, orgId)
 
     }
 

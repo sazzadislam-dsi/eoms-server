@@ -29,7 +29,7 @@ class HomeController constructor(val appUserService: AppUserService, val springU
 
             logger.info("Login with Username [{}], Organization name [{}], Organization id [{}]", user.username, organization?.name, organization?.id)
 
-            request.session.setAttribute(AppConstant.organization, organization?.id)
+            request.session.setAttribute(AppConstant.organization, organization)
 
         }
         return "home"

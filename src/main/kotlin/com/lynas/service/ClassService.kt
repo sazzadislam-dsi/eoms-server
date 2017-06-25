@@ -16,7 +16,7 @@ open class ClassService(val classRepo: ClassRepository) {
 
     @Transactional
     open fun save(course: Course): Course {
-        val foundDuplicate = classRepo.findListByOrganizationName(course.organization?.name)
+        val foundDuplicate = classRepo.findListByOrganizationId(course.organization!!.id!!)
                 .filter {
                     it.name == course.name
                     it.section == course.section
@@ -31,13 +31,13 @@ open class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    open fun findListByOrganizationName(name: String?): List<Course> {
-        return classRepo.findListByOrganizationName(name)
+    open fun findListByOrganizationId(orgId: Long): List<Course> {
+        return classRepo.findListByOrganizationId(orgId)
     }
 
     data class CourseInfo (var id: Long?, var name: String?)
-    open fun findClassListByOrganizationName(name: String?): List<CourseInfo> {
-        return findListByOrganizationName(name).map {
+    open fun findClassListByOrganizationId(orgId: Long): List<CourseInfo> {
+        return findListByOrganizationId(orgId).map {
             CourseInfo( id = it.id,
                     name = it.name + " " + it.section + " " + it.shift
             )
@@ -45,8 +45,8 @@ open class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    open fun findById(id: Long, organization: String): Course {
-        return classRepo.findById(id, organization)
+    open fun findById(id: Long, orgId: Long): Course {
+        return classRepo.findById(id, orgId)
     }
 
 
@@ -56,18 +56,18 @@ open class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    open fun findStudentsByClassId(classID: Long, organization: String, year: Int): Collection<ClassDetailQueryResult> {
-        return classRepo.findStudentsByClass(classID, organization, year)
+    open fun findStudentsByClassId(classID: Long, orgId: Long, year: Int): Collection<ClassDetailQueryResult> {
+        return classRepo.findStudentsByClass(classID, orgId, year)
     }
 
     @Transactional
-    open fun findStudentsByClassId(classID: Long, year: Int, organization: String): Collection<ClassDetailQueryResult> {
-        return classRepo.findStudentsByClass(classID, year, organization)
+    open fun findStudentsByClassId(classID: Long, year: Int, orgId: Long): Collection<ClassDetailQueryResult> {
+        return classRepo.findStudentsByClass(classID, year, orgId)
     }
 
     @Transactional
-    fun findListCountByOrganizationName(name: String?): Int {
-        return classRepo.findListCountByOrganizationName(name)
+    fun findListCountByOrganizationName(orgId: Long): Int {
+        return classRepo.findListCountByOrganizationName(orgId)
     }
 
     fun checkClassAlreadyExist(course: Course, orgId: Long): Boolean {

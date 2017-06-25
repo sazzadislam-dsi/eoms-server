@@ -24,7 +24,7 @@ class SubjectController constructor(val subjectService: SubjectService)  {
     fun subjectListOfClass(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("Return subject list for class id {}", classId)
         val organization = getOrganizationFromSession(request)
-        model.addAttribute("list", subjectService.findAllByClassId(classId, organization.name))
+        model.addAttribute("list", subjectService.findAllByClassId(classId, organization.id!!))
         model.addAttribute("classId", classId)
         return "subjectOfClass"
     }
@@ -33,7 +33,7 @@ class SubjectController constructor(val subjectService: SubjectService)  {
     fun subjectListOfStudent(@PathVariable stdId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("Return subject list for student id {}", stdId)
         val organization = getOrganizationFromSession(request)
-        model.addAttribute("list", subjectService.findAllByStudentId(stdId, organization.name))
+        model.addAttribute("list", subjectService.findAllByStudentId(stdId, organization.id!!))
         return "subjectOfClass"
     }
 

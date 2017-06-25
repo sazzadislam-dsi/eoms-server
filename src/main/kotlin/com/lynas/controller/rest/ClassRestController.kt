@@ -46,7 +46,7 @@ open class ClassRestController (val classService: ClassService) {
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     open fun patch(@RequestBody cls: Course, request: HttpServletRequest): Course {
         val organization = getOrganizationFromSession(request)
-        val previousClass = classService.findById(cls.id!!, organization.name)
+        val previousClass = classService.findById(cls.id!!, organization.id!!)
 
         println(cls.toString())
         println(verifyClassOrganization(previousClass, request))
@@ -61,8 +61,13 @@ open class ClassRestController (val classService: ClassService) {
 
     @GetMapping("/getCollection/orgName/{name}")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun getCollection(@PathVariable name: String): List<Course> {
-        return classService.findListByOrganizationName(name)
+    fun getCollection(@PathVariable name: String, request: HttpServletRequest): List<Course> {
+        val organization = getOrganizationFromSession(request)
+        if (organization.name != name) {
+            logger.warn("Request orgName [{}] and session orgName [{}] does not match", name, organization.name)
+            return ArrayList<Course>()
+        }
+        return classService.findListByOrganizationId(organization.id!!)
     }
 
 }

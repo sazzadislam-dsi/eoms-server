@@ -41,7 +41,7 @@ class StudentController(val studentService: StudentService,
     @GetMapping("/{studentId}/update")
     fun studentUpdate(model: Model, @PathVariable studentId: Long, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
-        model.addAttribute("student", studentService.findById(studentId, organization.name))
+        model.addAttribute("student", studentService.findById(studentId, organization.id!!))
         return "studentUpdate"
     }
 
@@ -55,7 +55,7 @@ class StudentController(val studentService: StudentService,
     fun studentSearch(@RequestParam firstName: String, model: Model, request: HttpServletRequest): String {
         logger.info("Student first name {}", firstName)
         val organization = getOrganizationFromSession(request)
-        val list: List<Student> = studentService.searchByFirstName(firstName, organization.name)
+        val list: List<Student> = studentService.searchByFirstName(firstName, organization.id!!)
         model.addAttribute("studentList", list)
         return "studentSearch"
     }
@@ -63,7 +63,7 @@ class StudentController(val studentService: StudentService,
     @GetMapping("/{studentId}/details")
     fun viewDetails(@PathVariable studentId: Long, model: Model, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
-        val student = studentService.findById(studentId, organization.name)
+        val student = studentService.findById(studentId, organization.id!!)
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!).contactInformationList
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
@@ -79,17 +79,16 @@ class StudentController(val studentService: StudentService,
                            @PathVariable year: Int,
                            @PathVariable classId: Long): String {
         val organization = getOrganizationFromSession(request)
-        val student = studentService.findById(studentId, organization.name)
+        val student = studentService.findById(studentId, organization.id!!)
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!).contactInformationList
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
         val studentFeeList = feeInfoService.findStudentFeeInfoByStudent(studentId)
-                ?.filter { it.feeInfo?.course?.organization?.id == getOrganizationFromSession(request).id }
+                ?.filter { it.feeInfo?.course?.organization?.id == organization.id }
         model.addAttribute("studentFeeList", studentFeeList)
 
 
-        val orgName = getOrganizationFromSession(request).name
-        val result: ExamClassResponse1 = examServiceJava.getResultOfClass(classId, year, orgName)
+        val result: ExamClassResponse1 = examServiceJava.getResultOfClass(classId, year, organization.id!!)
                 .filter { it.studentId == studentId }
                 .first()
         model.addAttribute("result", result)
@@ -106,7 +105,7 @@ class StudentController(val studentService: StudentService,
     @GetMapping("/list")
     fun studentList(model: Model, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
-        model.addAttribute("studentList", studentService.findAll(organization.name))
+        model.addAttribute("studentList", studentService.findAll(organization.id!!))
         return "studentList"
     }
 
