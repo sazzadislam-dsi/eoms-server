@@ -20,6 +20,4 @@ class Course {
 
     @Relationship(type = "classBelongsToAnOrganization", direction = Relationship.OUTGOING)
     var organization: Organization? = null
-    @Relationship(type = "curriculum", direction = Relationship.OUTGOING)
-    var subjects: MutableSet<Subject> = mutableSetOf()
 }
