@@ -33,14 +33,14 @@ class EnrolmentRestController (val enrolmentService: EnrolmentService,
         logger.info("Hit in enrolment post method with {}", enrolmentJson.toString())
         val organization = getOrganizationFromSession(request)
         val (enrollment, isEnroll) = enrolmentService.studentEnrolmentCheck(
-                enrolmentJson.studentId, enrolmentJson.year, organization.name)
+                enrolmentJson.studentId, enrolmentJson.year, organization.id!!)
         if (isEnroll) {
             // TODO need to change !! line below
             return responseConflict(enrollment!!)
         }
 
-        val _student: Student = studentService.findById(enrolmentJson.studentId, organization.name)
-        val _course: Course = classService.findById(enrolmentJson.classId, organization.name)
+        val _student: Student = studentService.findById(enrolmentJson.studentId, organization.id!!)
+        val _course: Course = classService.findById(enrolmentJson.classId, organization.id!!)
         val enrolment: Enrolment = Enrolment().apply {
             year = enrolmentJson.year
             roleNumber = enrolmentJson.roleNumber

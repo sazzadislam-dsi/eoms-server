@@ -18,11 +18,11 @@ open class AttendanceService constructor(val studentService: StudentService,
                                          val attendanceRepository: AttendanceRepository) {
 
     @Transactional
-    open fun post(attendanceJsonWrapper: AttendanceJsonWrapper, organization: String): AttendanceBook {
+    open fun post(attendanceJsonWrapper: AttendanceJsonWrapper, orgId: Long): AttendanceBook {
         val set = attendanceJsonWrapper.attendanceJson.map {
             i ->
             StudentAttendance().apply {
-                student = studentService.findById(i.t, organization)
+                student = studentService.findById(i.t, orgId)
                 attendanceStatus = i.i
             }
         }.toMutableSet()
@@ -30,15 +30,15 @@ open class AttendanceService constructor(val studentService: StudentService,
         val attendanceBook = AttendanceBook().apply {
             studentAttendances = set
             attendanceDate = attendanceJsonWrapper.date.convertToDate()
-            course = classService.findById(attendanceJsonWrapper.classId, organization)
+            course = classService.findById(attendanceJsonWrapper.classId, orgId)
         }
         return attendanceRepository.save(attendanceBook)
     }
 
 
     @Transactional
-    open fun getAttendanceOfAClassOnDate(date: Long, classId: Long, organizationName: String?): List<AttendanceViewQueryResult> {
-        return attendanceRepository.findAttendanceBookOfClass(date, classId, organizationName)
+    open fun getAttendanceOfAClassOnDate(date: Long, classId: Long, orgId: Long): List<AttendanceViewQueryResult> {
+        return attendanceRepository.findAttendanceBookOfClass(date, classId, orgId)
     }
 
 

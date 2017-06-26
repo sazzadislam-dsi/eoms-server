@@ -69,7 +69,7 @@ class StudentRestController(val studentService: StudentService) {
         logger.info("Hit student update controller with id {} && {}", studentJson.studentId, studentJson)
         val organization = getOrganizationFromSession(request)
 
-        val student = studentService.findById(studentJson.studentId, organization.name)
+        val student = studentService.findById(studentJson.studentId, organization.id!!)
         if (student?.person == null) return responseError(studentJson)
 
         var _dateOfBirth = Date()
@@ -102,7 +102,7 @@ class StudentRestController(val studentService: StudentService) {
                                       request: HttpServletRequest): Student {
         val organization = getOrganizationFromSession(request)
 
-        val student = studentService.findById(studentContact.studentId, organization.name)
+        val student = studentService.findById(studentContact.studentId, organization.id!!)
         if (null == student.person?.contactInformationList) {
             student.person?.contactInformationList = mutableListOf(
                     ContactInformation().apply {

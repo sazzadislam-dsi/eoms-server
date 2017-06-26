@@ -34,7 +34,7 @@ class ExamRestController(val examService: ExamService,
     fun post(@RequestBody examJson: ExamJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("hit in post controller with {}", examJson)
         val organization = getOrganizationFromSession(request)
-        val course = classService.findById(examJson.classId, organization.name)
+        val course = classService.findById(examJson.classId, organization.id!!)
         val _subject = subjectService.findById(examJson.subjectId)
         val listOfExam = examJson.examJson.map {
             (mark, studentId) ->
@@ -46,7 +46,7 @@ class ExamRestController(val examService: ExamService,
                 cls = course
                 subject = _subject
                 obtainedNumber = mark
-                student = studentService.findById(studentId, organization.name)
+                student = studentService.findById(studentId, organization.id!!)
             }
         }
         examService.save(listOfExam)
@@ -60,7 +60,7 @@ class ExamRestController(val examService: ExamService,
                                request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and subject id {} and year {}", classId, subjectId, _year)
         val organization = getOrganizationFromSession(request)
-        return responseOK(examService.resultOfSubjectByYear(classId, subjectId, _year, organization.name))
+        return responseOK(examService.resultOfSubjectByYear(classId, subjectId, _year, organization.id!!))
     }
 
     @GetMapping("student/{studentId}/results")
@@ -68,8 +68,8 @@ class ExamRestController(val examService: ExamService,
         logger.info("return result for student id [{}]", studentId)
         val organization = request.session.getAttribute(AppConstant.organization) as Organization
         val year = LocalDate.now().year
-        val studentInfo = studentService.studentInfoByYear(id = studentId, year = year, organization = organization.name)
-        return responseOK(examService.resultOfStudentByYear(studentInfo.classId, studentId, year, organization.name))
+        val studentInfo = studentService.studentInfoByYear(id = studentId, year = year, orgId = organization.id!!)
+        return responseOK(examService.resultOfStudentByYear(studentInfo.classId, studentId, year, organization.id!!))
     }
 
     @GetMapping("/class/{classId}/student/{studentId}/year/{_year}/results")
@@ -79,7 +79,7 @@ class ExamRestController(val examService: ExamService,
                               request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, studentId, _year)
         val organization = getOrganizationFromSession(request)
-        return responseOK(examService.resultOfStudentByYear(classId, studentId, _year, organization.name))
+        return responseOK(examService.resultOfStudentByYear(classId, studentId, _year, organization.id!!))
     }
 
     @GetMapping("/class/{classId}/year/{_year}/results")
@@ -88,7 +88,7 @@ class ExamRestController(val examService: ExamService,
                               request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, _year)
         val organization = getOrganizationFromSession(request)
-        val result = examService.resultOfClass(classId, _year, organization.name).groupBy { it.roleNumber }
+        val result = examService.resultOfClass(classId, _year, organization.id!!).groupBy { it.roleNumber }
                 .map { ExamClassResponse().apply {
                     roll = it.key
                     name = it.value[0].person
@@ -99,17 +99,17 @@ class ExamRestController(val examService: ExamService,
                     })
                 } }
 
-        return responseOK(examService.resultOfClass(classId, _year, organization.name))
+        return responseOK(examService.resultOfClass(classId, _year, organization.id!!))
     }
 
     @GetMapping("/class/{classId}/year/{_year}/results/new")
     fun resultOfClass(@PathVariable classId: Long,
                       @PathVariable _year: Int,
                       request: HttpServletRequest): ResponseEntity<*> {
-        val orgName = getOrganizationFromSession(request).name
-        logger.info("Hit method with classId [{}], year [{}], organization [{}]", classId, _year, orgName)
+        val organization = getOrganizationFromSession(request)
+        logger.info("Hit method with classId [{}], year [{}], organization [{}]", classId, _year, organization.id)
         val start = LocalTime.now()
-        val result = examServiceJava.getResultOfClass(classId, _year, orgName)
+        val result = examServiceJava.getResultOfClass(classId, _year, organization.id!!)
         val end = LocalTime.now()
         logger.info("Execution Time [{}] millisecond", ChronoUnit.MILLIS.between(start, end))
         return responseOK(result)

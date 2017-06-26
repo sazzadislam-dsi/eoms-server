@@ -30,7 +30,7 @@ class FeeRestController(val feeInfoService: FeeInfoService,
     @PostMapping
     fun post(@RequestBody feeInfoJson: FeeInfoJson, request: HttpServletRequest): FeeInfo {
         val organization = getOrganizationFromSession(request)
-        val courseById = classService.findById(id = feeInfoJson.classId, organization = organization.name)
+        val courseById = classService.findById(id = feeInfoJson.classId, orgId = organization.id!!)
         val feeInfo = FeeInfo().apply {
             type = feeInfoJson.type
             amount = feeInfoJson.amount
@@ -44,7 +44,7 @@ class FeeRestController(val feeInfoService: FeeInfoService,
     @PostMapping("/student/new")
     fun studentPayment(request: HttpServletRequest, @RequestBody feeStudentNew: FeeStudentNew): List<FeeInfo>? {
         val fee = feeInfoService.find(feeStudentNew.feeInfoId)
-        val studentOf = studentService.findById(feeStudentNew.studentId, getOrganizationFromSession(request).name)
+        val studentOf = studentService.findById(feeStudentNew.studentId, getOrganizationFromSession(request).id!!)
         val pDate = feeStudentNew.paymentDate.convertToDate()
 
         val studentFee = StudentFee().apply {
