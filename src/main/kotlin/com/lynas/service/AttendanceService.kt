@@ -1,5 +1,6 @@
 package com.lynas.service
 
+import com.lynas.exception.SameDateAttendanceException
 import com.lynas.model.AttendanceBook
 import com.lynas.model.StudentAttendance
 import com.lynas.model.query.result.AttendanceViewQueryResult
@@ -19,6 +20,15 @@ open class AttendanceService constructor(val studentService: StudentService,
 
     @Transactional
     open fun post(attendanceJsonWrapper: AttendanceJsonWrapper, orgId: Long): AttendanceBook {
+        val _attendanceDate = attendanceJsonWrapper.date.convertToDate()
+        val foundDuplicate = attendanceRepository
+                .findAttendanceBookOfClass(_attendanceDate.time, attendanceJsonWrapper.classId, orgId)
+                .isEmpty()
+                .not()
+        if (foundDuplicate) {
+            throw SameDateAttendanceException("Attendance duplicate entry found")
+        }
+
         val set = attendanceJsonWrapper.attendanceJson.map {
             i ->
             StudentAttendance().apply {
@@ -29,7 +39,7 @@ open class AttendanceService constructor(val studentService: StudentService,
 
         val attendanceBook = AttendanceBook().apply {
             studentAttendances = set
-            attendanceDate = attendanceJsonWrapper.date.convertToDate()
+            attendanceDate = _attendanceDate
             course = classService.findById(attendanceJsonWrapper.classId, orgId)
         }
         return attendanceRepository.save(attendanceBook)

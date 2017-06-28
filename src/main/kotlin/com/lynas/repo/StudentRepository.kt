@@ -12,7 +12,7 @@ import org.springframework.data.neo4j.repository.GraphRepository
 interface StudentRepository : GraphRepository<Student> {
 
     @Query("MATCH (s:Student)-[sp:studentIsAPerson]-> (p:Person)," +
-            "(p)-[:personBelongsToAnOrganization]->(org:Organization {name:{1}})" +
+            "(p)-[:personBelongsToAnOrganization]->(org:Organization)" +
             "WHERE ID(s) = {0} and ID(org) = {1}" +
             "return s, sp, p")
     fun findOne(id: Long, orgId: Long): Student
