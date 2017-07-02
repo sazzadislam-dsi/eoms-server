@@ -30,7 +30,7 @@ interface ExamRepository : GraphRepository<Exam> {
            " (cc)-[:classBelongsToAnOrganization]->(org:Organization)," +
            " (cc) <- [c:curriculum]- (sb:Subject) <- [ex:examOfSubject] -(exam:Exam{year: {1}})," +
            " (exam) -[info:examInfoOfPerson]-> (s) -[ss:studentIsAPerson]- (p:Person)" +
-           "where ID(cc) = {0} and ID(org) = {3} return collect(exam) as exam, sb.subjectName as subject, p.firstName as person, e.roleNumber as roleNumber, cc.name as courseName, ID(s) as studentId")
+           "where ID(cc) = {0} and ID(org) = {2} return collect(exam) as exam, sb.subjectName as subject, p.firstName as person, e.roleNumber as roleNumber, cc.name as courseName, ID(s) as studentId")
     fun resultOfClassByYear(classId: Long, year: Int, orgId: Long): List<ExamQueryResult>
 
 }
