@@ -2,11 +2,9 @@ package com.lynas.config
 
 import com.lynas.util.AppConstant
 import com.lynas.util.getLogger
-import org.apache.log4j.Logger
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter
 import java.time.LocalDate
-import java.time.LocalTime
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
