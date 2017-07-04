@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
@@ -57,3 +58,5 @@ fun String.convertToDate() : Date {
 }
 
 fun getOrganizationFromSession(request: HttpServletRequest) = request.session.getAttribute(AppConstant.organization) as Organization
+
+fun getCurrentYear() = LocalDate.now().year
