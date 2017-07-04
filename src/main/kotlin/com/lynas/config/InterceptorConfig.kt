@@ -20,7 +20,7 @@ class InterceptorConfig : HandlerInterceptorAdapter() {
     val logger = getLogger(InterceptorConfig::class.java)
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any?): Boolean {
-        logger.info("URL path [{}]", request.requestURI)
+        logger.info("URI path [{}] method [{}]", request.requestURI, request.method)
         request.session.setAttribute("currentYear", LocalDate.now().year)
         when (request.requestURI) {
             "/", "/login", "/logout" -> return true
