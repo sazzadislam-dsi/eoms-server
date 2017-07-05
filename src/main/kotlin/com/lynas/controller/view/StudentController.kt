@@ -87,10 +87,14 @@ class StudentController(val studentService: StudentService,
                 ?.filter { it.feeInfo?.course?.organization?.id == organization.id }
         model.addAttribute("studentFeeList", studentFeeList)
 
+        val resultList = examServiceJava.getResultOfClass(classId, year, organization.id!!)
+        var result: ExamClassResponse1? = null
+        if (!resultList.isEmpty()) {
+            result = resultList
+                    .filter { it.studentId == studentId }
+                    .first()
+        }
 
-        val result: ExamClassResponse1 = examServiceJava.getResultOfClass(classId, year, organization.id!!)
-                .filter { it.studentId == studentId }
-                .first()
         model.addAttribute("result", result)
 
         return "studentDetails"
