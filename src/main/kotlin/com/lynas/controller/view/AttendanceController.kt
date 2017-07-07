@@ -6,6 +6,7 @@ import com.lynas.util.getOrganizationFromSession
 import org.slf4j.Logger
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import javax.servlet.http.HttpServletRequest
@@ -27,17 +28,17 @@ class AttendanceController constructor(val classService: ClassService) {
         return "attenClassSelect"
     }
 
-    @RequestMapping("/view")
-    fun attendanceBookView(model: Model, request: HttpServletRequest): String {
+    @RequestMapping("/view/classId/{classId}")
+    fun attendanceBookView(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
-        model.addAttribute("classList", classService.findClassListByOrganizationId(organization.id!!).sortedBy { it.name })
-        logger.info("return attenClassSelect page with classList")
+        model.addAttribute("classId", classId)
+        logger.info("return attenClassSelect page for classId [{}]", classId)
         return "attendanceView"
     }
 
-    @RequestMapping("/studentList")
-    fun studentListByClass(@RequestParam classId: Long,
-                           @RequestParam year: Int,
+    @RequestMapping("/studentList/classId/{classId}/year/{year}")
+    fun studentListByClass(@PathVariable classId: Long,
+                           @PathVariable year: Int,
                            model: Model,
                            request: HttpServletRequest): String {
         logger.info("hit in studentListByClass with class id {}", classId)
