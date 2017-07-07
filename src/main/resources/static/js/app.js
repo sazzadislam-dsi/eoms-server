@@ -178,7 +178,8 @@
 
     var bindFormSubmitsWithUrl = function (formName, onSuccess, onError) {
         $('form.' + formName).on('submit', function () {
-            const className = $(".className").val();
+            const className = $("#classId").val();
+            console.log(className);
             const attendanceDate = $("#date").val();
             const url = "/attendances/ofClass/" + className + "/onDay/" + attendanceDate;
             console.log(url);
