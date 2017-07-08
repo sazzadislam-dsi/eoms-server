@@ -33,7 +33,6 @@ class ClassController constructor(val classService: ClassService, val feeInfoSer
 
     @RequestMapping("/createClass")
     fun createClass(): String {
-        println("test")
         return "createClass"
     }
 
