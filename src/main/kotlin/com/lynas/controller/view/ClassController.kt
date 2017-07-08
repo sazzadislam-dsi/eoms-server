@@ -4,6 +4,7 @@ import com.lynas.model.Course
 import com.lynas.model.query.result.ClassDetailQueryResult
 import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
+import com.lynas.service.SubjectService
 import com.lynas.util.getLogger
 import com.lynas.util.getOrganizationFromSession
 import org.springframework.stereotype.Controller
@@ -18,7 +19,9 @@ import javax.servlet.http.HttpServletRequest
 
 @Controller
 @RequestMapping("class")
-class ClassController constructor(val classService: ClassService, val feeInfoService: FeeInfoService) {
+class ClassController constructor(val classService: ClassService,
+                                  val feeInfoService: FeeInfoService,
+                                  val subjectService: SubjectService) {
 
     private val logger = getLogger(ClassController::class.java)
 
@@ -66,6 +69,7 @@ class ClassController constructor(val classService: ClassService, val feeInfoSer
                 ?.filter { it.course?.organization?.id == getOrganizationFromSession(request).id }
                 ?.sortedBy { it.type }
         model.addAttribute("feeList", feeInfoList)
+        model.addAttribute("list", subjectService.findAllByClassId(classId, organization.id!!))
         return "classDetail"
     }
 
