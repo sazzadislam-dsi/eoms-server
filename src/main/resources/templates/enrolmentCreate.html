@@ -24,7 +24,7 @@
                     </div>
                     <div>
                         <label>Class ID</label>
-                        <input th:required="required" type="text" class="form-control" name="classId" id="classId" placeholder=""/>
+                        <input th:required="required" disabled="disabled" type="text" class="form-control" name="classId" id="classId" th:value="${classId}" placeholder=""/>
                     </div>
                     <div>
                         <label>Role Number</label>
@@ -32,7 +32,7 @@
                     </div>
                     <div>
                         <label>Year</label>
-                        <input th:required="required" type="text" class="form-control" id="year" name="year" placeholder=""/>
+                        <input th:required="required" type="text" class="form-control" id="year" name="year" th:value="${session.currentYear}" placeholder=""/>
                     </div>
 
                 </div>

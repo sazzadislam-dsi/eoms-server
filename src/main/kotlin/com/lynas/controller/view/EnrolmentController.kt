@@ -3,6 +3,8 @@ package com.lynas.controller.view
 import com.lynas.service.EnrolmentService
 import com.lynas.util.getLogger
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 
 /**
@@ -14,9 +16,10 @@ class EnrolmentController constructor(enrolmentService: EnrolmentService) {
 
     val logger = getLogger(EnrolmentController::class.java)
 
-    @RequestMapping("/create")
-    fun create(): String {
-        logger.info("return enrolmentCreate page")
+    @RequestMapping("/create/{classId}")
+    fun create(@PathVariable classId: Long, model: Model): String {
+        logger.info("return enrolmentCreate page for classId [{}]", classId)
+        model.addAttribute("classId", classId)
         return "enrolmentCreate"
     }
 }
