@@ -19,54 +19,56 @@
                 <a class="btn btn-primary" th:href="|/subject/class/${cls.id}/list|">Subject List</a>
                 <a class="btn btn-primary" th:href="|/fee/new/class/${cls.id}|">New Fee</a>
                 <a class="btn btn-primary" th:href="|/enrolment/create/${cls.id}|">Enroll</a>
-                <a class="btn btn-primary" th:href="|/attendance/studentList/classId/${cls.id}/year/${session.currentYear}|">Take Attendance</a>
+                <a class="btn btn-primary"
+                   th:href="|/attendance/studentList/classId/${cls.id}/year/${session.currentYear}|">Take Attendance</a>
                 <a class="btn btn-primary" th:href="|/attendance/view/classId/${cls.id}|">View Attendance</a>
             </div>
 
             <h3 class="separator">Class Information</h3>
 
-                <div>
-                    <table class="table table-striped">
-                        <tr>
-                            <td>Class</td>
-                            <td th:text="${cls.name}"></td>
-                        </tr>
-                        <tr>
-                            <td>Shift</td>
-                            <td th:text="${cls.shift}"></td>
-                        </tr>
-                        <tr>
-                            <td>Section</td>
-                            <td th:text="${cls.section}"></td>
-                        </tr>
-                        <tr>
-                            <td>Student Number</td>
-                            <td th:text="${clsSize}"></td>
-                        </tr>
-                    </table>
-                </div>
-                <div>
-                    <table class="table table-striped">
+            <div>
+                <table class="table table-striped">
+                    <tr>
+                        <td>Class</td>
+                        <td th:text="${cls.name}"></td>
+                    </tr>
+                    <tr>
+                        <td>Shift</td>
+                        <td th:text="${cls.shift}"></td>
+                    </tr>
+                    <tr>
+                        <td>Section</td>
+                        <td th:text="${cls.section}"></td>
+                    </tr>
+                    <tr>
+                        <td>Student Number</td>
+                        <td th:text="${clsSize}"></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table class="table table-striped">
 
-                        <th style="width: 30%">Student Name</th>
-                        <th>Role Number</th>
-                        <th>Detail</th>
-                        <th>Option</th>
+                    <th style="width: 30%">Student Name</th>
+                    <th>Role Number</th>
+                    <th>Detail</th>
+                    <th>Option</th>
 
 
-                        <div th:each="each : ${classDetails}" class="separator">
-                            <tr>
-                                <td th:text="${each.studentName}"></td>
-                                <td th:text="${each.roleNumber}"></td>
-                                <td>
-                                    <a th:href="|/student/${each.studentId}/details/class/${cls.id}/year/${session.currentYear}|">Details</a>
-                                </td>
-                                <td><a th:href="|/fee/class/${cls.id}/student/${each.studentId}/|">Make Payment</a></td>
-                            </tr>
-                        </div>
-                    </table>
-                </div>
+                    <div th:each="each : ${classDetails}" class="separator">
+                        <tr>
+                            <td th:text="${each.studentName}"></td>
+                            <td th:text="${each.roleNumber}"></td>
+                            <td>
+                                <a th:href="|/student/${each.studentId}/details/class/${cls.id}/year/${session.currentYear}|">Details</a>
+                            </td>
+                            <td><a th:href="|/fee/class/${cls.id}/student/${each.studentId}/|">Make Payment</a></td>
+                        </tr>
+                    </div>
+                </table>
+            </div>
         </div>
+
         <div class="col-lg-6">
             <div>
                 <h4>Fee Information</h4>
@@ -87,6 +89,34 @@
                         <td th:text="${feeInfo.amount}"></td>
                         <td th:text="${feeInfo.year}"></td>
                         <td th:text="${feeInfo.lastDate}"></td>
+                    </tr>
+                </div>
+            </table>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div>
+                <div class="separator"></div>
+                <h4 class="separator">Subjects List</h4>
+            </div>
+            <table class="table table-striped">
+
+                <th style="width: 30%">Subject Name</th>
+                <th>Subject Id</th>
+                <th>Subject Description</th>
+                <th>Book Author</th>
+                <th>Result</th>
+                <div class="separator"></div>
+
+
+                <div th:each="sub : ${list}">
+                    <tr>
+                        <td th:text="${sub.subjectName}"></td>
+                        <td th:text="${sub.id}"></td>
+                        <td th:text="${sub.subjectDescription}"></td>
+                        <td th:text="${sub.subjectBookAuthor}"></td>
+                        <td><a id="i" th:href="|/exam/class/${classId}/subject/${sub.id}/|">Result</a></td>
                     </tr>
                 </div>
             </table>
