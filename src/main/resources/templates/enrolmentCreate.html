@@ -36,9 +36,15 @@
                     </div>
 
                 </div>
-                <input type="submit" value="Enroll" class="btn btn-primary est"/>
+                <div>
+
+                    <input type="submit" value="Enroll" class="btn btn-primary est"/>
+                    <a class="btn btn-primary est" th:href="|/class/detail/${classId}/year/${session.currentYear}|">Back</a>
+
+                </div>
 
             </form>
+
         </div>
         <div class="col-lg-3"></div>
     </div>
