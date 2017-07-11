@@ -18,8 +18,8 @@ open class ClassService(val classRepo: ClassRepository) {
     open fun save(course: Course): Course {
         val foundDuplicate = classRepo.findListByOrganizationId(course.organization!!.id!!)
                 .filter {
-                    it.name == course.name
-                    it.section == course.section
+                    it.name == course.name &&
+                    it.section == course.section &&
                     it.shift == course.shift
                 }
                 .isEmpty()
