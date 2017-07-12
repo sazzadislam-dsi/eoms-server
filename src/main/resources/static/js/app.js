@@ -72,7 +72,7 @@
         hideLoader();
         console.dir(response);
         alert("Fee create successful !");
-        location.reload();
+        window.location.replace("/class/detail/" + $("#classId").val() + "/year/" + new Date().getFullYear());
     }, function (xhr) {
         hideLoader();
         alert(xhr.status + "  Organization with given info exist");
@@ -93,7 +93,7 @@
         console.log("newww");
         console.dir(response);
         alert("Class create successful !");
-        location.reload();
+        window.location.replace("/class/detail/" + response.id + "/year/" + new Date().getFullYear());
     }, function (xhr) {
         hideLoader();
         alert(xhr.status + "  Class with given info exist");
