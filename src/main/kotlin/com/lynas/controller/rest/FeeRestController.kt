@@ -10,6 +10,8 @@ import com.lynas.service.StudentFeeService
 import com.lynas.service.StudentService
 import com.lynas.util.convertToDate
 import com.lynas.util.getOrganizationFromSession
+import com.lynas.util.responseOK
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -42,7 +44,7 @@ class FeeRestController(val feeInfoService: FeeInfoService,
     }
 
     @PostMapping("/student/new")
-    fun studentPayment(request: HttpServletRequest, @RequestBody feeStudentNew: FeeStudentNew): List<FeeInfo>? {
+    fun studentPayment(request: HttpServletRequest, @RequestBody feeStudentNew: FeeStudentNew): ResponseEntity<*> {
         val fee = feeInfoService.find(feeStudentNew.feeInfoId)
         val studentOf = studentService.findById(feeStudentNew.studentId, getOrganizationFromSession(request).id!!)
         val pDate = feeStudentNew.paymentDate.convertToDate()
@@ -53,8 +55,8 @@ class FeeRestController(val feeInfoService: FeeInfoService,
             paymentDate = pDate
 
         }
-        studentFeeService.save(studentFee)
-        return null
+        val savedObj = studentFeeService.save(studentFee)
+        return responseOK(savedObj)
     }
 }
 

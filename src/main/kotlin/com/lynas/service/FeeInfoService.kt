@@ -17,7 +17,6 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Sess
 
     @Transactional
     open fun save(feeInfo: FeeInfo): FeeInfo {
-        feeInfoRepository.findAll()
         return feeInfoRepository.save(feeInfo)
     }
 
