@@ -18,5 +18,5 @@ open class PersonService (val personRepository: PersonRepository) {
     }
 
     @Transactional
-    open fun findPersonById(id: Long) = personRepository.findOne(id)
+    open fun findPersonById(id: Long): Person? = personRepository.findOne(id)
 }

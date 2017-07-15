@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import java.time.LocalTime
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -64,7 +63,7 @@ class StudentController(val studentService: StudentService,
     fun viewDetails(@PathVariable studentId: Long, model: Model, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
         val student = studentService.findById(studentId, organization.id!!)
-        student.person?.contactInformationList = personService.findPersonById(student.person?.id!!).contactInformationList
+        student.person?.contactInformationList = personService.findPersonById(student.person?.id!!)?.contactInformationList
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
         val studentFeeList = feeInfoService.findStudentFeeInfoByStudent(studentId)
@@ -80,7 +79,7 @@ class StudentController(val studentService: StudentService,
                            @PathVariable classId: Long): String {
         val organization = getOrganizationFromSession(request)
         val student = studentService.findById(studentId, organization.id!!)
-        student.person?.contactInformationList = personService.findPersonById(student.person?.id!!).contactInformationList
+        student.person?.contactInformationList = personService.findPersonById(student.person?.id!!)?.contactInformationList
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
         val studentFeeList = feeInfoService.findStudentFeeInfoByStudent(studentId)
