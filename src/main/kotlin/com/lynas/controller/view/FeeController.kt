@@ -22,7 +22,7 @@ class FeeController(val feeInfoService: FeeInfoService, val classService: ClassS
     fun feeNew(@PathVariable classId: Long, request: HttpServletRequest, model: Model): String {
         val organization = getOrganizationFromSession(request)
         val course = classService.findById(id = classId, orgId = organization.id!!)
-        model.addAttribute("courseId", course.id)
+        model.addAttribute("courseId", course?.id)
         return "feeNew"
     }
 

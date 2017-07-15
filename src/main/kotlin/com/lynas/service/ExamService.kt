@@ -2,13 +2,11 @@ package com.lynas.service
 
 import com.lynas.model.Exam
 import com.lynas.model.query.result.ExamQueryResult
-import com.lynas.model.response.ExamClassResponse1
 import com.lynas.model.response.ExamResponse
 import com.lynas.model.response.ExamStudentResponse
 import com.lynas.repo.ExamRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import kotlin.streams.toList
 
 /**
  * Created by sazzad on 7/19/16
@@ -29,7 +27,7 @@ open class ExamService(private val examRepository: ExamRepository,
     open fun resultOfSubjectByYear(classId: Long, subjectId: Long, _year: Int, orgId: Long): ExamResponse {
         val resultList = examRepository.resultOfSubjectByYear(classId, subjectId, _year, orgId)
         val examResponse = ExamResponse().apply {
-            className = classService.findById(classId, orgId).name
+            className = classService.findById(classId, orgId)?.name
             subjectName = subjectService.findById(subjectId).subjectName
             year = _year
         }

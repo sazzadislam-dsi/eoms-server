@@ -60,7 +60,7 @@ class ClassController constructor(val classService: ClassService,
         logger.info("Hit in detail with class id {}", classId)
         val organization = getOrganizationFromSession(request)
         val classDetails: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId, organization.id!!, year)
-        val cls: Course = classService.findById(classId, organization.id!!)
+        val cls: Course? = classService.findById(classId, organization.id!!)
         logger.info("class student number {}", classDetails.size)
         model.addAttribute("classDetails", classDetails)
         model.addAttribute("cls", cls)

@@ -45,7 +45,7 @@ open class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    open fun findById(id: Long, orgId: Long): Course {
+    open fun findById(id: Long, orgId: Long): Course? {
         return classRepo.findById(id, orgId)
     }
 
