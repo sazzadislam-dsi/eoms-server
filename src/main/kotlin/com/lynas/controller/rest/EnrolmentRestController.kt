@@ -2,7 +2,6 @@ package com.lynas.controller.rest
 
 import com.lynas.model.Course
 import com.lynas.model.Enrolment
-import com.lynas.model.Organization
 import com.lynas.model.Student
 import com.lynas.model.request.EnrolmentJson
 import com.lynas.service.ClassService
@@ -22,9 +21,9 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("enrolments")
-class EnrolmentRestController (val enrolmentService: EnrolmentService,
-                               val studentService: StudentService,
-                               val classService: ClassService) {
+class EnrolmentRestController(val enrolmentService: EnrolmentService,
+                              val studentService: StudentService,
+                              val classService: ClassService) {
 
     val logger = getLogger(EnrolmentRestController::class.java)
 
@@ -41,6 +40,8 @@ class EnrolmentRestController (val enrolmentService: EnrolmentService,
 
         val _student: Student = studentService.findById(enrolmentJson.studentId, organization.id!!)
         val _course: Course = classService.findById(enrolmentJson.classId, organization.id!!)
+                ?: return responseError("Class/Course not found with given class/course id" + enrolmentJson.classId)
+
         val enrolment: Enrolment = Enrolment().apply {
             year = enrolmentJson.year
             roleNumber = enrolmentJson.roleNumber

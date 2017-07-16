@@ -1,6 +1,5 @@
 package com.lynas.controller.rest
 
-import com.lynas.model.Organization
 import com.lynas.model.Person
 import com.lynas.model.request.PersonContact
 import com.lynas.service.PersonService
@@ -24,7 +23,7 @@ class PersonRestController (val personService: PersonService) {
     }
 
     @PatchMapping
-    fun patch(@RequestBody person: Person): Person {
+    fun patch(@RequestBody person: Person): Person? {
         if (null != person.id) {
             val personFromDB = personService.findPersonById(person.id as Long)
             personFromDB?.apply {

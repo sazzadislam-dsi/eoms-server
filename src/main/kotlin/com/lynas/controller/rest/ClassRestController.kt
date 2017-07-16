@@ -6,7 +6,6 @@ import com.lynas.service.ClassService
 import com.lynas.util.getOrganizationFromSession
 import com.lynas.util.responseConflict
 import com.lynas.util.responseOK
-import com.lynas.util.verifyClassOrganization
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.http.ResponseEntity
@@ -43,24 +42,6 @@ open class ClassRestController (val classService: ClassService) {
         logger.info("Saved Class :: " + createdClass.toString())
         return responseOK(createdClass)
     }
-
-
-    @PatchMapping
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
-    open fun patch(@RequestBody cls: Course, request: HttpServletRequest): Course {
-        val organization = getOrganizationFromSession(request)
-        val previousClass = classService.findById(cls.id!!, organization.id!!)
-
-        println(cls.toString())
-        println(verifyClassOrganization(previousClass, request))
-
-        /*logger.info("Received Class :: " + cls.toString())
-        cls.organization = request.session.getAttribute(AppConstant.organization) as Organization?
-        classService.save(cls)
-        logger.info("Saved Class :: " + cls.toString())*/
-        return cls
-    }
-
 
     @GetMapping("/getCollection/orgName/{name}")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
