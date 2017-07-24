@@ -17,6 +17,7 @@ class   Exam {
     var totalNumber: Double? = null
     var obtainedNumber: Double? = null
     var percentile: Double? = 100.0
+    var isPresent: Boolean? = null
 
     @Relationship(type = "examOfClass", direction = Relationship.OUTGOING)
     var cls: Course? = null

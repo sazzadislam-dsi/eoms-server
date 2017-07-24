@@ -82,6 +82,7 @@
                         <th>Role Number</th>
                         <th>Student Name</th>
                         <th>Mark Obtain</th>
+                        <th>Present</th>
 
 
                         <div th:each="std, stat : ${studentList}">
@@ -89,6 +90,7 @@
                                 <td th:text="${std.roleNumber}"></td>
                                 <td th:text="${std.studentName}"></td>
                                 <td><input type="input" name="markObtain" id="i" /></td>
+                                <td><input type="checkbox" name="isPresent" id="p" th:checked="${true}" /></td>
                                 <td><input type="hidden" name="studentId" th:value="*{studentList[__${stat.index}__].studentId}"/> </td>
                             </tr>
                         </div>
@@ -115,8 +117,9 @@
             if (i != 0) {
                 var $row = $(n);
                 rows.push({
-                    mark:   $row.find('td:eq(2)').find('input').val(),
-                    studentId:   $row.find('td:eq(3)').find('input').val()
+                    mark:       $row.find('td:eq(2)').find('input').val(),
+                    isPresent:  $row.find('td:eq(3)').find('input').is(':checked'),
+                    studentId:  $row.find('td:eq(4)').find('input').val()
                 });
             }
         });

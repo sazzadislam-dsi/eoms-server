@@ -5,5 +5,6 @@ package com.lynas.model.request
  */
 data class ExamJson (
         val mark: Double = 0.0,
-        val studentId: Long = 0
+        val studentId: Long = 0,
+        val isPresent: Boolean = true
 )
