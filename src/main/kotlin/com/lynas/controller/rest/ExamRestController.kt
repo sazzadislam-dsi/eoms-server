@@ -50,7 +50,7 @@ class ExamRestController(val examService: ExamService,
                 student = studentService.findById(studentId, organization.id!!)
             }
         }
-        //examService.save(listOfExam)
+        examService.save(listOfExam)
         return responseOK(examJson)
     }
 
