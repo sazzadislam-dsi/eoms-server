@@ -35,7 +35,7 @@ open class StudentService(val studentRepository: StudentRepository) {
 
     @Transactional
     open fun findAll(orgId : Long): MutableList<Student> {
-        var studentList: MutableList<Student> = mutableListOf()
+        val studentList: MutableList<Student> = mutableListOf()
         studentRepository.findAll(orgId).forEach { i -> studentList.add(i) }
         return studentList
     }
@@ -43,6 +43,11 @@ open class StudentService(val studentRepository: StudentRepository) {
     @Transactional
     open fun studentInfoByYear(id: Long, year: Int, orgId : Long): StudentInfoQueryResult {
         return studentRepository.studentInfoByYear(id, year, orgId)
+    }
+
+    @Transactional
+    open fun findStudentCountOfOrganization(orgId: Long): Int {
+        return studentRepository.studentCountOfAnOrganization(orgId)
     }
 
 }

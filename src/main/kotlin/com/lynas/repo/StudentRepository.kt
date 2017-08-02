@@ -39,4 +39,8 @@ interface StudentRepository : GraphRepository<Student> {
             " where ID(org) = {0} return s, sp, p")
     fun findAll(orgId : Long): Iterable<Student>
 
+    @Query("MATCH (s:Student)-[sp:studentIsAPerson]-> (p:Person), (p)-[:personBelongsToAnOrganization]->(org:Organization) " +
+            "WHERE ID(org) = {0} return count(s)")
+    fun studentCountOfAnOrganization(orgId: Long): Int
+
 }
