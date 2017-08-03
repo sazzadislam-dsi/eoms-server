@@ -12,8 +12,8 @@
 <body>
 <div layout:fragment="page-content">
 
-    <div class="row est">
-        <div class="col-lg-6">
+    <div class="row est esb">
+        <div class="col-lg-12">
             <div>
                 <a class="btn btn-primary est" th:href="|/subject/class/${cls.id}/create|">Add Subject</a>
                 <a class="btn btn-primary est" th:href="|/subject/class/${cls.id}/list|">Subject List</a>
@@ -23,9 +23,11 @@
                    th:href="|/attendance/studentList/classId/${cls.id}/year/${session.currentYear}|">Take Attendance</a>
                 <a class="btn btn-primary est" th:href="|/attendance/view/classId/${cls.id}|">View Attendance</a>
             </div>
-
+        </div>
+    </div>
+    <div class="row est">
+        <div class="col-lg-6">
             <h3 class="separator">Class Information</h3>
-
             <div>
                 <table class="table table-striped">
                     <tr>
