@@ -32,6 +32,7 @@ class HomeController(
         if (request.session.getAttribute(AppConstant.organization) == null) {
             val organization = appUserService.findByUserName(username = user.username)?.organization
             logger.info("Login with Username [{}], Organization name [{}], Organization id [{}]", user.username, organization?.name, organization?.id)
+            request.session.setAttribute(AppConstant.organization, organization)
             model.addAttribute("studentCount", studentService.findStudentCountOfOrganization(organization!!.id!!))
 
         }
