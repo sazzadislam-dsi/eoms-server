@@ -2,6 +2,7 @@ package com.lynas.controller.view
 
 import com.lynas.model.util.SpringSecurityUser
 import com.lynas.service.AppUserService
+import com.lynas.service.ClassService
 import com.lynas.service.StudentService
 import com.lynas.util.AppConstant
 import com.lynas.util.SpringUtil
@@ -21,7 +22,8 @@ import javax.servlet.http.HttpServletRequest
 class HomeController(
         val appUserService: AppUserService,
         val springUtil: SpringUtil,
-        val studentService: StudentService) {
+        val studentService: StudentService,
+        val classService: ClassService) {
 
     val logger: Logger = getLogger(HomeController::class.java)
 
@@ -29,13 +31,13 @@ class HomeController(
     fun home(model: Model, request: HttpServletRequest): String {
         logger.info("return home page {}", springUtil.getAppOrganizationName())
         val user = SecurityContextHolder.getContext().authentication.principal as SpringSecurityUser
+        val organization = appUserService.findByUserName(username = user.username)?.organization
         if (request.session.getAttribute(AppConstant.organization) == null) {
-            val organization = appUserService.findByUserName(username = user.username)?.organization
             logger.info("Login with Username [{}], Organization name [{}], Organization id [{}]", user.username, organization?.name, organization?.id)
             request.session.setAttribute(AppConstant.organization, organization)
-            model.addAttribute("studentCount", studentService.findStudentCountOfOrganization(organization!!.id!!))
-
         }
+        model.addAttribute("studentCount", studentService.findStudentCountOfOrganization(organization!!.id!!))
+        model.addAttribute("classCount", classService.findListCountByOrganizationName(organization.id!!))
         return "home"
     }
 
