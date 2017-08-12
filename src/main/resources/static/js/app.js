@@ -399,4 +399,69 @@
         hideLoader();
         console.dir(xhr);
     });
+
+
+    $('#btnStudentSearch').click(function () {
+        console.log("search button pressed!!");
+        const url = "/students/search/name";
+        var name = $('#studentName').val();
+        var data = {name: name};
+
+        console.log("student name to search " + name);
+        console.log("data = " + JSON.stringify(data));
+        $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: "application/json",
+            dataType: "json",
+            data: name,
+            beforeSend: function (request) {
+                request.setRequestHeader("X-CSRF-TOKEN", getCsrf());
+                request.setRequestHeader("Accept", "application/json");
+            },
+            success: function (data) {
+                console.log("Success");
+                console.dir(data);
+                var table = "";
+                table += "<thead>";
+                table += "<th>Check</th>";
+                table += "<th>Student Id</th>";
+                table += "<th>Student Name</th>";
+                table += "</thead>";
+
+                table += "<tbody>";
+                $.each(data, function (index, obj) {
+                    table += "<tr>";
+                    table += "<td>" + "<input type=\"checkbox\" />" +  "</td>";
+                    table += "<td>" + obj.id + "</td>";
+                    table += "<td>" + obj.person.firstName + " " + obj.person.lastName + "</td>";
+                    table += "</tr>";
+                });
+                table += "</tbody>";
+                $("#tbShow").append(table);
+            },
+            error: function (data) {
+                console.log("Error");
+            }
+        });
+        return false;
+    });
+    $('#btnStudentSelect').click(function () {
+        console.log("select button pressed!!");
+        var studentId, studentName;
+        $('table tr').each(function (i, n) {
+                var $row = $(n);
+                var val = $row.find('td:eq(0)').find('input').is(':checked');
+                if (val) {
+                    console.log("val " + val);
+                    studentId = $row.find('td:eq(1)').html();
+                    studentName = $row.find('td:eq(2)').html();
+                    return false;
+                }
+        });
+        $("#studentId").val(studentId);
+        $("#studentName1").val(studentName);
+        $('#studentSearchModal').modal('toggle');
+        return false;
+    });
 })(jQuery);
