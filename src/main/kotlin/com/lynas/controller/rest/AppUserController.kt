@@ -1,9 +1,7 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.AppUser
-import com.lynas.model.Organization
 import com.lynas.service.AppUserService
-import com.lynas.util.AppConstant
 import com.lynas.util.encodePassword
 import com.lynas.util.getOrganizationFromSession
 import org.springframework.web.bind.annotation.*

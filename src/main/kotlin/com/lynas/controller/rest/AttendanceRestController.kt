@@ -2,7 +2,6 @@ package com.lynas.controller.rest
 
 import com.lynas.exception.SameDateAttendanceException
 import com.lynas.model.AttendanceBook
-import com.lynas.model.Organization
 import com.lynas.model.request.AttendanceJsonWrapper
 import com.lynas.model.response.ErrorObject
 import com.lynas.service.AttendanceService
