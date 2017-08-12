@@ -20,11 +20,37 @@
                 <div>
                     <div>
                         <label>Student ID</label>
-                        <input th:required="required" type="text" class="form-control"  id="studentId" name="studentId" placeholder=""/>
+                        <input th:required="required" type="hidden" class="form-control" data-toggle="modal" data-target="#studentSearchModal"  id="studentId" name="studentId" placeholder=""/>
+                        <input th:required="required" type="text" class="form-control" data-toggle="modal" data-target="#studentSearchModal"  id="studentName1" name="studentName" placeholder=""/>
                     </div>
+
+                    <!--Student Search Modal-->
+                    <div id="studentSearchModal" class="modal fade">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Student Search</h4>
+                            </div>
+                            <div class="modal-body">
+                                <label>Name : </label>
+                                <input id="studentName"/>
+                                <input type="button" id="btnStudentSearch" value="Search"/>
+                                <input type="button" id="btnStudentSelect" value="Select"/>
+                                <!--Table-->
+                                <div >
+                                    <table id="tbShow" class="table table-striped">
+
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                     <div>
                         <label>Class ID</label>
-                        <input th:required="required" disabled="disabled" type="text" class="form-control" name="classId" id="classId" th:value="${classId}" placeholder=""/>
+                        <input type="hidden" name="classId" id="classId" th:value="${classId}"/>
+                        <input th:required="required" disabled="disabled" type="text" class="form-control" name="className" id="className" th:value="${className}" placeholder=""/>
+
                     </div>
                     <div>
                         <label>Role Number</label>

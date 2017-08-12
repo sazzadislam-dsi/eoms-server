@@ -17,9 +17,9 @@ interface StudentRepository : GraphRepository<Student> {
             "return s, sp, p")
     fun findOne(id: Long, orgId: Long): Student
 
-    @Query("MATCH (s:Student) -[sp:studentIsAPerson]-> (p:Person {firstName:{0}})," +
+    @Query("MATCH (s:Student) -[sp:studentIsAPerson]-> (p:Person)," +
             " (p)-[:personBelongsToAnOrganization]->(org:Organization) " +
-            " where and ID(org) = {1} " +
+            " where lower(p.firstName) contains lower ({0}) and ID(org) = {1} " +
             " return s, p, sp ")
     fun searchByFirstName(name: String, orgId: Long) : List<Student>
 

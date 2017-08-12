@@ -135,5 +135,18 @@ class StudentRestController(val studentService: StudentService) {
         return studentService.save(student)
     }
 
+    @PostMapping("/search/name")
+    fun studentSearchWithName(@RequestBody name: String, request: HttpServletRequest): ResponseEntity<*> {
+        if (name.isEmpty()) {
+            logger.info("student search with Empty string")
+            return responseError("")
+        }
+        logger.info("search with student name [{}]", name)
+        val organization = getOrganizationFromSession(request)
+        val studentList = studentService.searchByFirstName(name, organization.id!!)
+        return responseOK(studentList)
+
+    }
+
 
 }
