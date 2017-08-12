@@ -406,9 +406,7 @@
         const url = "/students/search/name";
         var name = $('#studentName').val();
         var data = {name: name};
-
-        console.log("student name to search " + name);
-        console.log("data = " + JSON.stringify(data));
+        $("#tbShow").empty();
         $.ajax({
             url: url,
             type: 'POST',
@@ -432,7 +430,7 @@
                 table += "<tbody>";
                 $.each(data, function (index, obj) {
                     table += "<tr>";
-                    table += "<td>" + "<input type=\"checkbox\" />" +  "</td>";
+                    table += "<td>" + "<input type=\"radio\" name=\'selection\'/>" +  "</td>";
                     table += "<td>" + obj.id + "</td>";
                     table += "<td>" + obj.person.firstName + " " + obj.person.lastName + "</td>";
                     table += "</tr>";
@@ -459,6 +457,8 @@
                     return false;
                 }
         });
+        $("#studentId").val("");
+        $("#studentName1").val("");
         $("#studentId").val(studentId);
         $("#studentName1").val(studentName);
         $('#studentSearchModal').modal('toggle');
