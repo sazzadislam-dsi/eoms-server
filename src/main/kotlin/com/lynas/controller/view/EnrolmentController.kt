@@ -1,7 +1,9 @@
 package com.lynas.controller.view
 
+import com.lynas.model.query.result.ClassDetailQueryResult
 import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
+import com.lynas.util.getCurrentYear
 import com.lynas.util.getLogger
 import com.lynas.util.getOrganizationFromSession
 import org.springframework.stereotype.Controller
@@ -22,11 +24,14 @@ class EnrolmentController constructor(val enrolmentService: EnrolmentService,
 
     @RequestMapping("/create/{classId}")
     fun create(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
-        logger.info("return enrolmentCreate page for classId [{}]", classId)
-        model.addAttribute("classId", classId)
-        val course = classService.findById(classId, getOrganizationFromSession(request).id!!)
+        val organization = getOrganizationFromSession(request)
+        val course = classService.findById(classId, organization.id!!)
+        val classDetails: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId, organization.id!!, getCurrentYear())
         val courseName = course?.name + " " + course?.section + " " + course?.shift
+        model.addAttribute("classId", classId)
         model.addAttribute("className", courseName)
+        model.addAttribute("list", classDetails)
+        logger.info("return enrolmentCreate page for classId [{}]", classId)
         return "enrolmentCreate"
     }
 }

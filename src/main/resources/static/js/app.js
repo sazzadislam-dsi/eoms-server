@@ -161,7 +161,7 @@
     bindFormSubmits('enrolmentCreate', function (response) {
         hideLoader();
         alert("Enrolled !!");
-        location.reload();
+        location.reload(true);
     }, function (xhr) {
         hideLoader();
         alert(xhr.status + " Student Enrolled Another Class !!!");
@@ -461,6 +461,7 @@
         $("#studentName1").val("");
         $("#studentId").val(studentId);
         $("#studentName1").val(studentName);
+        $('#studentName1').prop('readonly', true);
         $('#studentSearchModal').modal('toggle');
         return false;
     });
