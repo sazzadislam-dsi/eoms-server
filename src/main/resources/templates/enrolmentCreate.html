@@ -14,12 +14,11 @@
         </div>
     </div>
     <div class="row separator">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-6 est esb">
+        <div class="col-lg-7 est esb">
             <form class="enrolmentCreate" role="form" method="post" action="/enrolments">
                 <div>
                     <div>
-                        <label>Student ID</label>
+                        <label>Student Name</label>
                         <input th:required="required" type="hidden" class="form-control" data-toggle="modal" data-target="#studentSearchModal"  id="studentId" name="studentId" placeholder=""/>
                         <input th:required="required" type="text" class="form-control" data-toggle="modal" data-target="#studentSearchModal"  id="studentName1" name="studentName" placeholder=""/>
                     </div>
@@ -46,7 +45,7 @@
                     </div>
 
                     <div>
-                        <label>Class ID</label>
+                        <label>Class Name</label>
                         <input type="hidden" name="classId" id="classId" th:value="${classId}"/>
                         <input th:required="required" disabled="disabled" type="text" class="form-control" name="className" id="className" th:value="${className}" placeholder=""/>
 
@@ -57,7 +56,7 @@
                     </div>
                     <div>
                         <label>Year</label>
-                        <input th:required="required" type="text" class="form-control" id="year" name="year" th:value="${session.currentYear}" placeholder=""/>
+                        <input th:required="required" type="text" disabled="disabled" class="form-control" id="year" name="year" th:value="${session.currentYear}" placeholder=""/>
                     </div>
 
                 </div>
@@ -71,7 +70,20 @@
             </form>
 
         </div>
-        <div class="col-lg-3"></div>
+        <div class="col-lg-5">
+            <table class="table table-striped separator">
+
+                <th style="width: 30%">Student Name</th>
+                <th>Role Number</th>
+
+                <div th:each="each : ${list}">
+                    <tr>
+                        <td th:text="${each.studentName}"></td>
+                        <td th:text="${each.roleNumber}"></td>
+                    </tr>
+                </div>
+            </table>
+        </div>
     </div>
 </div>
 </body>
