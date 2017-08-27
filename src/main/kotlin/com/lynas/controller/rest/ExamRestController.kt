@@ -5,10 +5,8 @@ import com.lynas.model.Organization
 import com.lynas.model.request.ExamJsonWrapper
 import com.lynas.model.response.ExamClassResponse
 import com.lynas.service.*
-import com.lynas.util.AppConstant
-import com.lynas.util.getLogger
-import com.lynas.util.getOrganizationFromSession
-import com.lynas.util.responseOK
+import com.lynas.util.*
+import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
@@ -32,10 +30,11 @@ class ExamRestController(val examService: ExamService,
 
     @PostMapping
     fun post(@RequestBody examJson: ExamJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("hit in post controller with {}", examJson)
+        logger.info("hit in create controller with {}", examJson)
         val organization = getOrganizationFromSession(request)
         val course = classService.findById(examJson.classId, organization.id!!)
         val _subject = subjectService.findById(examJson.subjectId)
+                ?: return responseError("SubjectId ${examJson.subjectId}".err_notFound())
         val listOfExam = examJson.examJson.map {
             (mark, studentId, _isPresent) ->
             Exam().apply {
@@ -61,7 +60,13 @@ class ExamRestController(val examService: ExamService,
                                request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and subject id {} and year {}", classId, subjectId, _year)
         val organization = getOrganizationFromSession(request)
-        return responseOK(examService.resultOfSubjectByYear(classId, subjectId, _year, organization.id!!))
+        return try {
+            responseOK(examService.resultOfSubjectByYear(classId, subjectId, _year, organization.id!!))
+        } catch (e: NotFoundException) {
+            responseError(e.message ?: "(ExamRestController:resultOfClassBySubject:NotFoundException) Error check server")
+        } catch (e: Exception) {
+            responseError(e.message ?: "(ExamRestController:resultOfClassBySubject:Exception) Error check server")
+        }
     }
 
     @GetMapping("student/{studentId}/results")

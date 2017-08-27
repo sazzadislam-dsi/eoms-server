@@ -29,7 +29,7 @@ class EnrolmentRestController(val enrolmentService: EnrolmentService,
 
     @PostMapping
     fun post(@RequestBody enrolmentJson: EnrolmentJson, request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("Hit in enrolment post method with {}", enrolmentJson.toString())
+        logger.info("Hit in enrolment create method with {}", enrolmentJson.toString())
         val organization = getOrganizationFromSession(request)
         val (enrollment, isEnroll) = enrolmentService.studentEnrolmentCheck(
                 enrolmentJson.studentId, enrolmentJson.year, organization.id!!)

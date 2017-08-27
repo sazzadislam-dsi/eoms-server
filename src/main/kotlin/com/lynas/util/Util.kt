@@ -60,3 +60,6 @@ fun String.convertToDate() : Date {
 fun getOrganizationFromSession(request: HttpServletRequest) = request.session.getAttribute(AppConstant.organization) as Organization
 
 fun getCurrentYear() = LocalDate.now().year
+
+
+fun String.err_notFound() = "Object or Property not found with given input : ${this}"

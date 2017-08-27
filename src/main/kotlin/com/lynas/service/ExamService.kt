@@ -5,6 +5,7 @@ import com.lynas.model.query.result.ExamQueryResult
 import com.lynas.model.response.ExamResponse
 import com.lynas.model.response.ExamStudentResponse
 import com.lynas.repo.ExamRepository
+import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -13,22 +14,24 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-open class ExamService(private val examRepository: ExamRepository,
-                       private val classService: ClassService,
-                       private val subjectService: SubjectService,
-                       private val studentService: StudentService) {
+class ExamService(private val examRepository: ExamRepository,
+                  private val classService: ClassService,
+                  private val subjectService: SubjectService,
+                  private val studentService: StudentService) {
 
     @Transactional
-    open fun save(exam: Collection<Exam>) {
+    fun save(exam: Collection<Exam>) {
         examRepository.save(exam)
     }
 
     @Transactional
-    open fun resultOfSubjectByYear(classId: Long, subjectId: Long, _year: Int, orgId: Long): ExamResponse {
+    @Throws(NotFoundException::class)
+    fun resultOfSubjectByYear(classId: Long, subjectId: Long, _year: Int, orgId: Long): ExamResponse {
         val resultList = examRepository.resultOfSubjectByYear(classId, subjectId, _year, orgId)
+        val subject = subjectService.findById(subjectId) ?: throw NotFoundException("subjectId : $subjectId")
         val examResponse = ExamResponse().apply {
             className = classService.findById(classId, orgId)?.name
-            subjectName = subjectService.findById(subjectId).subjectName
+            subjectName = subject.subjectName
             year = _year
         }
 
@@ -62,7 +65,7 @@ open class ExamService(private val examRepository: ExamRepository,
     }
 
     @Transactional
-    open fun resultOfStudentByYear(classId: Long, studentId: Long, _year: Int, orgId: Long): ExamStudentResponse {
+    fun resultOfStudentByYear(classId: Long, studentId: Long, _year: Int, orgId: Long): ExamStudentResponse {
         val resultList = examRepository.resultOfStudentByYear(classId, studentId, _year, orgId)
         val studentInfo = studentService.studentInfoByYear(studentId, _year, orgId)
         val response = ExamStudentResponse().apply {
@@ -126,7 +129,7 @@ open class ExamService(private val examRepository: ExamRepository,
     }*/
 
     @Transactional
-    open fun resultOfClass(classId: Long, _year: Int, orgId: Long): List<ExamQueryResult> {
+    fun resultOfClass(classId: Long, _year: Int, orgId: Long): List<ExamQueryResult> {
         val resultList = examRepository.resultOfClassByYear(classId, _year, orgId)
         val resultMap = resultList.groupBy { it.roleNumber }
 

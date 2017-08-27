@@ -9,27 +9,26 @@ import org.springframework.transaction.annotation.Transactional
  * Created by seal on 2/6/2017.
  */
 @Service
-open class SubjectService constructor(val subjectRepository: SubjectRepository) {
+class SubjectService constructor(val subjectRepository: SubjectRepository) {
 
     @Transactional
-    open fun post(subject: Subject) {
+    fun create(subject: Subject) {
         subjectRepository.save(subject)
     }
 
     @Transactional
-    open fun findById(subjectId: Long): Subject {
+    fun findById(subjectId: Long): Subject? {
         return subjectRepository.findOne(subjectId)
     }
 
     @Transactional
-    open fun findAllByClassId(classId: Long, orgId : Long): List<Subject> {
+    fun findAllByClassId(classId: Long, orgId: Long): List<Subject> {
         return subjectRepository.findAllByClassId(classId, orgId)
     }
 
     @Transactional
-    open fun findAllByStudentId(stdId: Long, orgId : Long): List<Subject> {
+    fun findAllByStudentId(stdId: Long, orgId: Long): List<Subject> {
         return subjectRepository.findAllByStudentId(stdId, orgId)
-
     }
 
 }

@@ -1,9 +1,7 @@
 package com.lynas.controller.rest
 
-import com.lynas.model.Organization
 import com.lynas.model.Stuff
 import com.lynas.service.StuffService
-import com.lynas.util.AppConstant
 import com.lynas.util.getOrganizationFromSession
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

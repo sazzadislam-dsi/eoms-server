@@ -1,12 +1,13 @@
 package com.lynas.controller.rest
 
-import com.lynas.model.Course
-import com.lynas.model.Organization
 import com.lynas.model.Subject
 import com.lynas.model.request.SubjectPostJson
 import com.lynas.service.ClassService
 import com.lynas.service.SubjectService
-import com.lynas.util.*
+import com.lynas.util.getLogger
+import com.lynas.util.getOrganizationFromSession
+import com.lynas.util.responseError
+import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -27,7 +28,7 @@ class SubjectRestController constructor(val subjectService: SubjectService,
 
     @PostMapping
     fun post(@RequestBody subjectJson: SubjectPostJson, request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("Hit post method with {}", subjectJson)
+        logger.info("Hit create method with {}", subjectJson)
         val organization = getOrganizationFromSession(request)
         val subject: Subject = Subject().apply {
             subjectName = subjectJson.subjectName
@@ -41,7 +42,7 @@ class SubjectRestController constructor(val subjectService: SubjectService,
                 .findById(subjectJson.classId as Long, organization.id!!)
                 ?.let {
                     subject.cls = it
-                    subjectService.post(subject)
+                    subjectService.create(subject)
                     logger.info("Post subject successful for class id [{}]", it.id)
                     return responseOK(subjectJson)
                 }
