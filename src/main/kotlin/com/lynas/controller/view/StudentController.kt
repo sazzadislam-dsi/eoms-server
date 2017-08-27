@@ -9,6 +9,7 @@ import com.lynas.service.PersonService
 import com.lynas.service.StudentService
 import com.lynas.util.getLogger
 import com.lynas.util.getOrganizationFromSession
+import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -62,7 +63,7 @@ class StudentController(val studentService: StudentService,
     @GetMapping("/{studentId}/details")
     fun viewDetails(@PathVariable studentId: Long, model: Model, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
-        val student = studentService.findById(studentId, organization.id!!)
+        val student = studentService.findById(studentId, organization.id!!) ?: throw NotFoundException()
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!)?.contactInformationList
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
@@ -78,7 +79,7 @@ class StudentController(val studentService: StudentService,
                            @PathVariable year: Int,
                            @PathVariable classId: Long): String {
         val organization = getOrganizationFromSession(request)
-        val student = studentService.findById(studentId, organization.id!!)
+        val student = studentService.findById(studentId, organization.id!!) ?: throw NotFoundException()
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!)?.contactInformationList
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))

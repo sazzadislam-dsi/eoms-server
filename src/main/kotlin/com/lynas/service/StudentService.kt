@@ -19,18 +19,13 @@ class StudentService(val studentRepository: StudentRepository) {
     }
 
     @Transactional
-    fun findById(id: Long, orgId: Long): Student {
+    fun findById(id: Long, orgId: Long): Student? {
         return studentRepository.findOne(id, orgId)
     }
 
     @Transactional
     fun searchByFirstName(name: String, orgId: Long): List<Student> {
         return studentRepository.searchByFirstName(name, orgId)
-    }
-
-    @Transactional
-    fun findStudentByContactId(id: Long, orgId: Long): Student {
-        return studentRepository.findStudentByContactId(id, orgId)
     }
 
     @Transactional

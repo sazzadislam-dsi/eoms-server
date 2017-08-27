@@ -39,6 +39,7 @@ class EnrolmentRestController(val enrolmentService: EnrolmentService,
         }
 
         val _student: Student = studentService.findById(enrolmentJson.studentId, organization.id!!)
+                ?: return responseError("Student not found with given student id ${enrolmentJson.studentId}")
         val _course: Course = classService.findById(enrolmentJson.classId, organization.id!!)
                 ?: return responseError("Class/Course not found with given class/course id" + enrolmentJson.classId)
 

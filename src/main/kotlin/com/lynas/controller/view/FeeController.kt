@@ -35,8 +35,8 @@ class FeeController(val feeInfoService: FeeInfoService, val classService: ClassS
         model.addAttribute("classId", classId)
         model.addAttribute("studentId", studentId)
         val feeInfoList = feeInfoService.findFeeInfoByClass(classId)
-                ?.filter { it.course?.organization?.id == getOrganizationFromSession(request).id }
-                ?.sortedBy { it.id }
+                .filter { it.course?.organization?.id == getOrganizationFromSession(request).id }
+                .sortedBy { it.id }
         model.addAttribute("feeInfoList", feeInfoList)
         return "makeStudentPayment"
     }

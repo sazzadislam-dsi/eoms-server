@@ -105,10 +105,11 @@ class StudentRestController(val studentService: StudentService) {
 
     @PostMapping("/add_contact_info")
     fun postStudentContactInformation(@RequestBody studentContact: StudentContact,
-                                      request: HttpServletRequest): Student {
+                                      request: HttpServletRequest): ResponseEntity<*> {
         val organization = getOrganizationFromSession(request)
 
         val student = studentService.findById(studentContact.studentId, organization.id!!)
+                ?: return responseError("Student not found with given student id ${studentContact.studentId}")
         if (null == student.person?.contactInformationList) {
             student.person?.contactInformationList = mutableListOf(
                     ContactInformation().apply {
@@ -131,7 +132,7 @@ class StudentRestController(val studentService: StudentService) {
 
             })
         }
-        return studentService.create(student)
+        return responseOK(studentService.create(student))
     }
 
     @PostMapping("/search/name")
