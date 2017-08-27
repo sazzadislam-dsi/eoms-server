@@ -14,12 +14,12 @@ import org.springframework.transaction.annotation.Transactional
  * Created by seal on 2/8/2017
  */
 @Service
-open class AttendanceService constructor(val studentService: StudentService,
-                                         val classService: ClassService,
-                                         val attendanceRepository: AttendanceRepository) {
+class AttendanceService constructor(val studentService: StudentService,
+                                    val classService: ClassService,
+                                    val attendanceRepository: AttendanceRepository) {
 
     @Transactional
-    open fun post(attendanceJsonWrapper: AttendanceJsonWrapper, orgId: Long): AttendanceBook {
+    fun post(attendanceJsonWrapper: AttendanceJsonWrapper, orgId: Long): AttendanceBook {
         val _attendanceDate = attendanceJsonWrapper.date.convertToDate()
         val foundDuplicate = attendanceRepository
                 .findAttendanceBookOfClass(_attendanceDate.time, attendanceJsonWrapper.classId, orgId)
@@ -47,7 +47,7 @@ open class AttendanceService constructor(val studentService: StudentService,
 
 
     @Transactional
-    open fun getAttendanceOfAClassOnDate(date: Long, classId: Long, orgId: Long): List<AttendanceViewQueryResult> {
+    fun getAttendanceOfAClassOnDate(date: Long, classId: Long, orgId: Long): List<AttendanceViewQueryResult> {
         return attendanceRepository.findAttendanceBookOfClass(date, classId, orgId)
     }
 

@@ -1,7 +1,6 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.ContactInformation
-import com.lynas.model.Organization
 import com.lynas.model.Person
 import com.lynas.model.Student
 import com.lynas.model.request.StudentContact
@@ -48,7 +47,7 @@ class StudentRestController(val studentService: StudentService) {
             religion = studentJson.religion
             organization = getOrganizationFromSession(request)
         }
-        studentService.save(student)
+        studentService.create(student)
         logger.warn("created student " + student.toString())
         return responseOK(student)
     }
@@ -99,7 +98,7 @@ class StudentRestController(val studentService: StudentService) {
             religion = studentJson.religion
         }
 
-        studentService.save(student)
+        studentService.create(student)
 
         return responseOK(student)
     }
@@ -132,7 +131,7 @@ class StudentRestController(val studentService: StudentService) {
 
             })
         }
-        return studentService.save(student)
+        return studentService.create(student)
     }
 
     @PostMapping("/search/name")

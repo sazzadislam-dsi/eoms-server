@@ -11,42 +11,42 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-open class StudentService(val studentRepository: StudentRepository) {
+class StudentService(val studentRepository: StudentRepository) {
 
     @Transactional
-    open fun save(student: Student): Student {
+    fun create(student: Student): Student {
         return studentRepository.save(student)
     }
 
     @Transactional
-    open fun findById(id: Long, orgId: Long): Student {
+    fun findById(id: Long, orgId: Long): Student {
         return studentRepository.findOne(id, orgId)
     }
 
     @Transactional
-    open fun searchByFirstName(name: String, orgId: Long) : List<Student> {
+    fun searchByFirstName(name: String, orgId: Long): List<Student> {
         return studentRepository.searchByFirstName(name, orgId)
     }
 
     @Transactional
-    open fun findStudentByContactId(id: Long, orgId : Long): Student {
+    fun findStudentByContactId(id: Long, orgId: Long): Student {
         return studentRepository.findStudentByContactId(id, orgId)
     }
 
     @Transactional
-    open fun findAll(orgId : Long): MutableList<Student> {
+    fun findAll(orgId: Long): MutableList<Student> {
         val studentList: MutableList<Student> = mutableListOf()
         studentRepository.findAll(orgId).forEach { i -> studentList.add(i) }
         return studentList
     }
 
     @Transactional
-    open fun studentInfoByYear(id: Long, year: Int, orgId : Long): StudentInfoQueryResult {
+    fun studentInfoByYear(id: Long, year: Int, orgId: Long): StudentInfoQueryResult {
         return studentRepository.studentInfoByYear(id, year, orgId)
     }
 
     @Transactional
-    open fun findStudentCountOfOrganization(orgId: Long): Int {
+    fun findStudentCountOfOrganization(orgId: Long): Int {
         return studentRepository.studentCountOfAnOrganization(orgId)
     }
 

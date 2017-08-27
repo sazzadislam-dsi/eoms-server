@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 class StudentFeeService(val studentFeeRepository: StudentFeeRepository) {
 
     @Transactional
-    open fun save(studentFee: StudentFee): StudentFee {
+    fun save(studentFee: StudentFee): StudentFee {
         return studentFeeRepository.save(studentFee)
     }
 

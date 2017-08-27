@@ -11,10 +11,10 @@ import java.util.*
  */
 
 @Service
-open class EnrolmentService (val enrolmentRepository: EnrolmentRepository) {
+class EnrolmentService(val enrolmentRepository: EnrolmentRepository) {
 
     @Transactional
-    open fun save(enrolment: Enrolment) {
+    fun save(enrolment: Enrolment) {
         enrolmentRepository.save(enrolment)
     }
 
@@ -28,8 +28,9 @@ open class EnrolmentService (val enrolmentRepository: EnrolmentRepository) {
      * @return enrollment(can be null) object and boolean value (whether the student enrolled or not in the given year)
      */
     data class Result(val enrolment: Enrolment?, val isEnroll: Boolean)
+
     @Transactional
-    open fun studentEnrolmentCheck(studentId: Long, year: Int, orgId: Long): Result {
+    fun studentEnrolmentCheck(studentId: Long, year: Int, orgId: Long): Result {
         val enrolment: Enrolment? = enrolmentRepository.findEnrollmentOfStudentByYear(studentId, year, orgId)
         return Result(enrolment, Objects.nonNull(enrolment))
     }

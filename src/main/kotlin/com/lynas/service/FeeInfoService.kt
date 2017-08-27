@@ -16,32 +16,32 @@ import org.springframework.transaction.annotation.Transactional
 class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Session) {
 
     @Transactional
-    open fun save(feeInfo: FeeInfo): FeeInfo {
+    fun save(feeInfo: FeeInfo): FeeInfo {
         return feeInfoRepository.save(feeInfo)
     }
 
     @Transactional
-    open fun findFeeInfoByClass(id: Long): List<FeeInfo>? {
+    fun findFeeInfoByClass(id: Long): List<FeeInfo>? {
         return feeInfoRepository.findFeeInfoByClass(id)
     }
 
     @Transactional
-    open fun findStudentFeeInfoByClass(id: Long): List<StudentFee>? {
+    fun findStudentFeeInfoByClass(id: Long): List<StudentFee>? {
         return feeInfoRepository.findStudentFeeInfoByClass(id)
     }
 
     @Transactional
-    open fun findStudentFeeInfoByStudent(id: Long): List<StudentFee>? {
+    fun findStudentFeeInfoByStudent(id: Long): List<StudentFee>? {
         return feeInfoRepository.findStudentFeeInfoByStudent(id)
     }
 
     @Transactional
-    open fun find(id: Long): FeeInfo? {
+    fun find(id: Long): FeeInfo? {
         return feeInfoRepository.findOne(id, 2)
     }
 
     @Transactional
-    open fun delete(id: Long): Boolean {
+    fun delete(id: Long): Boolean {
         try {
             feeInfoRepository.delete(id)
             return true
@@ -51,7 +51,7 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Sess
     }
 
     @Transactional
-    open fun findFeeInfoByStudent(id: Long): List<FeeInfo>? {
+    fun findFeeInfoByStudent(id: Long): List<FeeInfo>? {
         return feeInfoRepository.findFeeInfoByStudent(id = id)
     }
 

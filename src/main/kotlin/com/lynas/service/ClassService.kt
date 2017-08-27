@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-open class ClassService(val classRepo: ClassRepository) {
+class ClassService(val classRepo: ClassRepository) {
 
     @Transactional
-    open fun save(course: Course): Course {
+    fun save(course: Course): Course {
         val foundDuplicate = classRepo.findListByOrganizationId(course.organization!!.id!!)
                 .filter {
                     it.name == course.name &&
@@ -31,12 +31,13 @@ open class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    open fun findListByOrganizationId(orgId: Long): List<Course> {
+    fun findListByOrganizationId(orgId: Long): List<Course> {
         return classRepo.findListByOrganizationId(orgId)
     }
 
     data class CourseInfo (var id: Long?, var name: String?)
-    open fun findClassListByOrganizationId(orgId: Long): List<CourseInfo> {
+
+    fun findClassListByOrganizationId(orgId: Long): List<CourseInfo> {
         return findListByOrganizationId(orgId).map {
             CourseInfo( id = it.id,
                     name = it.name + " " + it.section + " " + it.shift
@@ -45,23 +46,23 @@ open class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    open fun findById(id: Long, orgId: Long): Course? {
+    fun findById(id: Long, orgId: Long): Course? {
         return classRepo.findById(id, orgId)
     }
 
 
     @Transactional
-    open fun deleteById(id: Long) {
+    fun deleteById(id: Long) {
         return classRepo.delete(id)
     }
 
     @Transactional
-    open fun findStudentsByClassId(classID: Long, orgId: Long, year: Int): Collection<ClassDetailQueryResult> {
+    fun findStudentsByClassId(classID: Long, orgId: Long, year: Int): Collection<ClassDetailQueryResult> {
         return classRepo.findStudentsByClass(classID, orgId, year)
     }
 
     @Transactional
-    open fun findStudentsByClassId(classID: Long, year: Int, orgId: Long): Collection<ClassDetailQueryResult> {
+    fun findStudentsByClassId(classID: Long, year: Int, orgId: Long): Collection<ClassDetailQueryResult> {
         return classRepo.findStudentsByClass(classID, year, orgId)
     }
 
