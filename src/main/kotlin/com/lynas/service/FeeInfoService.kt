@@ -21,12 +21,12 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Sess
     }
 
     @Transactional
-    fun findFeeInfoByClass(id: Long): List<FeeInfo>? {
+    fun findFeeInfoByClass(id: Long): List<FeeInfo> {
         return feeInfoRepository.findFeeInfoByClass(id)
     }
 
     @Transactional
-    fun findStudentFeeInfoByClass(id: Long): List<StudentFee>? {
+    fun findStudentFeeInfoByClass(id: Long): List<StudentFee> {
         return feeInfoRepository.findStudentFeeInfoByClass(id)
     }
 
@@ -42,16 +42,16 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Sess
 
     @Transactional
     fun delete(id: Long): Boolean {
-        try {
+        return try {
             feeInfoRepository.delete(id)
-            return true
+            true
         } catch (e: Exception) {
-            return false
+            false
         }
     }
 
     @Transactional
-    fun findFeeInfoByStudent(id: Long): List<FeeInfo>? {
+    fun findFeeInfoByStudent(id: Long): List<FeeInfo> {
         return feeInfoRepository.findFeeInfoByStudent(id = id)
     }
 
