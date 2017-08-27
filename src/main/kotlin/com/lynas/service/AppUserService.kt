@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 class AppUserService(val appUserRepository: AppUserRepository) {
 
     @Transactional
-    fun save(appUser: AppUser): AppUser? = appUserRepository.save(appUser)
+    fun create(appUser: AppUser): AppUser? = appUserRepository.save(appUser)
 
     @Transactional
     fun findByUserName(username: String): AppUser? = appUserRepository.findByUsername(username)

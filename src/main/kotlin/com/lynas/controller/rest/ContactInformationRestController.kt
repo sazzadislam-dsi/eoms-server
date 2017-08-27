@@ -34,7 +34,7 @@ class ContactInformationRestController (val contactInformationService: ContactIn
                     phone_3 = contactInformation.phone_3
                     contactType = contactInformation.contactType
                 }
-                contactInformationService.save(contactInfo)
+                contactInformationService.create(contactInfo)
                 return responseOK(contactInfo)
             }
         }

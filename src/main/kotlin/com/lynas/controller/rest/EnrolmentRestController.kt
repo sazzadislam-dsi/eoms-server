@@ -49,7 +49,7 @@ class EnrolmentRestController(val enrolmentService: EnrolmentService,
             cls = _course
         }
 
-        enrolmentService.save(enrolment)
+        enrolmentService.create(enrolment)
         return responseOK(enrolment)
     }
 

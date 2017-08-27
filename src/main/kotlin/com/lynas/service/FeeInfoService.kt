@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Session) {
 
     @Transactional
-    fun save(feeInfo: FeeInfo): FeeInfo {
+    fun create(feeInfo: FeeInfo): FeeInfo {
         return feeInfoRepository.save(feeInfo)
     }
 

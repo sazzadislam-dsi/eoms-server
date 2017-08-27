@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 class ContactInformationService(val contactInformationRepository: ContactInformationRepository) {
 
     @Transactional
-    fun save(contactInformation: ContactInformation) {
+    fun create(contactInformation: ContactInformation) {
         contactInformationRepository.save(contactInformation)
     }
 

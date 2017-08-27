@@ -20,7 +20,7 @@ class ExamService(private val examRepository: ExamRepository,
                   private val studentService: StudentService) {
 
     @Transactional
-    fun save(exam: Collection<Exam>) {
+    fun create(exam: Collection<Exam>) {
         examRepository.save(exam)
     }
 

@@ -14,7 +14,7 @@ import java.util.*
 class EnrolmentService(val enrolmentRepository: EnrolmentRepository) {
 
     @Transactional
-    fun save(enrolment: Enrolment) {
+    fun create(enrolment: Enrolment) {
         enrolmentRepository.save(enrolment)
     }
 

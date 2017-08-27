@@ -21,7 +21,7 @@ class OrganizationRestController (val organizationService: OrganizationService) 
     @PostMapping
     fun post(@RequestBody organization: Organization): Organization {
         logger.info("Hit Organization RestController with {}", organization.toString())
-        organizationService.save(organization)
+        organizationService.create(organization)
         return organization
     }
 

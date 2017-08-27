@@ -16,7 +16,7 @@ class TeacherService(
         val personRepository: PersonRepository) {
 
     @Transactional
-    fun save(teacher: Teacher) {
+    fun create(teacher: Teacher) {
         teacher.person = personRepository.save(teacher.person)
         teacherRepository.save(teacher)
     }

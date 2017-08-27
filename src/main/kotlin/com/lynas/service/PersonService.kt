@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 class PersonService(val personRepository: PersonRepository) {
 
     @Transactional
-    fun save(person: Person) {
+    fun create(person: Person) {
         personRepository.save(person)
     }
 

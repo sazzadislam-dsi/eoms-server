@@ -19,7 +19,7 @@ class AttendanceService constructor(val studentService: StudentService,
                                     val attendanceRepository: AttendanceRepository) {
 
     @Transactional
-    fun post(attendanceJsonWrapper: AttendanceJsonWrapper, orgId: Long): AttendanceBook {
+    fun create(attendanceJsonWrapper: AttendanceJsonWrapper, orgId: Long): AttendanceBook {
         val _attendanceDate = attendanceJsonWrapper.date.convertToDate()
         val foundDuplicate = attendanceRepository
                 .findAttendanceBookOfClass(_attendanceDate.time, attendanceJsonWrapper.classId, orgId)

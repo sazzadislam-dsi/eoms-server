@@ -30,7 +30,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
         logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
         val organization = getOrganizationFromSession(request)
         try {
-            val attendanceBook: AttendanceBook = attendanceService.post(attendanceJson, organization.id!!)
+            val attendanceBook: AttendanceBook = attendanceService.create(attendanceJson, organization.id!!)
             logger.info("Post successfully attendance book")
         } catch (ex: SameDateAttendanceException) {
             logger.error("Duplicate attendance entry found on date [{}], class ID [{}]", attendanceJson.date, attendanceJson.classId)

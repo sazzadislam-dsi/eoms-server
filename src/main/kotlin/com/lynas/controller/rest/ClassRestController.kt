@@ -31,7 +31,7 @@ open class ClassRestController (val classService: ClassService) {
         createdClass.organization = getOrganizationFromSession(request)
 
         try {
-            createdClass = classService.save(createdClass)
+            createdClass = classService.create(createdClass)
         }
         catch (ex: DuplicateCourseException) {
             logger.warn("Duplicate class info found, class name [{}], shift [{}], section [{}]", cls.name, cls.shift, cls.section)

@@ -40,7 +40,7 @@ class FeeRestController(val feeInfoService: FeeInfoService,
             lastDate = if (feeInfoJson.lastDate?.trim() == "") null else feeInfoJson.lastDate?.convertToDate()
             course = courseById
         }
-        return feeInfoService.save(feeInfo)
+        return feeInfoService.create(feeInfo)
     }
 
     @PostMapping("/student/new")
@@ -55,7 +55,7 @@ class FeeRestController(val feeInfoService: FeeInfoService,
             paymentDate = pDate
 
         }
-        val savedObj = studentFeeService.save(studentFee)
+        val savedObj = studentFeeService.create(studentFee)
         return responseOK(savedObj)
     }
 }

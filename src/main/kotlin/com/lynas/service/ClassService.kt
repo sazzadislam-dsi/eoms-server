@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 class ClassService(val classRepo: ClassRepository) {
 
     @Transactional
-    fun save(course: Course): Course {
+    fun create(course: Course): Course {
         val foundDuplicate = classRepo.findListByOrganizationId(course.organization!!.id!!)
                 .filter {
                     it.name == course.name &&

@@ -18,7 +18,7 @@ class PersonRestController (val personService: PersonService) {
     @PostMapping
     fun post(@RequestBody person: Person, request: HttpServletRequest): Person {
         person.organization = getOrganizationFromSession(request)
-        personService.save(person)
+        personService.create(person)
         return person
     }
 
@@ -33,7 +33,7 @@ class PersonRestController (val personService: PersonService) {
                 sex = person.sex
             }
             if (null != personFromDB) {
-                personService.save(personFromDB)
+                personService.create(personFromDB)
             }
             return personFromDB
         }

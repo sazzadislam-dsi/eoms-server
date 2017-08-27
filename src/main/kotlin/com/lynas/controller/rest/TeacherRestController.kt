@@ -24,7 +24,7 @@ class TeacherRestController (val teacherService: TeacherService) {
 
         }
         teacher.person?.organization = request.session.getAttribute(AppConstant.organization) as Organization
-        teacherService.save(teacher)
+        teacherService.create(teacher)
         return teacher
     }
 }
