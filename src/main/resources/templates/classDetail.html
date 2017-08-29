@@ -106,9 +106,8 @@
 
                 <th style="width: 30%">Subject Name</th>
                 <th>Subject Id</th>
-                <th>Subject Description</th>
-                <th>Book Author</th>
-                <th>Result</th>
+                <th>Input</th>
+                <th>View</th>
                 <div class="separator"></div>
 
 
@@ -116,8 +115,7 @@
                     <tr>
                         <td th:text="${sub.subjectName}"></td>
                         <td th:text="${sub.id}"></td>
-                        <td th:text="${sub.subjectDescription}"></td>
-                        <td th:text="${sub.subjectBookAuthor}"></td>
+                        <td><a id="v" th:href="|/exam/class/${classId}/subject/${sub.id}/|">Result</a></td>
                         <td><a id="i" th:href="|/exam/class/${classId}/subject/${sub.id}/|">Result</a></td>
                     </tr>
                 </div>
