@@ -1,14 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
-<head></head>
+<head>
+    <title>E.O.M.S.</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script type="text/javascript" src="/js/jquery-min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/loading.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/jquery-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/reset.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/css.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css"/>
+    <script type="text/javascript" src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/loading.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+
+
+</head>
 <body>
-<h1>Login</h1>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name <input class="form-control" type="text" name="username" value="sazzad"/>
-    </label></div>
-    <div><label> Password <input class="form-control" type="password" name="password" value="123456"/>
-    </label></div>
-    <div><input class="btn btn-primary" type="submit" value="Sign In"/></div>
-</form>
+<div class="pen-title">
+    <h1>Baitul Mokaddem Institute</h1>
+</div>
+<div class="container">
+    <div class="card"></div>
+    <div class="card">
+        <h1 class="title">Login</h1>
+        <form th:action="@{/login}" method="post">
+            <div class="input-container">
+                <input name="username" th:required="required"/>
+                <label>Username</label>
+                <div class="bar"></div>
+            </div>
+            <div class="input-container">
+                <input th:required="required" name="password" type="password"/>
+                <label>Password</label>
+                <div class="bar"></div>
+            </div>
+            <div class="button-container">
+                <button><span>Go</span></button>
+            </div>
+            <div class="footer"><a href="#">Forgot your password?</a></div>
+            <div class="footer"><a href="#">Register</a></div>
+        </form>
+    </div>
+</div>
 </body>
 </html>
