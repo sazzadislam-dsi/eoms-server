@@ -2,6 +2,7 @@ package com.lynas.util
 
 import com.lynas.model.Course
 import com.lynas.model.Organization
+import org.neo4j.ogm.exception.NotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -57,7 +58,10 @@ fun String.convertToDate() : Date {
     return dateFormatter.parse(this)
 }
 
-fun getOrganizationFromSession(request: HttpServletRequest) = request.session.getAttribute(AppConstant.organization) as Organization
+@Throws(NotFoundException::class)
+fun getOrganizationFromSession(request: HttpServletRequest)
+        = request.session.getAttribute(AppConstant.organization) as Organization?
+        ?: throw NotFoundException("Organization info not found in session")
 
 fun getCurrentYear() = LocalDate.now().year
 

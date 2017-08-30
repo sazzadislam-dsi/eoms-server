@@ -1,5 +1,6 @@
 (function ($) {
-
+    const currentYear = new Date().getFullYear();
+    const baseUrl =
     $(".date").datepicker(
         {
             dateFormat: 'dd-mm-yy',
@@ -128,7 +129,7 @@
     });
 
     bindFormSubmits('studentUpdate', function (response) {
-        hideLoader()
+        hideLoader();
         window.location.replace("/student/" + response.id + "/details");
     }, function (xhr) {
         hideLoader();
@@ -225,7 +226,7 @@
 
     var bindFormSubmitsWithUrl2 = function (formName, onSuccess, onError) {
         $('form.' + formName).on('submit', function () {
-            const url = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/student/" + $('#studentId').val() + "/year/" + $('#year').val() + "/results";
+            const url = "/exams/class/" + $('#clsId').find(":selected").val() + "/student/" + $('#studentId').val() + "/year/" + $('#year').val() + "/results";
             console.log(url);
             showLoader();
             $.ajax({
@@ -288,7 +289,8 @@
 
     var bindFormSubmitsWithUrl3 = function (formName, onSuccess, onError) {
         $('form.' + formName).on('submit', function () {
-            const url = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/subject/" + $('#subjectId').val() + "/year/" + $('#year').val() + "/results";
+            const url = "/exams/class/" + $('#class_id').data("cls_id")
+                + "/subject/" + $('#subject_id').data("subid") + "/year/" + $('#year').val() + "/results";
             console.log(url);
             showLoader();
             $.ajax({
@@ -344,7 +346,7 @@
 
     var bindFormSubmitsWithUrl4 = function (formName, onSuccess, onError) {
         $('form.' + formName).on('submit', function () {
-            const url = "http://localhost:8080/exams/class/" + $('#clsId').find(":selected").val() + "/year/" + $('#year').val() + "/results";
+            const url = "/exams/class/" + $('#clsId').find(":selected").val() + "/year/" + $('#year').val() + "/results";
             console.log(url);
             showLoader();
             $.ajax({
