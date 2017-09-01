@@ -76,7 +76,7 @@
                 <th style="width: 30%">Student Name</th>
                 <th>Role Number</th>
 
-                <div th:each="each : ${list}">
+                <div th:each="each : ${enrolStudentList}">
                     <tr>
                         <td th:text="${each.studentName}"></td>
                         <td th:text="${each.roleNumber}"></td>

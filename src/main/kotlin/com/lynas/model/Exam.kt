@@ -9,7 +9,7 @@ import org.neo4j.ogm.annotation.Relationship
  * Created by sazzad on 8/31/16
  */
 @NodeEntity
-class   Exam {
+class Exam {
     @GraphId
     var id: Long? = null
     var examType: ExamType? = null

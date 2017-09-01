@@ -26,11 +26,11 @@ class EnrolmentController constructor(val enrolmentService: EnrolmentService,
     fun create(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
         val course = classService.findById(classId, organization.id!!)
-        val classDetails: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId, organization.id!!, getCurrentYear())
+        val enrolStudentList: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId, organization.id!!, getCurrentYear())
         val courseName = course?.name + " " + course?.section + " " + course?.shift
         model.addAttribute("classId", classId)
         model.addAttribute("className", courseName)
-        model.addAttribute("list", classDetails)
+        model.addAttribute("enrolStudentList", enrolStudentList)
         logger.info("return enrolmentCreate page for classId [{}]", classId)
         return "enrolmentCreate"
     }

@@ -18,6 +18,11 @@ class EnrolmentService(val enrolmentRepository: EnrolmentRepository) {
         enrolmentRepository.save(enrolment)
     }
 
+    @Transactional
+    fun delete(enrolmentId: Long) {
+        enrolmentRepository.delete(enrolmentId)
+    }
+
     /**
      * This method check whether a student enrolled in a class or not in a given year. This method return
      * two values, the enrollment(this object can be NULL) and boolean value whether the student enrolled or not.
