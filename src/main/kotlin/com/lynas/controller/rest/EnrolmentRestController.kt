@@ -31,13 +31,10 @@ class EnrolmentRestController(val enrolmentService: EnrolmentService,
     fun post(@RequestBody enrolmentJson: EnrolmentJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit in enrolment create method with {}", enrolmentJson.toString())
         val organization = getOrganizationFromSession(request)
-        val (enrollment, isEnroll) = enrolmentService.studentEnrolmentCheck(
-                enrolmentJson.studentId, enrolmentJson.year, organization.id!!)
-        if (isEnroll) {
-            // TODO need to change !! line below
-            return responseConflict(enrollment!!)
+        val (isValid, message) = enrolmentService.studentEnrolmentCheck(enrolmentJson.roleNumber, enrolmentJson.studentId, enrolmentJson.classId, enrolmentJson.year, organization.id!!)
+        if (!isValid) {
+            return responseError(ErrInf(enrolmentJson,message))
         }
-
         val _student: Student = studentService.findById(enrolmentJson.studentId, organization.id!!)
                 ?: return responseError("Student not found with given student id ${enrolmentJson.studentId}")
         val _course: Course = classService.findById(enrolmentJson.classId, organization.id!!)

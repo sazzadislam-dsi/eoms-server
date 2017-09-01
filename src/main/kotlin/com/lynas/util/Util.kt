@@ -18,11 +18,11 @@ import javax.servlet.http.HttpServletRequest
  * Created by sazzad on 8/17/16
  */
 
-object AppConstant{
+object AppConstant {
     val organization = "ORGANIZATION"
 }
 
-fun encodePassword(password:String?): String = BCryptPasswordEncoder().encode(password)
+fun encodePassword(password: String?): String = BCryptPasswordEncoder().encode(password)
 
 fun getLogger(clazz: Class<*>): Logger {
     return LoggerFactory.getLogger(clazz)
@@ -36,23 +36,24 @@ fun verifyClassOrganization(cls: Course, request: HttpServletRequest): Boolean {
 }
 
 fun responseOK(responseObject: Any): ResponseEntity<*> {
-    return ResponseEntity(responseObject,HttpStatus.OK)
+    return ResponseEntity(responseObject, HttpStatus.OK)
 }
 
 fun responseConflict(responseObject: Any): ResponseEntity<*> {
-    return ResponseEntity(responseObject,HttpStatus.CONFLICT)
+    return ResponseEntity(responseObject, HttpStatus.CONFLICT)
 }
 
 fun responseError(responseObject: Any): ResponseEntity<*> {
-    return ResponseEntity(responseObject,HttpStatus.BAD_REQUEST)
+    return ResponseEntity(responseObject, HttpStatus.BAD_REQUEST)
 }
 
-fun String.convertToDate() : Date {
-    var pattern: String? = null
-    if (this.matches(kotlin.text.Regex("[A-Za-z]+ [A-Za-z]+ \\d?\\d \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3} \\d{4}"))) {
-        pattern = "EEE MMM dd HH:mm:ss Z yyyy"
+data class ErrInf(val input: Any, val msg: Any  )
+
+fun String.convertToDate(): Date {
+    val pattern = if (this.matches(kotlin.text.Regex("[A-Za-z]+ [A-Za-z]+ \\d?\\d \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3} \\d{4}"))) {
+        "EEE MMM dd HH:mm:ss Z yyyy"
     } else {
-        pattern = "dd-MM-yyyy"
+        "dd-MM-yyyy"
     }
     val dateFormatter = SimpleDateFormat(pattern)
     return dateFormatter.parse(this)

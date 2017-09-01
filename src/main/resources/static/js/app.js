@@ -165,8 +165,7 @@
         location.reload(true);
     }, function (xhr) {
         hideLoader();
-        alert(xhr.status + " Student Enrolled Another Class !!!");
-        //alert(xhr.responseText);
+        alert("["+xhr.status+"]"+JSON.parse(xhr.responseText).msg)
     });
 
     bindFormSubmits('subjectCreate', function (response) {
@@ -176,7 +175,6 @@
     }, function (xhr) {
         hideLoader();
         alert(xhr.status + " Subject cannot add to class");
-        //alert(xhr.responseText);
     });
 
     var bindFormSubmitsWithUrl = function (formName, onSuccess, onError) {

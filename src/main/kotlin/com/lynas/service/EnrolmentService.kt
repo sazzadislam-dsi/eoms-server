@@ -27,11 +27,21 @@ class EnrolmentService(val enrolmentRepository: EnrolmentRepository) {
      *
      * @return enrollment(can be null) object and boolean value (whether the student enrolled or not in the given year)
      */
-    data class Result(val enrolment: Enrolment?, val isEnroll: Boolean)
+    //data class Result(val enrolment: Enrolment?, val isEnroll: Boolean)
 
     @Transactional
-    fun studentEnrolmentCheck(studentId: Long, year: Int, orgId: Long): Result {
-        val enrolment: Enrolment? = enrolmentRepository.findEnrollmentOfStudentByYear(studentId, year, orgId)
-        return Result(enrolment, Objects.nonNull(enrolment))
+    fun studentEnrolmentCheck(roleNumber: Int, studentId: Long, classId: Long, year: Int, orgId: Long): Pair<Boolean, String> {
+        val enrolment = enrolmentRepository.findEnrollmentOfStudentByYear(studentId, year, orgId)
+        return if (enrolment == null) {
+            val enrolmentList = enrolmentRepository.findEnrollmentOfRole(roleNumber, year, orgId, classId)
+            if (enrolmentList.isNotEmpty()) {
+                false to "Role already exist"
+            } else {
+                true to ""
+            }
+        }else {
+            false to "Enrolment already exist"
+        }
     }
+
 }
