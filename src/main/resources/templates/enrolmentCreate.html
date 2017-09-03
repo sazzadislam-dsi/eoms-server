@@ -75,11 +75,16 @@
 
                 <th style="width: 30%">Student Name</th>
                 <th>Role Number</th>
+                <th>Option</th>
 
                 <div th:each="each : ${enrolStudentList}">
                     <tr>
                         <td th:text="${each.studentName}"></td>
                         <td th:text="${each.roleNumber}"></td>
+                        <td>
+                            <a th:href="|/enrolment/${each.enrolmentId}/update|">Update </a> ||
+                            <a th:href="|/enrolment/delete/${each.enrolmentId}/class/${classId}/student/${each.studentId}|">Remove </a>
+                        </td>
                     </tr>
                 </div>
             </table>

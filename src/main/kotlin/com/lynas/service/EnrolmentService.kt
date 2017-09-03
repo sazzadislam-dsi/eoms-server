@@ -19,8 +19,14 @@ class EnrolmentService(val enrolmentRepository: EnrolmentRepository) {
     }
 
     @Transactional
-    fun delete(enrolmentId: Long) {
-        enrolmentRepository.delete(enrolmentId)
+    fun delete(enrolmentId: Long, studentId: Long, year: Int, orgId: Long): Boolean {
+        val enrolment:Enrolment? = enrolmentRepository.findEnrollmentOfStudentByYear(studentId, year, orgId)
+        return if (enrolment != null && enrolment.id == enrolmentId) {
+            enrolmentRepository.delete(enrolmentId)
+            true
+        } else {
+            false
+        }
     }
 
     /**
@@ -44,7 +50,7 @@ class EnrolmentService(val enrolmentRepository: EnrolmentRepository) {
             } else {
                 true to ""
             }
-        }else {
+        } else {
             false to "Enrolment already exist"
         }
     }

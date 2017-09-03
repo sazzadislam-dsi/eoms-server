@@ -10,5 +10,6 @@ open class ClassDetailQueryResult {
     var studentId: Long? = null
     var studentName: String? = null
     var roleNumber: Int? = null
+    var enrolmentId: Long? = null
 
 }

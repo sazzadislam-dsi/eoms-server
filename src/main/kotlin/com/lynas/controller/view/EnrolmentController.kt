@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import java.time.LocalDate
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -33,5 +34,16 @@ class EnrolmentController constructor(val enrolmentService: EnrolmentService,
         model.addAttribute("enrolStudentList", enrolStudentList)
         logger.info("return enrolmentCreate page for classId [{}]", classId)
         return "enrolmentCreate"
+    }
+
+    @RequestMapping("/delete/{enrolmentId}/class/{classId}/student/{studentId}")
+    fun delete(@PathVariable enrolmentId: Long, @PathVariable classId: Long, @PathVariable studentId: Long,
+               request: HttpServletRequest): String {
+        val organization = getOrganizationFromSession(request)
+        return if(enrolmentService.delete(enrolmentId,studentId,LocalDate.now().year,organization.id!!)){
+            "redirect:/enrolment/create/" + classId
+        } else {
+            "error"
+        }
     }
 }
