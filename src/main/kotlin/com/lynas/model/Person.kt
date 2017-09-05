@@ -35,5 +35,6 @@ open class Person {
                 "sex=$sex, religion=$religion, organization=$organization, contactInformationList=$contactInformationList)"
     }
 
+    var dateInString: String? = null
 
 }

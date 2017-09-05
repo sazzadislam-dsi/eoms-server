@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-lg-3"></div>
         <div class="col-lg-6">
-            <form class="studentUpdate" role="form" method="patch" action="/students">
+            <form class="studentUpdate" role="form" method="patch" action="/students" style="margin-bottom: 20px">
                 <div>
                     <label>First Name</label>
                     <input th:required="required" type="text" class="form-control" id="firstName" name="firstName"
@@ -23,7 +23,7 @@
                 <div>
                     <label>Date of birth</label>
                     <input th:required="required" type="text" class="form-control date" id="dateOfBirth" name="dateOfBirth"
-                           th:value="${student.person.dateOfBirth}"/>
+                           th:value="${student.person.dateInString}"/>
                 </div>
                 <div>
                     <label for="sex">Select Gender</label>
@@ -46,8 +46,9 @@
                     </select>
                 </div>
                 <input type="hidden" class="form-control" name="studentId" th:value="${student.id}"/>
+                <br />
                 <input type="submit" value="Update Student" class="btn btn-primary"/>
-
+                <br />
             </form>
         </div>
         <div class="col-lg-3"></div>

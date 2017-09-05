@@ -59,6 +59,8 @@ fun String.convertToDate(): Date {
     return dateFormatter.parse(this)
 }
 
+fun Date.convertToString() = SimpleDateFormat("dd-MM-yyyy").format(this)
+
 @Throws(NotFoundException::class)
 fun getOrganizationFromSession(request: HttpServletRequest)
         = request.session.getAttribute(AppConstant.organization) as Organization?
