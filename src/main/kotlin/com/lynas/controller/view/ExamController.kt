@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -31,8 +30,8 @@ class ExamController constructor(val classService: ClassService,
         return "exmClassSelect"
     }
 
-    @RequestMapping("/studentList")
-    fun studentListByClass(@RequestParam classId: Long, model: Model, request: HttpServletRequest): String {
+    @RequestMapping("/studentList/{classId}")
+    fun studentListByClass(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("hit in studentListByClass with class id {}", classId)
         val organization = getOrganizationFromSession(request)
         val year = getCurrentYear()
