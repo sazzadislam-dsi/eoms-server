@@ -23,7 +23,7 @@
                 <div>
                     <label>Date of birth</label>
                     <input th:required="required" type="text" class="form-control date" id="dateOfBirth" name="dateOfBirth"
-                           th:value="${student.person.dateInString}"/>
+                           th:value="${student.person.dateInString()}"/>
                 </div>
                 <div>
                     <label for="sex">Select Gender</label>

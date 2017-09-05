@@ -2,6 +2,7 @@ package com.lynas.model
 
 import com.lynas.model.util.Religion
 import com.lynas.model.util.Sex
+import com.lynas.util.convertToString
 import org.neo4j.ogm.annotation.GraphId
 import org.neo4j.ogm.annotation.NodeEntity
 import org.neo4j.ogm.annotation.Relationship
@@ -35,6 +36,6 @@ open class Person {
                 "sex=$sex, religion=$religion, organization=$organization, contactInformationList=$contactInformationList)"
     }
 
-    var dateInString: String? = null
+    fun dateInString():String = this.dateOfBirth!!.convertToString()
 
 }

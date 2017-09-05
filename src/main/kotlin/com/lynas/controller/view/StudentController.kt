@@ -7,7 +7,6 @@ import com.lynas.service.ExamServiceJava
 import com.lynas.service.FeeInfoService
 import com.lynas.service.PersonService
 import com.lynas.service.StudentService
-import com.lynas.util.convertToString
 import com.lynas.util.getLogger
 import com.lynas.util.getOrganizationFromSession
 import org.neo4j.ogm.exception.NotFoundException
@@ -41,10 +40,8 @@ class StudentController(val studentService: StudentService,
 
     @GetMapping("/{studentId}/update")
     fun studentUpdate(model: Model, @PathVariable studentId: Long, request: HttpServletRequest): String {
-        val organization = getOrganizationFromSession(request)
-        val student = studentService.findById(studentId, organization.id!!)
-        student?.person?.dateInString = student?.person?.dateOfBirth?.convertToString()
-        model.addAttribute("student", student)
+        model.addAttribute("student",
+                studentService.findById(studentId, getOrganizationFromSession(request).id!!))
         return "studentUpdate"
     }
 
