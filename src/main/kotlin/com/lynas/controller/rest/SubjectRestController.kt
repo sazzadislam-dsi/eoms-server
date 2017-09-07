@@ -24,12 +24,11 @@ import javax.servlet.http.HttpServletRequest
 class SubjectRestController constructor(val subjectService: SubjectService,
                                         val classService: ClassService) {
 
-    val logger = getLogger(SubjectRestController::class.java)
+    val logger = getLogger(this.javaClass)
 
     @PostMapping
     fun post(@RequestBody subjectJson: SubjectPostJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit create method with {}", subjectJson)
-        val organization = getOrganizationFromSession(request)
         val subject: Subject = Subject().apply {
             subjectName = subjectJson.subjectName
             subjectDescription = subjectJson.subjectDescription
@@ -39,7 +38,7 @@ class SubjectRestController constructor(val subjectService: SubjectService,
 
         // Problem in save object
         classService
-                .findById(subjectJson.classId as Long, organization.id!!)
+                .findById(subjectJson.classId as Long, getOrganizationFromSession(request).id!!)
                 ?.let {
                     subject.cls = it
                     subjectService.create(subject)

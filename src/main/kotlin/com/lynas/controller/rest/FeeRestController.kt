@@ -31,8 +31,7 @@ class FeeRestController(val feeInfoService: FeeInfoService,
 
     @PostMapping
     fun post(@RequestBody feeInfoJson: FeeInfoJson, request: HttpServletRequest): FeeInfo {
-        val organization = getOrganizationFromSession(request)
-        val courseById = classService.findById(id = feeInfoJson.classId, orgId = organization.id!!)
+        val courseById = classService.findById(id = feeInfoJson.classId, orgId = getOrganizationFromSession(request).id!!)
         val feeInfo = FeeInfo().apply {
             type = feeInfoJson.type
             amount = feeInfoJson.amount

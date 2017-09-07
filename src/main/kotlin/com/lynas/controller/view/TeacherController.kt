@@ -17,8 +17,8 @@ class TeacherController (val classService: ClassService) {
 
     @RequestMapping("/home")
     fun classHome(model: Model,request : HttpServletRequest): String {
-        val organization = getOrganizationFromSession(request)
-        model.addAttribute("classList", classService.findListByOrganizationId(organization.id!!))
+        model.addAttribute("classList",
+                classService.findListByOrganizationId(getOrganizationFromSession(request).id!!))
         return "classHome"
     }
 

@@ -20,12 +20,12 @@ import javax.servlet.http.HttpServletRequest
 class ExamController constructor(val classService: ClassService,
                                  val subjectService: SubjectService) {
 
-    val logger = getLogger(ExamController::class.java)
+    val logger = getLogger(this.javaClass)
 
     @RequestMapping("/class/select")
     fun attendanceBook(model: Model, request: HttpServletRequest): String {
-        val organization = getOrganizationFromSession(request)
-        model.addAttribute("classList", classService.findClassListByOrganizationId(organization.id!!).sortedBy { it.name })
+        model.addAttribute("classList",
+                classService.findClassListByOrganizationId(getOrganizationFromSession(request).id!!).sortedBy { it.name })
         logger.info("return examClassSelect page")
         return "exmClassSelect"
     }
@@ -46,9 +46,9 @@ class ExamController constructor(val classService: ClassService,
     @RequestMapping("/subject/result")
     fun resultOfSubject(request: HttpServletRequest, model: Model): String {
         logger.info("return subjectResult")
-        val organization = getOrganizationFromSession(request)
         model.addAttribute("classList",
-                classService.findClassListByOrganizationId(organization.id!!).sortedBy { it.name })
+                classService.findClassListByOrganizationId(getOrganizationFromSession(request).id!!)
+                        .sortedBy { it.name })
         return "subjectResult"
     }
 
@@ -67,18 +67,17 @@ class ExamController constructor(val classService: ClassService,
 
     @RequestMapping("/student/result")
     fun resultOfStudent(request: HttpServletRequest, model: Model): String {
-        val organization = getOrganizationFromSession(request)
         model.addAttribute("classList",
-                classService.findClassListByOrganizationId(organization.id!!).sortedBy { it.name })
-
+                classService.findClassListByOrganizationId(getOrganizationFromSession(request).id!!)
+                        .sortedBy { it.name })
         return "studentResult"
     }
 
     @RequestMapping("/class/result")
     fun resultOfClass(request: HttpServletRequest, model: Model): String {
-        val organization = getOrganizationFromSession(request)
         model.addAttribute("classList",
-                classService.findClassListByOrganizationId(organization.id!!).sortedBy { it.name })
+                classService.findClassListByOrganizationId(getOrganizationFromSession(request).id!!)
+                        .sortedBy { it.name })
 
         return "classResult"
     }

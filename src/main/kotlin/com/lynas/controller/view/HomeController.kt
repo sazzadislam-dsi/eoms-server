@@ -25,7 +25,7 @@ class HomeController(
         val studentService: StudentService,
         val classService: ClassService) {
 
-    val logger: Logger = getLogger(HomeController::class.java)
+    val logger: Logger = getLogger(this.javaClass)
 
     @RequestMapping(value = "/")
     fun home(model: Model, request: HttpServletRequest): String {

@@ -20,8 +20,7 @@ class FeeController(val feeInfoService: FeeInfoService, val classService: ClassS
 
     @RequestMapping("/new/class/{classId}")
     fun feeNew(@PathVariable classId: Long, request: HttpServletRequest, model: Model): String {
-        val organization = getOrganizationFromSession(request)
-        val course = classService.findById(id = classId, orgId = organization.id!!)
+        val course = classService.findById(id = classId, orgId = getOrganizationFromSession(request).id!!)
         model.addAttribute("courseId", course?.id)
         return "feeNew"
     }

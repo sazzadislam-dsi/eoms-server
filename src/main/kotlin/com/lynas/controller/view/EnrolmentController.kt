@@ -21,13 +21,17 @@ import javax.servlet.http.HttpServletRequest
 class EnrolmentController constructor(val enrolmentService: EnrolmentService,
                                       val classService: ClassService) {
 
-    val logger = getLogger(EnrolmentController::class.java)
+    val logger = getLogger(this.javaClass)
 
     @RequestMapping("/create/{classId}")
     fun create(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
         val organization = getOrganizationFromSession(request)
         val course = classService.findById(classId, organization.id!!)
-        val enrolStudentList: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId, organization.id!!, getCurrentYear())
+        val enrolStudentList: Collection<ClassDetailQueryResult> = classService
+                .findStudentsByClassId(
+                        classId,
+                        organization.id!!,
+                        getCurrentYear())
         val courseName = course?.name + " " + course?.section + " " + course?.shift
         model.addAttribute("classId", classId)
         model.addAttribute("className", courseName)
@@ -39,8 +43,11 @@ class EnrolmentController constructor(val enrolmentService: EnrolmentService,
     @RequestMapping("/delete/{enrolmentId}/class/{classId}/student/{studentId}")
     fun delete(@PathVariable enrolmentId: Long, @PathVariable classId: Long, @PathVariable studentId: Long,
                request: HttpServletRequest): String {
-        val organization = getOrganizationFromSession(request)
-        return if(enrolmentService.delete(enrolmentId,studentId,LocalDate.now().year,organization.id!!)){
+        return if(enrolmentService.delete(
+                enrolmentId = enrolmentId,
+                studentId = studentId,
+                year = LocalDate.now().year,
+                orgId = getOrganizationFromSession(request).id!!)){
             "redirect:/enrolment/create/" + classId
         } else {
             "error"

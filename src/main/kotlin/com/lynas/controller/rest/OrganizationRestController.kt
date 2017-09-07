@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("organizations")
 class OrganizationRestController (val organizationService: OrganizationService) {
 
-    val logger = getLogger(OrganizationRestController::class.java)
+    val logger = getLogger(this.javaClass)
 
     @PostMapping
     fun post(@RequestBody organization: Organization): Organization {

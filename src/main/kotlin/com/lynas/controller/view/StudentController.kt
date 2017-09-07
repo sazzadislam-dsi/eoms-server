@@ -29,7 +29,7 @@ class StudentController(val studentService: StudentService,
                         val feeInfoService: FeeInfoService,
                         val examServiceJava: ExamServiceJava) {
 
-    val logger = getLogger(StudentController::class.java)
+    val logger = getLogger(this.javaClass)
 
     @GetMapping("/create")
     fun studentCreate(): String {
@@ -54,16 +54,14 @@ class StudentController(val studentService: StudentService,
     @GetMapping("/search/byFirstName")
     fun studentSearch(@RequestParam firstName: String, model: Model, request: HttpServletRequest): String {
         logger.info("Student first name {}", firstName)
-        val organization = getOrganizationFromSession(request)
-        val list: List<Student> = studentService.searchByFirstName(firstName, organization.id!!)
+        val list: List<Student> = studentService.searchByFirstName(firstName, getOrganizationFromSession(request).id!!)
         model.addAttribute("studentList", list)
         return "studentSearch"
     }
 
     @GetMapping("/{studentId}/details")
     fun viewDetails(@PathVariable studentId: Long, model: Model, request: HttpServletRequest): String {
-        val organization = getOrganizationFromSession(request)
-        val student = studentService.findById(studentId, organization.id!!) ?: throw NotFoundException()
+        val student = studentService.findById(studentId, getOrganizationFromSession(request).id!!) ?: throw NotFoundException()
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!)?.contactInformationList
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
@@ -108,17 +106,9 @@ class StudentController(val studentService: StudentService,
 
     @GetMapping("/list")
     fun studentList(model: Model, request: HttpServletRequest): String {
-        val organization = getOrganizationFromSession(request)
-        model.addAttribute("studentList", studentService.findAll(organization.id!!))
+        model.addAttribute("studentList", studentService.findAll(getOrganizationFromSession(request).id!!))
         return "studentList"
     }
-
-    /*@GetMapping("/detail/{contactId}/contactInfo")
-    fun findbyStudentOfContactId(@PathVariable contactId: Long): String {
-        logger.info("contact id {} for searching student", contactId)
-        var student = studentService.findStudentByContactId(contactId)
-        return "redirect:/student/" + student.id + "/details"
-    }*/
 
 }
 

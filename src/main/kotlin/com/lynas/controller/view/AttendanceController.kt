@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -18,19 +17,18 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("attendance")
 class AttendanceController constructor(val classService: ClassService) {
 
-    val logger: Logger = getLogger(AttendanceController::class.java)
+    val logger: Logger = getLogger(this.javaClass)
 
     @RequestMapping("/book")
     fun attendanceBook(model: Model, request: HttpServletRequest): String {
-        val organization = getOrganizationFromSession(request)
-        model.addAttribute("classList", classService.findClassListByOrganizationId(organization.id!!).sortedBy { it.name })
+        model.addAttribute("classList", classService.findClassListByOrganizationId(
+                getOrganizationFromSession(request).id!!).sortedBy { it.name })
         logger.info("return attenClassSelect page with classList")
         return "attenClassSelect"
     }
 
     @RequestMapping("/view/classId/{classId}")
     fun attendanceBookView(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
-        val organization = getOrganizationFromSession(request)
         model.addAttribute("classId", classId)
         logger.info("return attenClassSelect page for classId [{}]", classId)
         return "attendanceView"
@@ -42,8 +40,7 @@ class AttendanceController constructor(val classService: ClassService) {
                            model: Model,
                            request: HttpServletRequest): String {
         logger.info("hit in studentListByClass with class id {}", classId)
-        val organization = getOrganizationFromSession(request)
-        val studentList = classService.findStudentsByClassId(classId, year, organization.id!!)
+        val studentList = classService.findStudentsByClassId(classId, year, getOrganizationFromSession(request).id!!)
         model.addAttribute("studentList", studentList)
         model.addAttribute("clsId", classId)
         return "attendanceStudent"

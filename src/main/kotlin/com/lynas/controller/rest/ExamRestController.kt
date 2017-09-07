@@ -1,7 +1,6 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.Exam
-import com.lynas.model.Organization
 import com.lynas.model.request.ExamJsonWrapper
 import com.lynas.model.response.ExamClassResponse
 import com.lynas.service.*
@@ -10,8 +9,6 @@ import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
-import java.time.LocalTime
-import java.time.temporal.ChronoUnit
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -26,13 +23,14 @@ class ExamRestController(val examService: ExamService,
                          val studentService: StudentService,
                          val examServiceJava: ExamServiceJava) {
 
-    val logger = getLogger(ExamRestController::class.java)
+    val logger = getLogger(this.javaClass)
 
     @PostMapping
     fun post(@RequestBody examJson: ExamJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("hit in create controller with {}", examJson)
         val organization = getOrganizationFromSession(request)
         val course = classService.findById(examJson.classId, organization.id!!)
+                ?: return responseError("ClassId/CourseId ${examJson.classId}".err_notFound())
         val _subject = subjectService.findById(examJson.subjectId)
                 ?: return responseError("SubjectId ${examJson.subjectId}".err_notFound())
         val listOfExam = examJson.examJson.map {
@@ -59,20 +57,25 @@ class ExamRestController(val examService: ExamService,
                                @PathVariable _year: Int,
                                request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and subject id {} and year {}", classId, subjectId, _year)
-        val organization = getOrganizationFromSession(request)
         return try {
-            responseOK(examService.resultOfSubjectByYear(classId, subjectId, _year, organization.id!!))
+            responseOK(examService.resultOfSubjectByYear(
+                    classId = classId,
+                    subjectId = subjectId,
+                    _year = _year,
+                    orgId = getOrganizationFromSession(request).id!!))
         } catch (e: NotFoundException) {
-            responseError(e.message ?: "(ExamRestController:resultOfClassBySubject:NotFoundException) Error check server")
+            responseError(e.message
+                    ?: "(ExamRestController:resultOfClassBySubject:NotFoundException) Error check server")
         } catch (e: Exception) {
-            responseError(e.message ?: "(ExamRestController:resultOfClassBySubject:Exception) Error check server")
+            responseError(e.message
+                    ?: "(ExamRestController:resultOfClassBySubject:Exception) Error check server")
         }
     }
 
     @GetMapping("student/{studentId}/results")
     fun resultOfStudentByYear(@PathVariable studentId: Long, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result for student id [{}]", studentId)
-        val organization = request.session.getAttribute(AppConstant.organization) as Organization
+        val organization = getOrganizationFromSession(request)
         val year = LocalDate.now().year
         val studentInfo = studentService.studentInfoByYear(id = studentId, year = year, orgId = organization.id!!)
         return responseOK(examService.resultOfStudentByYear(studentInfo.classId, studentId, year, organization.id!!))
@@ -94,6 +97,7 @@ class ExamRestController(val examService: ExamService,
                               request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, _year)
         val organization = getOrganizationFromSession(request)
+        // TODO why following code was written
         val result = examService.resultOfClass(classId, _year, organization.id!!).groupBy { it.roleNumber }
                 .map { ExamClassResponse().apply {
                     roll = it.key
@@ -114,10 +118,7 @@ class ExamRestController(val examService: ExamService,
                       request: HttpServletRequest): ResponseEntity<*> {
         val organization = getOrganizationFromSession(request)
         logger.info("Hit method with classId [{}], year [{}], organization [{}]", classId, _year, organization.id)
-        val start = LocalTime.now()
         val result = examServiceJava.getResultOfClass(classId, _year, organization.id!!)
-        val end = LocalTime.now()
-        logger.info("Execution Time [{}] millisecond", ChronoUnit.MILLIS.between(start, end))
         return responseOK(result)
     }
 }

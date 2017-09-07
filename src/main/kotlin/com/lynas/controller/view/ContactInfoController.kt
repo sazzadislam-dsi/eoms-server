@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @RequestMapping("contactInformation")
 class ContactInfoController constructor(val contactInfoService: ContactInformationService) {
 
-    val logger = getLogger(ContactInfoController::class.java)
+    val logger = getLogger(this.javaClass)
 
     @GetMapping("/create/")
     fun contactInfoCreate(@RequestParam userId: Long, model: Model): String {
@@ -28,16 +28,14 @@ class ContactInfoController constructor(val contactInfoService: ContactInformati
     @GetMapping("/detail/{contactId}")
     fun contactInfoDetail(@PathVariable contactId: Long, model: Model): String {
         logger.info("hit method contactInfoDetail with id {}", contactId)
-        var contactInfo = contactInfoService.findById(contactId)
-        model.addAttribute("contact", contactInfo)
+        model.addAttribute("contact", contactInfoService.findById(contactId))
         return "contactInfoDetail"
     }
 
     @GetMapping("/{contactId}/update/{studentId}/student")
     fun contactUpdate(@PathVariable contactId: Long,@PathVariable studentId: Long, model: Model): String {
-        var contact = contactInfoService.findById(contactId)
         logger.info("return for update contact info for id {}", contactId)
-        model.addAttribute("contact", contact)
+        model.addAttribute("contact", contactInfoService.findById(contactId))
         model.addAttribute("studentId", studentId)
         return "contactInfoUpdate"
     }

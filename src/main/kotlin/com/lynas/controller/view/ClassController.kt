@@ -1,6 +1,5 @@
 package com.lynas.controller.view
 
-import com.lynas.model.Course
 import com.lynas.model.query.result.ClassDetailQueryResult
 import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
@@ -23,13 +22,13 @@ class ClassController constructor(val classService: ClassService,
                                   val feeInfoService: FeeInfoService,
                                   val subjectService: SubjectService) {
 
-    private val logger = getLogger(ClassController::class.java)
+    private val logger = getLogger(this.javaClass)
 
 
     @RequestMapping("/home")
     fun classHome(model: Model, request: HttpServletRequest): String {
-        val organization = getOrganizationFromSession(request)
-        model.addAttribute("classList", classService.findListByOrganizationId(organization.id!!).sortedBy { it.name })
+        model.addAttribute("classList", classService
+                .findListByOrganizationId(getOrganizationFromSession(request).id!!).sortedBy { it.name })
         return "classHome"
     }
 
@@ -41,8 +40,7 @@ class ClassController constructor(val classService: ClassService,
 
     @RequestMapping("/updateClass/{classId}")
     fun updateClass(model: Model, @PathVariable classId: Long, request: HttpServletRequest): String {
-        val organization = getOrganizationFromSession(request)
-        val course = classService.findById(classId, organization.id!!)
+        val course = classService.findById(classId, getOrganizationFromSession(request).id!!)
         logger.warn("Received Course : " + course.toString())
         model.addAttribute("course", course)
         return "updateClass"
@@ -51,6 +49,7 @@ class ClassController constructor(val classService: ClassService,
 
     @RequestMapping("/delete/{classId}")
     fun delete(@PathVariable classId: Long): String {
+        //TODO check org id
         classService.deleteById(classId)
         return "redirect:/class/home"
     }
@@ -60,10 +59,9 @@ class ClassController constructor(val classService: ClassService,
         logger.info("Hit in detail with class id {}", classId)
         val organization = getOrganizationFromSession(request)
         val classDetails: Collection<ClassDetailQueryResult> = classService.findStudentsByClassId(classId, organization.id!!, year)
-        val cls: Course? = classService.findById(classId, organization.id!!)
         logger.info("class student number {}", classDetails.size)
         model.addAttribute("classDetails", classDetails)
-        model.addAttribute("cls", cls)
+        model.addAttribute("cls", classService.findById(classId, organization.id!!))
         model.addAttribute("clsSize", classDetails.size)
         val feeInfoList = feeInfoService.findFeeInfoByClass(classId)
                 .filter { it.course?.organization?.id == getOrganizationFromSession(request).id }
