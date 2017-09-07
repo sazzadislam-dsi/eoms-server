@@ -25,15 +25,20 @@ class EnrolmentRestController(val enrolmentService: EnrolmentService,
                               val studentService: StudentService,
                               val classService: ClassService) {
 
-    val logger = getLogger(EnrolmentRestController::class.java)
+    val logger = getLogger(this.javaClass)
 
     @PostMapping
     fun post(@RequestBody enrolmentJson: EnrolmentJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit in enrolment create method with {}", enrolmentJson.toString())
         val organization = getOrganizationFromSession(request)
-        val (isValid, message) = enrolmentService.studentEnrolmentCheck(enrolmentJson.roleNumber, enrolmentJson.studentId, enrolmentJson.classId, enrolmentJson.year, organization.id!!)
+        val (isValid, message) = enrolmentService.studentEnrolmentCheck(
+                roleNumber = enrolmentJson.roleNumber,
+                studentId = enrolmentJson.studentId,
+                classId = enrolmentJson.classId,
+                year = enrolmentJson.year,
+                orgId = organization.id!!)
         if (!isValid) {
-            return responseError(ErrInf(enrolmentJson,message))
+            return responseError(ErrInf(input = enrolmentJson, msg = message))
         }
         val _student: Student = studentService.findById(enrolmentJson.studentId, organization.id!!)
                 ?: return responseError("Student not found with given student id ${enrolmentJson.studentId}")

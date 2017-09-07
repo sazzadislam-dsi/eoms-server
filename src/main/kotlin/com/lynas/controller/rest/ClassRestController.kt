@@ -3,10 +3,10 @@ package com.lynas.controller.rest
 import com.lynas.exception.DuplicateCourseException
 import com.lynas.model.Course
 import com.lynas.service.ClassService
+import com.lynas.util.getLogger
 import com.lynas.util.getOrganizationFromSession
 import com.lynas.util.responseConflict
 import com.lynas.util.responseOK
-import org.slf4j.LoggerFactory
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -19,13 +19,13 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("classes")
-open class ClassRestController (val classService: ClassService) {
+class ClassRestController (val classService: ClassService) {
 
-    private val logger = LoggerFactory.getLogger(ClassRestController::class.java)
+    private val logger = getLogger(this.javaClass)
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    open fun post(@RequestBody cls: Course, request: HttpServletRequest): ResponseEntity<*> {
+    fun post(@RequestBody cls: Course, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Received Class :: " + cls.toString())
         var createdClass = cls
         createdClass.organization = getOrganizationFromSession(request)
@@ -49,7 +49,7 @@ open class ClassRestController (val classService: ClassService) {
         val organization = getOrganizationFromSession(request)
         if (organization.name != name) {
             logger.warn("Request orgName [{}] and session orgName [{}] does not match", name, organization.name)
-            return ArrayList<Course>()
+            return ArrayList()
         }
         return classService.findListByOrganizationId(organization.id!!)
     }

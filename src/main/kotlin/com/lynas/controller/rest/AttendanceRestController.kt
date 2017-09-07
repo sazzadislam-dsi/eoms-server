@@ -1,7 +1,6 @@
 package com.lynas.controller.rest
 
 import com.lynas.exception.SameDateAttendanceException
-import com.lynas.model.AttendanceBook
 import com.lynas.model.request.AttendanceJsonWrapper
 import com.lynas.model.response.ErrorObject
 import com.lynas.service.AttendanceService
@@ -21,16 +20,17 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("attendances")
 class AttendanceRestController constructor(val attendanceService: AttendanceService) {
 
-    val logger = getLogger(AttendanceRestController::class.java)
+    val logger = getLogger(this.javaClass)
 
     @PostMapping
     @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
-    fun postAttendance(@RequestBody attendanceJson: AttendanceJsonWrapper,
+    fun post(@RequestBody attendanceJson: AttendanceJsonWrapper,
                        request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
-        val organization = getOrganizationFromSession(request)
         try {
-            val attendanceBook: AttendanceBook = attendanceService.create(attendanceJson, organization.id!!)
+            attendanceService.create(
+                    attendanceJsonWrapper = attendanceJson,
+                    orgId = getOrganizationFromSession(request).id!!)
             logger.info("Post successfully attendance book")
         } catch (ex: SameDateAttendanceException) {
             logger.error("Duplicate attendance entry found on date [{}], class ID [{}]", attendanceJson.date, attendanceJson.classId)
@@ -41,10 +41,10 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
                 logger.error(cause.message)
             }
             return responseError(ErrorObject(
-                    attendanceJson,
-                    "date",
-                    Constants.INVALID_DATE_FORMAT,
-                    Constants.EXPECTED_DATE_FORMAT))
+                    receivedObject = attendanceJson,
+                    errorField = "date",
+                    errorMessage = Constants.INVALID_DATE_FORMAT,
+                    errorSuggestion = Constants.EXPECTED_DATE_FORMAT))
         }
         return responseOK(attendanceJson)
     }
@@ -61,16 +61,15 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
         } catch (ex: ParseException) {
             ex.printStackTrace()
             return responseError(ErrorObject(
-                    day,
-                    "day",
-                    Constants.INVALID_DATE_FORMAT,
-                    Constants.EXPECTED_DATE_FORMAT))
+                    receivedObject = day,
+                    errorField = "day",
+                    errorMessage = Constants.INVALID_DATE_FORMAT,
+                    errorSuggestion = Constants.EXPECTED_DATE_FORMAT))
         }
-        val organization = getOrganizationFromSession(request)
         val result = attendanceService.getAttendanceOfAClassOnDate(
-                dateOf.time,
-                classId,
-                organization.id!!)
+                date = dateOf.time,
+                classId = classId,
+                orgId = getOrganizationFromSession(request).id!!)
 
         return responseOK(result)
     }

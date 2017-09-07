@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("contactInformations")
 class ContactInformationRestController (val contactInformationService: ContactInformationService) {
 
-    private val logger = getLogger(ContactInformationRestController::class.java)
+    private val logger = getLogger(this.javaClass)
 
     @PatchMapping
     fun patch(@RequestBody contactInformation: ContactInformation): ResponseEntity<*> {
         logger.info("contact info is going to update :: {}", contactInformation)
         if (null != contactInformation.id) {
-            var contactInfo = contactInformationService.findById(contactInformation.id as Long)
+            val contactInfo = contactInformationService.findById(contactInformation.id as Long)
             if (null != contactInfo) {
                 contactInfo.apply {
                     name = contactInformation.name
