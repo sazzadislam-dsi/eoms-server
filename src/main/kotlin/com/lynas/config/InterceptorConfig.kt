@@ -20,8 +20,9 @@ class InterceptorConfig : HandlerInterceptorAdapter() {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any?): Boolean {
         logger.info("URI path [{}] method [{}]", request.requestURI, request.method)
-        request.session.setAttribute("currentYear", LocalDate.now().year)
+        request.session.setAttribute("currentYear", LocalDate.now().year) // allows getting current year from thymeleaf view
 
+        // TODO why this code was written?
         if (handler is HandlerMethod) {
             val handlerMethod: HandlerMethod = handler
             val controllerName = handlerMethod.beanType.simpleName

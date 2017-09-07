@@ -26,7 +26,7 @@ class AppUserController(val appUserService: AppUserService) {
     }
 
     @GetMapping
-    fun post(@PathVariable username: String): AppUser?
+    fun get(@PathVariable username: String): AppUser?
         = appUserService.findByUserName(username)
 
 }
