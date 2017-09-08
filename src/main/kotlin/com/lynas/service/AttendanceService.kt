@@ -9,6 +9,7 @@ import com.lynas.repo.AttendanceRepository
 import com.lynas.util.convertToDate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 /**
  * Created by seal on 2/8/2017
@@ -20,17 +21,14 @@ class AttendanceService constructor(val studentService: StudentService,
 
     @Transactional
     fun create(attendanceJsonWrapper: AttendanceJsonWrapper, orgId: Long): AttendanceBook {
+        //TODO what happens if user gives invalid date format
         val _attendanceDate = attendanceJsonWrapper.date.convertToDate()
-        val foundDuplicate = attendanceRepository
-                .findAttendanceBookOfClass(_attendanceDate.time, attendanceJsonWrapper.classId, orgId)
-                .isEmpty()
-                .not()
-        if (foundDuplicate) {
-            throw SameDateAttendanceException("Attendance duplicate entry found")
-        }
+        checkExistingAttendanceOnGivenDate(
+                _attendanceDate = _attendanceDate,
+                classId = attendanceJsonWrapper.classId,
+                orgId = orgId)
 
-        val set = attendanceJsonWrapper.attendanceJson.map {
-            i ->
+        val set = attendanceJsonWrapper.attendanceJson.map { i ->
             StudentAttendance().apply {
                 student = studentService.findById(i.t, orgId)
                 attendanceStatus = i.i
@@ -43,6 +41,16 @@ class AttendanceService constructor(val studentService: StudentService,
             course = classService.findById(attendanceJsonWrapper.classId, orgId)
         }
         return attendanceRepository.save(attendanceBook)
+    }
+
+    private fun checkExistingAttendanceOnGivenDate(_attendanceDate: Date, classId: Long, orgId: Long) {
+        val foundDuplicate = attendanceRepository
+                .findAttendanceBookOfClass(_attendanceDate.time, classId, orgId)
+                .isEmpty()
+                .not()
+        if (foundDuplicate) {
+            throw SameDateAttendanceException("Attendance duplicate entry found")
+        }
     }
 
 
