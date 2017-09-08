@@ -35,12 +35,8 @@ class ExamService(private val examRepository: ExamRepository,
             year = _year
         }
 
-        val map = resultList.associateBy({ it.roleNumber },
-                {
-                    it.exam
-                            .map { (it.percentile!! * it.obtainedNumber!!) / 100 }
-                            .sum()
-                })
+        val studentRollNumberToResultMap = resultList.associateBy(
+                { it.roleNumber }, { it.exam.map { (it.percentile!! * it.obtainedNumber!!) / 100 }.sum() })
 
         resultList.forEach {
             val student = ExamResponse.Student().apply {
@@ -55,7 +51,8 @@ class ExamService(private val examRepository: ExamRepository,
                     obtainMark = it.obtainedNumber
                 }
             }.toMutableList()
-            student.result = map[student.rollNumber]
+            //TODO result property name confusing
+            student.result = studentRollNumberToResultMap[student.rollNumber]
             examResponse.student.add(student)
         }
 
@@ -85,55 +82,15 @@ class ExamService(private val examRepository: ExamRepository,
             }.toMutableList()
         })
 
-        response.resultBySubject = resultList.associateBy({ it.subject },
-                {
-                    it.exam
-                            .map { (it.percentile!! * it.obtainedNumber!!) / 100 }
-                            .sum()
-                })
-
+        response.resultBySubject = resultList.associateBy(
+                { it.subject },{it.exam.map { (it.percentile!! * it.obtainedNumber!!) / 100 }.sum()})
         return response
     }
-
-    /*@Transactional
-    open fun courseResult(classId: Long, _year: Int, organization: String): List<() ->ExamClassResponse1> {
-        val classResultList = examRepository
-                .resultOfClassByYear(classId, _year, organization)
-                .sortedBy { it.roleNumber }
-                .groupBy { it.roleNumber }
-                .entries
-                .parallelStream()
-                .map { (_rollNumber, queryResult) ->
-                    {
-                        ExamClassResponse1().apply {
-                            rollNumber = _rollNumber!!
-                            year = _year
-                            subjects =  queryResult.
-                                    map {
-                                        ExamClassResponse1
-                                                .Subjects()
-                                                .apply {
-                                                    subjectName = it.courseName!!
-                                                    obtained = it.exam
-                                                            .map { (it.percentile!! * it.obtainedNumber!!) / 100 }
-                                                            .sum()
-                                                    exams = it.exam
-                                                }
-                                    }
-                                    .toList()
-                        }
-                    }
-                }
-                .toList()
-        return classResultList
-    }*/
 
     @Transactional
     fun resultOfClass(classId: Long, _year: Int, orgId: Long): List<ExamQueryResult> {
         val resultList = examRepository.resultOfClassByYear(classId, _year, orgId)
         val resultMap = resultList.groupBy { it.roleNumber }
-
         return resultList
-
     }
 }
