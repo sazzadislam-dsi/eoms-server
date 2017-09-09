@@ -21,7 +21,7 @@ class UserDetailService(val appUserService: AppUserService) : UserDetailsService
     override fun loadUserByUsername(userName: String): UserDetails {
         val appUser:AppUser? = appUserService.findByUserName(userName)
         if (appUser == null) {
-            throw UsernameNotFoundException(String.format("No user found with username '%s'" + userName))
+            throw UsernameNotFoundException(String.format("No user found with username '%s'", userName))
         } else {
             return SpringSecurityUser(
                     appUser.id,
