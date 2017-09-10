@@ -481,4 +481,15 @@
     });
 
 
+    $('.class_delete').click(function () {
+        const result = confirm("Are you sure you want to delete? " +
+            "All associated Subject, Enrolment, Result with this class will be deleted");
+        const cls_id = $('.class_delete').data("class_id");
+        if (result) {
+            console.log("deleting");
+            window.location.replace("/class/delete/" + cls_id);
+        }
+    });
+
+
 })(jQuery);

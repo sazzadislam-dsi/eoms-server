@@ -41,7 +41,7 @@
                         <a th:href="|/class/updateClass/${cls.id}|">Update</a>
                     </td>
                     <td>
-                        <a th:href="|/class/delete/${cls.id}|">Delete</a>
+                        <a href="#" class="class_delete" th:attr="data-class_id=${cls.id}">Delete</a>
                     </td>
                 </tr>
                 </tbody>
