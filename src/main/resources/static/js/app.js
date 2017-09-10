@@ -1,13 +1,13 @@
 (function ($) {
     const currentYear = new Date().getFullYear();
     const baseUrl =
-    $(".date").datepicker(
-        {
-            dateFormat: 'dd-mm-yy',
-            changeYear: true,
-            changeMonth: true,
-            yearRange: '-50:+0'
-        }
+        $(".date").datepicker(
+            {
+                dateFormat: 'dd-mm-yy',
+                changeYear: true,
+                changeMonth: true,
+                yearRange: '-50:+0'
+            }
         );
 
     var getCsrf = function () {
@@ -165,7 +165,7 @@
         location.reload(true);
     }, function (xhr) {
         hideLoader();
-        alert("["+xhr.status+"]"+JSON.parse(xhr.responseText).msg)
+        alert("[" + xhr.status + "]" + JSON.parse(xhr.responseText).msg)
     });
 
     bindFormSubmits('subjectCreate', function (response) {
@@ -430,7 +430,7 @@
                 table += "<tbody>";
                 $.each(data, function (index, obj) {
                     table += "<tr>";
-                    table += "<td>" + "<input type=\"radio\" name=\'selection\'/>" +  "</td>";
+                    table += "<td>" + "<input type=\"radio\" name=\'selection\'/>" + "</td>";
                     table += "<td>" + obj.id + "</td>";
                     table += "<td>" + obj.person.firstName + " " + obj.person.lastName + "</td>";
                     table += "</tr>";
@@ -448,14 +448,14 @@
         console.log("select button pressed!!");
         var studentId, studentName;
         $('table tr').each(function (i, n) {
-                var $row = $(n);
-                var val = $row.find('td:eq(0)').find('input').is(':checked');
-                if (val) {
-                    console.log("val " + val);
-                    studentId = $row.find('td:eq(1)').html();
-                    studentName = $row.find('td:eq(2)').html();
-                    return false;
-                }
+            var $row = $(n);
+            var val = $row.find('td:eq(0)').find('input').is(':checked');
+            if (val) {
+                console.log("val " + val);
+                studentId = $row.find('td:eq(1)').html();
+                studentName = $row.find('td:eq(2)').html();
+                return false;
+            }
         });
         $("#studentId").val("");
         $("#studentName1").val("");
@@ -465,4 +465,31 @@
         $('#studentSearchModal').modal('toggle');
         return false;
     });
+
+    $('.update_role_number').click(function () {
+        const roll_number = $('.update_role_number').data("student_roll_number");
+        const new_role = prompt("Change Roll number, Existing role >>" + roll_number + "<< Enter new Roll number", "");
+        if (new_role != null) {
+            if (new_role.trim() != "") {
+                if (isNaN(new_role)) {
+                    alert("Not a valid input");
+                } else {
+                    console.log(new_role);
+                }
+            }
+        }
+    });
+
+
+    $('.class_delete').click(function () {
+        const result = confirm("Are you sure you want to delete? " +
+            "All associated Subject, Enrolment, Result with this class will be deleted");
+        const cls_id = $('.class_delete').data("class_id");
+        if (result) {
+            console.log("deleting");
+            window.location.replace("/class/delete/" + cls_id);
+        }
+    });
+
+
 })(jQuery);

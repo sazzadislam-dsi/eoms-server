@@ -19,8 +19,10 @@
                 <div>
                     <div>
                         <label>Student Name</label>
-                        <input th:required="required" type="hidden" class="form-control" data-toggle="modal" data-target="#studentSearchModal"  id="studentId" name="studentId" placeholder=""/>
-                        <input th:required="required" type="text" class="form-control" data-toggle="modal" data-target="#studentSearchModal"  id="studentName1" name="studentName" placeholder=""/>
+                        <input th:required="required" type="hidden" class="form-control" data-toggle="modal"
+                               data-target="#studentSearchModal" id="studentId" name="studentId" placeholder=""/>
+                        <input th:required="required" type="text" class="form-control" data-toggle="modal"
+                               data-target="#studentSearchModal" id="studentName1" name="studentName" placeholder=""/>
                     </div>
 
                     <!--Student Search Modal-->
@@ -34,7 +36,7 @@
                                 <input id="studentName"/>
                                 <input type="button" id="btnStudentSearch" value="Search"/>
                                 <!--Table-->
-                                <div >
+                                <div>
                                     <table id="tbShow" class="table table-striped">
 
                                     </table>
@@ -47,23 +49,27 @@
                     <div>
                         <label>Class Name</label>
                         <input type="hidden" name="classId" id="classId" th:value="${classId}"/>
-                        <input th:required="required" disabled="disabled" type="text" class="form-control" name="className" id="className" th:value="${className}" placeholder=""/>
+                        <input th:required="required" disabled="disabled" type="text" class="form-control"
+                               name="className" id="className" th:value="${className}" placeholder=""/>
 
                     </div>
                     <div>
                         <label>Role Number</label>
-                        <input th:required="required" type="text" class="form-control" id="roleNumber" name="roleNumber" placeholder=""/>
+                        <input th:required="required" type="text" class="form-control" id="roleNumber" name="roleNumber"
+                               placeholder=""/>
                     </div>
                     <div>
                         <label>Year</label>
-                        <input th:required="required" class="form-control" id="year" name="year" th:value="${session.currentYear}" placeholder=""/>
+                        <input th:required="required" class="form-control" id="year" name="year"
+                               th:value="${session.currentYear}" placeholder=""/>
                     </div>
 
                 </div>
                 <div>
 
                     <input type="submit" value="Enroll" class="btn btn-primary est"/>
-                    <a class="btn btn-primary est" th:href="|/class/detail/${classId}/year/${session.currentYear}|">Back</a>
+                    <a class="btn btn-primary est"
+                       th:href="|/class/detail/${classId}/year/${session.currentYear}|">Back</a>
 
                 </div>
 
@@ -72,21 +78,24 @@
         </div>
         <div class="col-lg-5">
             <table class="table table-striped separator">
-
-                <th style="width: 30%">Student Name</th>
-                <th>Role Number</th>
-                <th>Option</th>
-
-                <div th:each="each : ${enrolStudentList}">
-                    <tr>
-                        <td th:text="${each.studentName}"></td>
-                        <td th:text="${each.roleNumber}"></td>
-                        <td>
-                            <a th:href="|/enrolment/${each.enrolmentId}/update|">Update </a> ||
-                            <a th:href="|/enrolment/delete/${each.enrolmentId}/class/${classId}/student/${each.studentId}|">Remove </a>
-                        </td>
-                    </tr>
-                </div>
+                <tr>
+                    <th style="width: 30%">Student Name</th>
+                    <th style="text-align: center">Role Number</th>
+                    <th>Option</th>
+                </tr>
+                <tr th:each="each : ${enrolStudentList}">
+                    <td th:text="${each.studentName}"></td>
+                    <td th:text="${each.roleNumber}" style="text-align: center"></td>
+                    <td>
+                        <!--<a class="update_role_number"
+                           href="#"
+                           th:attr="data-enrolment_id=${each.enrolmentId},
+                                        data-class_id=${classId},
+                                        data-student_id=${each.studentId},
+                                        data-student_roll_number=${each.roleNumber}">Update </a> ||-->
+                        <a th:href="|/enrolment/delete/${each.enrolmentId}/class/${classId}/student/${each.studentId}|">Remove </a>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
