@@ -212,7 +212,7 @@
             if (itr.present == true) {
                 table += '<td>' + 'Present' + '</td>';
             } else {
-                table += '<td>' + 'Absent' + '</td>';
+                table += '<td style="color: red; font-weight: bold;">' + 'Absent' + '</td>';
             }
             table += '</tr>';
         });
