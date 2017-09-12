@@ -212,7 +212,7 @@
             if (itr.present == true) {
                 table += '<td>' + 'Present' + '</td>';
             } else {
-                table += '<td>' + 'Absent' + '</td>';
+                table += '<td style="color: red; font-weight: bold;">' + 'Absent' + '</td>';
             }
             table += '</tr>';
         });
@@ -466,28 +466,24 @@
         return false;
     });
 
-    $('.update_role_number').click(function () {
-        const roll_number = $('.update_role_number').data("student_roll_number");
-        const new_role = prompt("Change Roll number, Existing role >>" + roll_number + "<< Enter new Roll number", "");
-        if (new_role != null) {
-            if (new_role.trim() != "") {
-                if (isNaN(new_role)) {
-                    alert("Not a valid input");
-                } else {
-                    console.log(new_role);
-                }
-            }
-        }
-    });
-
-
     $('.class_delete').click(function () {
         const result = confirm("Are you sure you want to delete? " +
             "All associated Subject, Enrolment, Result with this class will be deleted");
-        const cls_id = $('.class_delete').data("class_id");
+        const cls_id = $(event.currentTarget).attr('data-class_id');
         if (result) {
             console.log("deleting");
             window.location.replace("/class/delete/" + cls_id);
+        }
+    });
+
+    $('.enrolment_delete').click(function (event) {
+        const result = confirm("Are you sure you want to remove this enrolment?");
+        const enrolment_id = $(event.currentTarget).attr('data-enrolment_id');
+        const class_id = $(event.currentTarget).attr('data-class_id');
+        const student_id = $(event.currentTarget).attr('data-student_id');
+        if (result) {
+            console.log("deleting");
+            window.location.replace("/enrolment/delete/" + enrolment_id + "/class/" + class_id + "/student/" + student_id);
         }
     });
 
