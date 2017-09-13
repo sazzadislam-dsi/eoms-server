@@ -32,7 +32,7 @@
                         <tr th:each="std, stat : ${studentList}" class="separator">
                             <td th:text="${std.roleNumber}"></td>
                             <td th:text="${std.studentName}"></td>
-                            <td><input type="checkbox" name="i" id="i" value="true"/></td>
+                            <td><input type="checkbox" name="i" id="i" value="true" th:checked="checked"/></td>
                             <td><input type="hidden" name="t" th:value="*{studentList[__${stat.index}__].studentId}"/>
                             </td>
                         </tr>

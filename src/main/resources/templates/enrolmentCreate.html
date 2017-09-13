@@ -87,13 +87,8 @@
                     <td th:text="${each.studentName}"></td>
                     <td th:text="${each.roleNumber}" style="text-align: center"></td>
                     <td>
-                        <!--<a class="update_role_number"
-                           href="#"
-                           th:attr="data-enrolment_id=${each.enrolmentId},
-                                        data-class_id=${classId},
-                                        data-student_id=${each.studentId},
-                                        data-student_roll_number=${each.roleNumber}">Update </a> ||-->
-                        <a th:href="|/enrolment/delete/${each.enrolmentId}/class/${classId}/student/${each.studentId}|">Remove </a>
+                        <a href="#" class="enrolment_delete" th:attr="data-enrolment_id=${each.enrolmentId},
+                                            data-class_id=${classId},data-student_id=${each.studentId}">Remove </a>
                     </td>
                 </tr>
             </table>
