@@ -21,7 +21,7 @@ class SubjectController constructor(val subjectService: SubjectService)  {
     @RequestMapping("/class/{classId}/list")
     fun subjectListOfClass(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("Return subject list for class id {}", classId)
-        model.addAttribute("list", subjectService.findAllByClassId(
+        model.addAttribute("subjectList", subjectService.findAllByClassId(
                 classId,
                 getOrganizationFromSession(request).id!!))
         model.addAttribute("classId", classId)
@@ -31,7 +31,7 @@ class SubjectController constructor(val subjectService: SubjectService)  {
     @RequestMapping("/student/{stdId}/list")
     fun subjectListOfStudent(@PathVariable stdId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("Return subject list for student id {}", stdId)
-        model.addAttribute("list", subjectService.findAllByStudentId(
+        model.addAttribute("subjectList", subjectService.findAllByStudentId(
                 stdId,
                 getOrganizationFromSession(request).id!!))
         return "subjectOfClass"
@@ -39,9 +39,11 @@ class SubjectController constructor(val subjectService: SubjectService)  {
 
 
     @RequestMapping("/class/{classId}/create")
-    fun create(@PathVariable classId: Long, model: Model): String {
+    fun create(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("Return subject create page for class Id {}", classId)
         model.addAttribute("classId", classId)
+        model.addAttribute("subjectList",
+                subjectService.findAllByClassId(classId, getOrganizationFromSession(request).id!!))
         return "subjectCreate"
     }
 }
