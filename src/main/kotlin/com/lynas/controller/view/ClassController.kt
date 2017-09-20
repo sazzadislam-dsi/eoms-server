@@ -34,7 +34,9 @@ class ClassController constructor(val classService: ClassService,
 
 
     @RequestMapping("/createClass")
-    fun createClass(): String {
+    fun createClass(model: Model, request: HttpServletRequest): String {
+        model.addAttribute("classList", classService
+                .findListByOrganizationId(getOrganizationFromSession(request).id!!).sortedBy { it.name })
         return "createClass"
     }
 

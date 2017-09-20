@@ -48,7 +48,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">Class <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/class/home">View Class Info</a></li>
+                            <li><a href="/class/home">Class List</a></li>
                             <li><a href="/class/createClass">Create Class</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#">Other</a></li>
@@ -77,9 +77,12 @@
                         <div class="loading-view"></div>
                     </li>
                     <li>
-                        <form th:action="@{/logout}" method="post">
-                            <input class="btn btn-danger" type="submit" value="Logout"/>
-                        </form>
+                        <div class="navbar-header">
+                            <form th:action="@{/logout}" method="post">
+                                <input class="navbar-brand" type="submit" value="Logout"
+                                       style="background-color: red; color: white; font-weight: bold"/>
+                            </form>
+                        </div>
                     </li>
                 </ul>
             </div>
