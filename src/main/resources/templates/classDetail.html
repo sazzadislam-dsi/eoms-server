@@ -35,8 +35,8 @@
     </div>
     <div class="row est">
         <div class="col-lg-6">
-            <h3 class="separator">Class Information</h3>
             <div>
+                <h3 class="separator">Class Information</h3>
                 <table class="table table-striped">
                     <tr>
                         <td>Class</td>
@@ -56,7 +56,9 @@
                     </tr>
                 </table>
             </div>
+
             <div>
+                <h3 class="separator">Students List</h3>
                 <table class="table table-striped">
 
                     <th style="width: 30%">Student Name</th>
@@ -65,7 +67,7 @@
                     <th>Option</th>
 
 
-                    <div th:each="each : ${classDetails}" class="separator">
+                    <div th:each="each : ${classDetails}">
                         <tr>
                             <td th:text="${each.studentName}"></td>
                             <td th:text="${each.roleNumber}"></td>
@@ -77,12 +79,15 @@
                     </div>
                 </table>
             </div>
+
+            <div>
+                <h3 class="separator">Exams Info</h3>
+
+            </div>
         </div>
 
         <div class="col-lg-6">
-            <div>
-                <h4>Fee Information</h4>
-            </div>
+            <h3 class="separator">Fee Information</h3>
             <table class="table table-striped">
 
                 <th>ID</th>
@@ -92,7 +97,7 @@
                 <th>Last Date</th>
 
 
-                <div th:each="feeInfo : ${feeList}" class="separator">
+                <div th:each="feeInfo : ${feeList}">
                     <tr>
                         <td th:text="${feeInfo.id}"></td>
                         <td th:text="${feeInfo.type}"></td>
@@ -106,20 +111,16 @@
 
 
         <div class="col-lg-6">
-            <div>
-                <div class="separator"></div>
-                <h4 class="separator">Subjects List</h4>
-            </div>
+            <h3 class="separator">Subjects List</h3>
             <table class="table table-striped">
 
                 <th style="width: 30%">Subject Name</th>
                 <th>Subject Id</th>
                 <th>Result</th>
                 <th>Result</th>
-                <div class="separator"></div>
 
 
-                <div th:each="sub : ${classList}">
+                <div th:each="sub : ${subjectList}">
                     <tr>
                         <td th:text="${sub.subjectName}"></td>
                         <td th:text="${sub.id}"></td>
