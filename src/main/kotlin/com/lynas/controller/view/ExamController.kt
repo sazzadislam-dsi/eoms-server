@@ -70,6 +70,7 @@ class ExamController constructor(val classService: ClassService,
         model.addAttribute("classList",
                 classService.findClassListByOrganizationId(getOrganizationFromSession(request).id!!)
                         .sortedBy { it.name })
+        // TODO retrieve student by student name not ID
         return "studentResult"
     }
 
