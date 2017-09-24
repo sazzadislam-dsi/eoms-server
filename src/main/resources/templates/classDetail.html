@@ -115,7 +115,6 @@
             <table class="table table-striped">
 
                 <th style="width: 30%">Subject Name</th>
-                <th>Subject Id</th>
                 <th>Result</th>
                 <th>Result</th>
 
@@ -123,7 +122,6 @@
                 <div th:each="sub : ${subjectList}">
                     <tr>
                         <td th:text="${sub.subjectName}"></td>
-                        <td th:text="${sub.id}"></td>
                         <td><a id="v" th:href="|/exam/studentList/${classId}|">Input</a></td>
                         <td><a id="i" th:href="|/exam/subject/${sub.id}/class/${classId}/result|">View</a></td>
                     </tr>
