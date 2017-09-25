@@ -11,6 +11,7 @@ data class ExamJsonWrapper(
         val subjectId: Long,
         val totalMark: Double,
         val percentile: Double,
+        val date: String,
         val year: Int,
         val examType: ExamType,
         val examJson: Array<ExamJson>)

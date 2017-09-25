@@ -4,6 +4,7 @@ import com.lynas.model.util.ExamType
 import org.neo4j.ogm.annotation.GraphId
 import org.neo4j.ogm.annotation.NodeEntity
 import org.neo4j.ogm.annotation.Relationship
+import java.util.*
 
 /**
  * Created by sazzad on 8/31/16
@@ -18,6 +19,7 @@ class Exam {
     var obtainedNumber: Double? = null
     var percentile: Double? = 100.0
     var isPresent: Boolean? = null
+    var date: Date? = null
 
     @Relationship(type = "examOfClass", direction = Relationship.OUTGOING)
     var cls: Course? = null
