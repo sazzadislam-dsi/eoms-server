@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -49,6 +50,7 @@ fun responseError(responseObject: Any): ResponseEntity<*> {
 
 data class ErrInf(val input: Any, val msg: Any  )
 
+@Throws(ParseException::class)
 fun String.convertToDate(): Date {
     val pattern = if (this.matches(kotlin.text.Regex("[A-Za-z]+ [A-Za-z]+ \\d?\\d \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3} \\d{4}"))) {
         "EEE MMM dd HH:mm:ss Z yyyy"

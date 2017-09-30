@@ -8,7 +8,9 @@ import com.lynas.util.*
 import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.text.ParseException
 import java.time.LocalDate
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -29,6 +31,7 @@ class ExamRestController(val examService: ExamService,
     fun post(@RequestBody examJson: ExamJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("hit in create controller with {}", examJson)
         val organization = getOrganizationFromSession(request)
+        val _date : Date? = try {examJson.date.convertToDate()} catch (e : ParseException) {return responseError(examJson)}
         val course = classService.findById(examJson.classId, organization.id!!)
                 ?: return responseError("ClassId/CourseId ${examJson.classId}".err_notFound())
         val _subject = subjectService.findById(examJson.subjectId)
@@ -40,6 +43,7 @@ class ExamRestController(val examService: ExamService,
                 totalNumber = examJson.totalMark
                 percentile = examJson.percentile
                 isPresent = _isPresent
+                date = _date
                 year = examJson.year
                 cls = course
                 subject = _subject

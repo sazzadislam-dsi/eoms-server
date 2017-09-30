@@ -66,7 +66,7 @@
                                 Date
                             </div>
                             <div class="col-lg-6 est">
-                                <input type="input" class="form-control date" name="year" id="date" th:value="${session.currentYear}"/>
+                                <input type="input" class="form-control date" name="date" id="date"/>
                             </div><div class="col-lg-6 est">
                                 Year
                             </div>
@@ -133,6 +133,7 @@
             + "\"classId\":" + $('#clsId').val() + ","
             + "\"totalMark\":" + $('#totalMark').val() + ","
             + "\"percentile\":" + $('#percentile').val() + ","
+            + "\"date\":" + "\"" + $('#date').val() + "\","
             + "\"year\":" + $('#year').val() + ","
             + "\"examType\":" + "\"" + $( "#examType option:selected" ).text() + "\"" + ","
             + "\"subjectId\":" + "\"" + $( "#subject option:selected" ).val() + "\"" +
