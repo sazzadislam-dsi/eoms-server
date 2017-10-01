@@ -5,6 +5,7 @@ import com.lynas.model.query.result.ExamQueryResult
 import com.lynas.model.response.ExamResponse
 import com.lynas.model.response.ExamStudentResponse
 import com.lynas.repo.ExamRepository
+import com.lynas.service.dto.ExamListDTO
 import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -92,5 +93,14 @@ class ExamService(private val examRepository: ExamRepository,
         val resultList = examRepository.resultOfClassByYear(classId, _year, orgId)
         val resultMap = resultList.groupBy { it.roleNumber }
         return resultList
+    }
+
+    @Transactional
+    fun examListOfSubject(classId: Long, subjectId: Long, _year: Int, orgId: Long): ExamListDTO {
+        return ExamListDTO(classId = classId,
+                subjectId = subjectId,
+                year = _year,
+                listOfExamTypeDateDTO = examRepository.examListBySubject(classId, subjectId, _year, orgId)
+        )
     }
 }

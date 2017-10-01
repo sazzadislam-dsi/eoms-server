@@ -43,6 +43,32 @@
                         <input type="submit" class="from-control" value="Show Result"/>
                     </form>
                 </div>
+                <div class="col-md-4"><a href="#" data-toggle="modal" data-target="#examHistory">History</a></div>
+
+                <div id="examHistory" class="modal fade">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Exams History</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-striped table-hover table-condensed table-responsive">
+                                <thead>
+                                    <th>Date</th>
+                                    <th>Exam Type</th>
+                                </thead>
+                                <tbody>
+                                    <th:block th:each="exam : ${examList.listOfExamTypeDateDTO}">
+                                        <tr>
+                                            <td th:text="${exam.date}"></td>
+                                            <td th:text="${exam.examType}"></td>
+                                        </tr>
+                                    </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-md-4"></div>
             </div>
         </div>

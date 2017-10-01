@@ -1,6 +1,7 @@
 package com.lynas.controller.view
 
 import com.lynas.service.ClassService
+import com.lynas.service.ExamService
 import com.lynas.service.SubjectService
 import com.lynas.util.getCurrentYear
 import com.lynas.util.getLogger
@@ -18,7 +19,8 @@ import javax.servlet.http.HttpServletRequest
 @Controller
 @RequestMapping("exam")
 class ExamController constructor(val classService: ClassService,
-                                 val subjectService: SubjectService) {
+                                 val subjectService: SubjectService,
+                                 val examService: ExamService) {
 
     val logger = getLogger(this.javaClass)
 
@@ -59,9 +61,11 @@ class ExamController constructor(val classService: ClassService,
         val organization = getOrganizationFromSession(request)
         model.addAttribute("classList",
                 classService.findClassListByOrganizationId(organization.id!!).sortedBy { it.name })
-        model.addAttribute("year", getCurrentYear())
-        model.addAttribute("subject", subjectService.findById(subjectId))
-        model.addAttribute("cls", classService.findById(classId, organization.id!!))
+                .addAttribute("year", getCurrentYear())
+                .addAttribute("subject", subjectService.findById(subjectId))
+                .addAttribute("cls", classService.findById(classId, organization.id!!))
+                // TODO year must be taken from user end
+                .addAttribute("examList", examService.examListOfSubject(classId, subjectId, getCurrentYear(), organization.id!!))
         return "subjectResult"
     }
 
