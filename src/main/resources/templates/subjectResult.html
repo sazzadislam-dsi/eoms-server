@@ -59,8 +59,8 @@
                                 <tbody>
                                     <th:block th:each="exam : ${examList.listOfExamTypeDateDTO}">
                                         <tr>
-                                            <td th:text="${exam.date}"></td>
-                                            <td th:text="${exam.examType}"></td>
+                                            <td ><a class="exam-history-date" href="#" th:text="${exam.date}"></a></td>
+                                            <td class="exam-history-examType" th:text="${exam.examType}"></td>
                                         </tr>
                                     </th:block>
                                 </tbody>
@@ -101,7 +101,12 @@
         </div>
     </div>
 </div>
-
-
 </body>
 </html>
+
+
+<script type="application/javascript">
+    $(document).on('click','.exam-history-date', function () {
+        $(this).val();
+    });
+</script>

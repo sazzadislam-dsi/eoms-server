@@ -1,5 +1,6 @@
 package com.lynas.controller.view
 
+import com.lynas.model.util.ExamType
 import com.lynas.service.ClassService
 import com.lynas.service.ExamService
 import com.lynas.service.SubjectService
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -32,7 +34,7 @@ class ExamController constructor(val classService: ClassService,
         return "exmClassSelect"
     }
 
-    @RequestMapping("/studentList/{classId}")
+    @RequestMapping("/studentList/{classId}") // TODO add subject id, cause input result for specific subject
     fun studentListByClass(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("hit in studentListByClass with class id {}", classId)
         val organization = getOrganizationFromSession(request)
@@ -43,6 +45,19 @@ class ExamController constructor(val classService: ClassService,
         model.addAttribute("subjectList", subjectList)
         model.addAttribute("clsId", classId)
         return "exmStudentList"
+    }
+
+    @RequestMapping("/result/update/classId/{classId}/subjectId/{subjectId}/year/{_year}/date/{date}/examType/{examType}")
+    fun resultUpdateBySubject(@PathVariable classId: Long,
+                              @PathVariable subjectId: Long,
+                              @PathVariable _year: Int,
+                              @PathVariable date: Date,
+                              @PathVariable examType: ExamType,
+                              model: Model,
+                              request: HttpServletRequest) {
+        logger.info("Result update for classId [{}], subjectId [{}], year [{}], date [{}], examType [{}]",
+                classId, subjectId, _year, date, examType)
+
     }
 
     @RequestMapping("/subject/result")
