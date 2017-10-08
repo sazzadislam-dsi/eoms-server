@@ -59,7 +59,7 @@
                                 <tbody>
                                     <th:block th:each="exam : ${examList.listOfExamTypeDateDTO}">
                                         <tr>
-                                            <td ><a class="exam-history-date" href="#" th:text="${exam.date}"></a></td>
+                                            <td ><a class="exam-history-date" th:href="|/exam/result/update/classId/${cls.id}/subjectId/${subject.id}/year/${session.currentYear}/date/${#dates.format(exam.date, 'dd-MM-yyyy')}/examType/${exam.examType}|" th:text="${#dates.format(exam.date, 'dd-MM-yyyy')}"></a></td>
                                             <td class="exam-history-examType" th:text="${exam.examType}"></td>
                                         </tr>
                                     </th:block>
@@ -97,6 +97,8 @@
                     </tbody>
                 </table>
             </div>
+
+
 
         </div>
     </div>

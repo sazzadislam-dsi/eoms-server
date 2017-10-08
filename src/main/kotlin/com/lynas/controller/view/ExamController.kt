@@ -1,12 +1,11 @@
 package com.lynas.controller.view
 
+import com.lynas.model.response.ErrorObject
 import com.lynas.model.util.ExamType
 import com.lynas.service.ClassService
 import com.lynas.service.ExamService
 import com.lynas.service.SubjectService
-import com.lynas.util.getCurrentYear
-import com.lynas.util.getLogger
-import com.lynas.util.getOrganizationFromSession
+import com.lynas.util.*
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
@@ -51,13 +50,18 @@ class ExamController constructor(val classService: ClassService,
     fun resultUpdateBySubject(@PathVariable classId: Long,
                               @PathVariable subjectId: Long,
                               @PathVariable _year: Int,
-                              @PathVariable date: Date,
+                              @PathVariable date: String,
                               @PathVariable examType: ExamType,
                               model: Model,
-                              request: HttpServletRequest) {
+                              request: HttpServletRequest): String {
         logger.info("Result update for classId [{}], subjectId [{}], year [{}], date [{}], examType [{}]",
                 classId, subjectId, _year, date, examType)
+        val _date: Date = date.convertToDate()
+        model.addAttribute("object", examService.findByClassIdSubjectIdYearDateExamType(
+                classId, subjectId, _year, _date, examType, getOrganizationFromSession(request).id!!
+        ))
 
+        return "resultUpdateOfSubject"
     }
 
     @RequestMapping("/subject/result")

@@ -4,11 +4,15 @@ import com.lynas.model.Exam
 import com.lynas.model.query.result.ExamQueryResult
 import com.lynas.model.response.ExamResponse
 import com.lynas.model.response.ExamStudentResponse
+import com.lynas.model.util.ExamType
 import com.lynas.repo.ExamRepository
 import com.lynas.service.dto.ExamListDTO
+import com.lynas.service.dto.ExamOfStudent
+import com.lynas.service.dto.ExamOfSubjectUpdateDTO
 import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 /**
  * Created by sazzad on 7/19/16
@@ -84,7 +88,7 @@ class ExamService(private val examRepository: ExamRepository,
         })
 
         response.resultBySubject = resultList.associateBy(
-                { it.subject },{it.exam.map { (it.percentile!! * it.obtainedNumber!!) / 100 }.sum()})
+                { it.subject }, { it.exam.map { (it.percentile!! * it.obtainedNumber!!) / 100 }.sum() })
         return response
     }
 
@@ -102,5 +106,43 @@ class ExamService(private val examRepository: ExamRepository,
                 year = _year,
                 listOfExamTypeDateDTO = examRepository.examListBySubject(classId, subjectId, _year, orgId)
         )
+    }
+
+    @Transactional
+    fun findByClassIdSubjectIdYearDateExamType(classId: Long,
+                                               subjectId: Long,
+                                               year: Int,
+                                               date: Date,
+                                               examType: ExamType,
+                                               orgId: Long): ExamOfSubjectUpdateDTO {
+        val examOfSubjectUpdateDTO: ExamOfSubjectUpdateDTO = ExamOfSubjectUpdateDTO()
+        examOfSubjectUpdateDTO.classId = classService.findById(classId, orgId)!!.id ?: throw NotFoundException("classId : $classId")
+        examOfSubjectUpdateDTO.subjectId = subjectService.findById(subjectId)!!.id ?: throw NotFoundException("subjectId : $subjectId")
+        examOfSubjectUpdateDTO.examType = examType
+        examOfSubjectUpdateDTO.date = date
+
+        // TODO compare with date also , by now date is ignored
+        val results = examRepository.findByExamTypeAndDate(classId, subjectId, year, orgId, examType)
+        if (results.isEmpty()) {
+            throw NotFoundException("classId : [$classId], subjectId : [$subjectId], examType : [$examType]")
+        }
+
+        examOfSubjectUpdateDTO.percentile = results[0].percentile!!
+        examOfSubjectUpdateDTO.totalNumber = results[0].totalNumber!!
+
+        examOfSubjectUpdateDTO.resultOfASubjectByExamTypeDate = results
+                .map {
+            val exam = it.exam[0]
+            ExamOfStudent(studentId = exam.student!!.id!!,
+                    name = it.person!!,
+                    rollNumber = it.roleNumber!!,
+                    examId = exam.id!!,
+                    obtainMark = exam.obtainedNumber!!,
+                    p = exam.isPresent!!)
+        }
+                .sortedBy { it.rollNumber }
+                .toMutableList()
+
+        return examOfSubjectUpdateDTO
     }
 }
