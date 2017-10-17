@@ -19,6 +19,7 @@ class ExamResponse {
     }
 
     class Exam {
+        var examId: Long? = null
         var examType: ExamType? = null
         var totalMark: Double? = 0.0
         var obtainMark: Double? = 0.0

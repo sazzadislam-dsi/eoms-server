@@ -2,6 +2,7 @@ package com.lynas.controller.rest
 
 import com.lynas.model.Exam
 import com.lynas.model.request.ExamJsonWrapper
+import com.lynas.model.request.ExamUpdateJson
 import com.lynas.model.response.ExamClassResponse
 import com.lynas.service.*
 import com.lynas.util.*
@@ -53,6 +54,20 @@ class ExamRestController(val examService: ExamService,
         }
         examService.create(listOfExam)
         return responseOK(examJson)
+    }
+
+    @PatchMapping
+    fun updateExamMark(@RequestBody examUpdateJson: ExamUpdateJson, request: HttpServletRequest) : ResponseEntity<*> {
+        logger.info("Update examId [{}], with updated obtain mark [{}]", examUpdateJson.examId, examUpdateJson.updateObtainMark)
+        return try {
+            examService.update(examUpdateJson)
+            responseOK(examUpdateJson)
+        } catch (e : NotFoundException) {
+            responseError(e.message ?: "")
+        } catch (e : Exception) {
+            responseError(e.message
+                    ?: "(ExamRestController:resultOfClassBySubject:Exception) Error check server")
+        }
     }
 
     @GetMapping("/class/{classId}/subject/{subjectId}/year/{_year}/results")

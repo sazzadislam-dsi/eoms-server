@@ -79,6 +79,16 @@
         alert(xhr.status + "  Organization with given info exist");
     });
 
+    bindFormSubmits('exam-mark-update', function (response) {
+        hideLoader();
+        console.dir(response);
+        alert("Exam mark updated !");
+        // window.location.replace("/class/detail/" + $("#classId").val() + "/year/" + new Date().getFullYear());
+    }, function (xhr) {
+        hideLoader();
+        alert(xhr.status + "  Problem when updating exam mark !!");
+    });
+
     bindFormSubmits('studentFeeNew', function (response) {
         hideLoader();
         console.dir(response);
@@ -323,13 +333,16 @@
             for (var i = 0; i < h.length; i++) {
                 var flag = false;
                 var obtainMark = 0;
+                var examId = -1;
                 $.each(obj.exams, function (index, obj) {
                     if (obj.examType === h[i]) {
                         flag = true;
                         obtainMark = Number(obj.obtainMark).toFixed(2);
+                        examId = obj.examId;
                     }
                 });
-                table += '<td>' + obtainMark + '</td>';
+                /*table +=  '<input type="hidden" value="'+ examId + '"/>';*/
+                table += '<td>' + '<a class=\" html-to-modal \" id="' + examId + '"> ' + obtainMark + '</a> ' + '</td>';
             }
             table += '<td>' + Number(obj.result).toFixed(2) + '</td>';
             table += '</tr>';

@@ -2,6 +2,8 @@ package com.lynas.service
 
 import com.lynas.model.Exam
 import com.lynas.model.query.result.ExamQueryResult
+import com.lynas.model.request.ExamJson
+import com.lynas.model.request.ExamUpdateJson
 import com.lynas.model.response.ExamResponse
 import com.lynas.model.response.ExamStudentResponse
 import com.lynas.model.util.ExamType
@@ -12,6 +14,7 @@ import com.lynas.service.dto.ExamOfSubjectUpdateDTO
 import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.lang.IllegalStateException
 import java.util.*
 
 /**
@@ -27,6 +30,26 @@ class ExamService(private val examRepository: ExamRepository,
     @Transactional
     fun create(exam: Collection<Exam>) {
         examRepository.save(exam)
+    }
+
+    @Transactional
+    fun create(exam: Exam) {
+        examRepository.save(exam)
+    }
+
+    @Transactional
+    fun findById(examId: Long): Exam {
+        return examRepository.findOne(examId)
+    }
+
+    @Transactional
+    fun update(examUpdateJson: ExamUpdateJson) {
+        val exam = findById(examUpdateJson.examId) ?: throw NotFoundException("examId : $examUpdateJson.examId")
+        if (exam.totalNumber!! < examUpdateJson.updateObtainMark)
+            throw IllegalStateException("updated mark : ${examUpdateJson.updateObtainMark} is grater then " +
+                    "total mark ${exam.totalNumber} of exam")
+        exam.obtainedNumber = examUpdateJson.updateObtainMark
+        create(exam)
     }
 
     @Transactional
@@ -51,6 +74,7 @@ class ExamService(private val examRepository: ExamRepository,
 
             student.exams = it.exam.map {
                 ExamResponse.Exam().apply {
+                    examId = it.id
                     examType = it.examType
                     totalMark = it.totalNumber
                     obtainMark = it.obtainedNumber
