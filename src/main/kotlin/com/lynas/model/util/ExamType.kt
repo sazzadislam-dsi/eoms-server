@@ -5,6 +5,7 @@ package com.lynas.model.util
  */
 
 enum class ExamType {
+    NULL,
     FIRST_TERM,
     SECOND_TERM,
     FINAL,

@@ -1,14 +1,16 @@
 package com.lynas.controller.view
 
+import com.lynas.model.response.ErrorObject
+import com.lynas.model.util.ExamType
 import com.lynas.service.ClassService
+import com.lynas.service.ExamService
 import com.lynas.service.SubjectService
-import com.lynas.util.getCurrentYear
-import com.lynas.util.getLogger
-import com.lynas.util.getOrganizationFromSession
+import com.lynas.util.*
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -18,7 +20,8 @@ import javax.servlet.http.HttpServletRequest
 @Controller
 @RequestMapping("exam")
 class ExamController constructor(val classService: ClassService,
-                                 val subjectService: SubjectService) {
+                                 val subjectService: SubjectService,
+                                 val examService: ExamService) {
 
     val logger = getLogger(this.javaClass)
 
@@ -30,7 +33,7 @@ class ExamController constructor(val classService: ClassService,
         return "exmClassSelect"
     }
 
-    @RequestMapping("/studentList/{classId}")
+    @RequestMapping("/studentList/{classId}") // TODO add subject id, cause input result for specific subject
     fun studentListByClass(@PathVariable classId: Long, model: Model, request: HttpServletRequest): String {
         logger.info("hit in studentListByClass with class id {}", classId)
         val organization = getOrganizationFromSession(request)
@@ -41,6 +44,24 @@ class ExamController constructor(val classService: ClassService,
         model.addAttribute("subjectList", subjectList)
         model.addAttribute("clsId", classId)
         return "exmStudentList"
+    }
+
+    @RequestMapping("/result/update/classId/{classId}/subjectId/{subjectId}/year/{_year}/date/{date}/examType/{examType}")
+    fun resultUpdateBySubject(@PathVariable classId: Long,
+                              @PathVariable subjectId: Long,
+                              @PathVariable _year: Int,
+                              @PathVariable date: String,
+                              @PathVariable examType: ExamType,
+                              model: Model,
+                              request: HttpServletRequest): String {
+        logger.info("Result update for classId [{}], subjectId [{}], year [{}], date [{}], examType [{}]",
+                classId, subjectId, _year, date, examType)
+        val _date: Date = date.convertToDate()
+        model.addAttribute("object", examService.findByClassIdSubjectIdYearDateExamType(
+                classId, subjectId, _year, _date, examType, getOrganizationFromSession(request).id!!
+        ))
+
+        return "resultUpdateOfSubject"
     }
 
     @RequestMapping("/subject/result")
@@ -59,9 +80,11 @@ class ExamController constructor(val classService: ClassService,
         val organization = getOrganizationFromSession(request)
         model.addAttribute("classList",
                 classService.findClassListByOrganizationId(organization.id!!).sortedBy { it.name })
-        model.addAttribute("year", getCurrentYear())
-        model.addAttribute("subject", subjectService.findById(subjectId))
-        model.addAttribute("cls", classService.findById(classId, organization.id!!))
+                .addAttribute("year", getCurrentYear())
+                .addAttribute("subject", subjectService.findById(subjectId))
+                .addAttribute("cls", classService.findById(classId, organization.id!!))
+                // TODO year must be taken from user end
+                .addAttribute("examList", examService.examListOfSubject(classId, subjectId, getCurrentYear(), organization.id!!))
         return "subjectResult"
     }
 
