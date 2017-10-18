@@ -4,6 +4,7 @@ import com.lynas.model.util.ClassDetailQueryResult
 import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
 import com.lynas.service.SubjectService
+import com.lynas.util.getCurrentUserOrganizationId
 import com.lynas.util.getLogger
 import com.lynas.util.getOrganizationFromSession
 import org.springframework.stereotype.Controller
@@ -28,7 +29,7 @@ class ClassController constructor(val classService: ClassService,
     @RequestMapping("/home")
     fun classHome(model: Model, request: HttpServletRequest): String {
         model.addAttribute("classList", classService
-                .findListByOrganizationId(getOrganizationFromSession(request).id!!).sortedBy { it.name })
+                .findListByOrganizationId(getCurrentUserOrganizationId(request)).sortedBy { it.name })
         return "classHome"
     }
 
@@ -36,13 +37,13 @@ class ClassController constructor(val classService: ClassService,
     @RequestMapping("/createClass")
     fun createClass(model: Model, request: HttpServletRequest): String {
         model.addAttribute("classList", classService
-                .findListByOrganizationId(getOrganizationFromSession(request).id!!).sortedBy { it.name })
+                .findListByOrganizationId(getCurrentUserOrganizationId(request)).sortedBy { it.name })
         return "createClass"
     }
 
     @RequestMapping("/updateClass/{classId}")
     fun updateClass(model: Model, @PathVariable classId: Long, request: HttpServletRequest): String {
-        val course = classService.findById(classId, getOrganizationFromSession(request).id!!)
+        val course = classService.findById(classId, getCurrentUserOrganizationId(request))
         logger.warn("Received Course : " + course.toString())
         model.addAttribute("course", course)
         return "updateClass"

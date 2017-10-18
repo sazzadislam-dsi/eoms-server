@@ -9,7 +9,7 @@ import com.lynas.service.FeeInfoService
 import com.lynas.service.StudentFeeService
 import com.lynas.service.StudentService
 import com.lynas.util.convertToDate
-import com.lynas.util.getOrganizationFromSession
+import com.lynas.util.getCurrentUserOrganizationId
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -31,7 +31,7 @@ class FeeRestController(val feeInfoService: FeeInfoService,
 
     @PostMapping
     fun post(@RequestBody feeInfoJson: FeeInfoJson, request: HttpServletRequest): FeeInfo {
-        val courseById = classService.findById(id = feeInfoJson.classId, orgId = getOrganizationFromSession(request).id!!)
+        val courseById = classService.findById(id = feeInfoJson.classId, orgId = getCurrentUserOrganizationId(request))
         val feeInfo = FeeInfo().apply {
             type = feeInfoJson.type
             amount = feeInfoJson.amount
@@ -45,7 +45,7 @@ class FeeRestController(val feeInfoService: FeeInfoService,
     @PostMapping("/student/new")
     fun studentPayment(request: HttpServletRequest, @RequestBody feeStudentNew: FeeStudentNew): ResponseEntity<*> {
         val fee = feeInfoService.find(feeStudentNew.feeInfoId)
-        val studentOf = studentService.findById(feeStudentNew.studentId, getOrganizationFromSession(request).id!!)
+        val studentOf = studentService.findById(feeStudentNew.studentId, getCurrentUserOrganizationId(request))
         val pDate = feeStudentNew.paymentDate.convertToDate()
 
         val studentFee = StudentFee().apply {

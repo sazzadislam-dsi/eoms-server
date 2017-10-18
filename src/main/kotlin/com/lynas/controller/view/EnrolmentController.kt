@@ -3,6 +3,7 @@ package com.lynas.controller.view
 import com.lynas.model.util.ClassDetailQueryResult
 import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
+import com.lynas.util.getCurrentUserOrganizationId
 import com.lynas.util.getCurrentYear
 import com.lynas.util.getLogger
 import com.lynas.util.getOrganizationFromSession
@@ -47,7 +48,7 @@ class EnrolmentController constructor(val enrolmentService: EnrolmentService,
                 enrolmentId = enrolmentId,
                 studentId = studentId,
                 year = LocalDate.now().year,
-                orgId = getOrganizationFromSession(request).id!!)){
+                orgId = getCurrentUserOrganizationId(request))){
             "redirect:/enrolment/create/" + classId
         } else {
             "error"

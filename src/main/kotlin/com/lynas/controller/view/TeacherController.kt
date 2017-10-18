@@ -1,7 +1,7 @@
 package com.lynas.controller.view
 
 import com.lynas.service.ClassService
-import com.lynas.util.getOrganizationFromSession
+import com.lynas.util.getCurrentUserOrganizationId
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,7 +18,7 @@ class TeacherController (val classService: ClassService) {
     @RequestMapping("/home")
     fun classHome(model: Model,request : HttpServletRequest): String {
         model.addAttribute("classList",
-                classService.findListByOrganizationId(getOrganizationFromSession(request).id!!))
+                classService.findListByOrganizationId(getCurrentUserOrganizationId(request)))
         return "classHome"
     }
 

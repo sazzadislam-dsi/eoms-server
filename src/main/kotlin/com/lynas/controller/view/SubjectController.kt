@@ -1,8 +1,8 @@
 package com.lynas.controller.view
 
 import com.lynas.service.SubjectService
+import com.lynas.util.getCurrentUserOrganizationId
 import com.lynas.util.getLogger
-import com.lynas.util.getOrganizationFromSession
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
@@ -23,7 +23,7 @@ class SubjectController constructor(val subjectService: SubjectService)  {
         logger.info("Return subject list for class id {}", classId)
         model.addAttribute("subjectList", subjectService.findAllByClassId(
                 classId,
-                getOrganizationFromSession(request).id!!))
+                getCurrentUserOrganizationId(request)))
         model.addAttribute("classId", classId)
         return "subjectOfClass"
     }
@@ -33,7 +33,7 @@ class SubjectController constructor(val subjectService: SubjectService)  {
         logger.info("Return subject list for student id {}", stdId)
         model.addAttribute("subjectList", subjectService.findAllByStudentId(
                 stdId,
-                getOrganizationFromSession(request).id!!))
+                getCurrentUserOrganizationId(request)))
         return "subjectOfClass"
     }
 
@@ -43,7 +43,7 @@ class SubjectController constructor(val subjectService: SubjectService)  {
         logger.info("Return subject create page for class Id {}", classId)
         model.addAttribute("classId", classId)
         model.addAttribute("subjectList",
-                subjectService.findAllByClassId(classId, getOrganizationFromSession(request).id!!))
+                subjectService.findAllByClassId(classId, getCurrentUserOrganizationId(request)))
         return "subjectCreate"
     }
 }

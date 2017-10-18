@@ -81,7 +81,7 @@ class ExamRestController(val examService: ExamService,
                     classId = classId,
                     subjectId = subjectId,
                     _year = _year,
-                    orgId = getOrganizationFromSession(request).id!!))
+                    orgId = getCurrentUserOrganizationId(request)))
         } catch (e: NotFoundException) {
             responseError(e.message
                     ?: "(ExamRestController:resultOfClassBySubject:NotFoundException) Error check server")
