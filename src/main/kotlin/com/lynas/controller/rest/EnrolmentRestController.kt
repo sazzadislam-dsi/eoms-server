@@ -3,7 +3,7 @@ package com.lynas.controller.rest
 import com.lynas.model.Course
 import com.lynas.model.Enrolment
 import com.lynas.model.Student
-import com.lynas.model.request.EnrolmentJson
+import com.lynas.model.util.EnrolmentJson
 import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
 import com.lynas.service.StudentService

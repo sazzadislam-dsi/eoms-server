@@ -1,8 +1,8 @@
 package com.lynas.controller.rest
 
 import com.lynas.exception.SameDateAttendanceException
-import com.lynas.model.request.AttendanceJsonWrapper
 import com.lynas.model.response.ErrorObject
+import com.lynas.model.util.AttendanceJsonWrapper
 import com.lynas.service.AttendanceService
 import com.lynas.util.*
 import org.springframework.http.ResponseEntity
@@ -25,7 +25,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
     @PostMapping
     @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
     fun post(@RequestBody attendanceJson: AttendanceJsonWrapper,
-                       request: HttpServletRequest): ResponseEntity<*> {
+             request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
         try {
             attendanceService.create(

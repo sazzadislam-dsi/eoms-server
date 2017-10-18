@@ -1,12 +1,11 @@
 package com.lynas.service
 
 import com.lynas.model.Exam
-import com.lynas.model.query.result.ExamQueryResult
-import com.lynas.model.request.ExamJson
-import com.lynas.model.request.ExamUpdateJson
 import com.lynas.model.response.ExamResponse
 import com.lynas.model.response.ExamStudentResponse
+import com.lynas.model.util.ExamQueryResult
 import com.lynas.model.util.ExamType
+import com.lynas.model.util.ExamUpdateJson
 import com.lynas.repo.ExamRepository
 import com.lynas.service.dto.ExamListDTO
 import com.lynas.service.dto.ExamOfStudent

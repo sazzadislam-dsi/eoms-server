@@ -3,9 +3,9 @@ package com.lynas.controller.rest
 import com.lynas.model.ContactInformation
 import com.lynas.model.Person
 import com.lynas.model.Student
-import com.lynas.model.request.StudentContact
-import com.lynas.model.request.StudentJson
 import com.lynas.model.response.ErrorObject
+import com.lynas.model.util.StudentContact
+import com.lynas.model.util.StudentJson
 import com.lynas.service.StudentService
 import com.lynas.util.*
 import org.springframework.http.ResponseEntity

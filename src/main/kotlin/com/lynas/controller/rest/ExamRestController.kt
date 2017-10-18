@@ -1,9 +1,9 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.Exam
-import com.lynas.model.request.ExamJsonWrapper
-import com.lynas.model.request.ExamUpdateJson
 import com.lynas.model.response.ExamClassResponse
+import com.lynas.model.util.ExamJsonWrapper
+import com.lynas.model.util.ExamUpdateJson
 import com.lynas.service.*
 import com.lynas.util.*
 import org.neo4j.ogm.exception.NotFoundException

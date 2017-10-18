@@ -2,7 +2,7 @@ package com.lynas.service
 
 import com.lynas.exception.DuplicateCourseException
 import com.lynas.model.Course
-import com.lynas.model.query.result.ClassDetailQueryResult
+import com.lynas.model.util.ClassDetailQueryResult
 import com.lynas.repo.ClassRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

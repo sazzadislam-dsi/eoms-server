@@ -2,8 +2,8 @@ package com.lynas.controller.rest
 
 import com.lynas.model.FeeInfo
 import com.lynas.model.StudentFee
-import com.lynas.model.request.FeeInfoJson
-import com.lynas.model.request.FeeStudentNew
+import com.lynas.model.util.FeeInfoJson
+import com.lynas.model.util.FeeStudentNew
 import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
 import com.lynas.service.StudentFeeService

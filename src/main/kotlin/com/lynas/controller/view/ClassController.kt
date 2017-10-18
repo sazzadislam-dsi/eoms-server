@@ -1,6 +1,6 @@
 package com.lynas.controller.view
 
-import com.lynas.model.query.result.ClassDetailQueryResult
+import com.lynas.model.util.ClassDetailQueryResult
 import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
 import com.lynas.service.SubjectService

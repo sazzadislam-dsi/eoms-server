@@ -1,7 +1,7 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.Subject
-import com.lynas.model.request.SubjectPostJson
+import com.lynas.model.util.SubjectPostJson
 import com.lynas.service.ClassService
 import com.lynas.service.SubjectService
 import com.lynas.util.getLogger

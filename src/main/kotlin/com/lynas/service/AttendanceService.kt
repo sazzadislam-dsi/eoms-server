@@ -3,8 +3,8 @@ package com.lynas.service
 import com.lynas.exception.SameDateAttendanceException
 import com.lynas.model.AttendanceBook
 import com.lynas.model.StudentAttendance
-import com.lynas.model.query.result.AttendanceViewQueryResult
-import com.lynas.model.request.AttendanceJsonWrapper
+import com.lynas.model.util.AttendanceJsonWrapper
+import com.lynas.model.util.AttendanceViewQueryResult
 import com.lynas.repo.AttendanceRepository
 import com.lynas.util.convertToDate
 import org.springframework.stereotype.Service

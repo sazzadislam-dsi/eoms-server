@@ -1,7 +1,7 @@
 package com.lynas.repo
 
 import com.lynas.model.Course
-import com.lynas.model.query.result.ClassDetailQueryResult
+import com.lynas.model.util.ClassDetailQueryResult
 import org.springframework.data.neo4j.annotation.Query
 import org.springframework.data.neo4j.repository.GraphRepository
 
