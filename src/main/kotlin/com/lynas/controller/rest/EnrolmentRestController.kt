@@ -1,8 +1,6 @@
 package com.lynas.controller.rest
 
-import com.lynas.model.Course
 import com.lynas.model.Enrolment
-import com.lynas.model.Student
 import com.lynas.model.util.EnrolmentJson
 import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
@@ -36,13 +34,13 @@ class EnrolmentRestController(val enrolmentService: EnrolmentService,
                 studentId = enrolmentJson.studentId,
                 classId = enrolmentJson.classId,
                 year = enrolmentJson.year,
-                orgId = organization.id!!)
+                orgId = organization.id ?: throw NullPointerException(Constants.ORG_ID_NULL))
         if (!isValid) {
             return responseError(ErrInf(input = enrolmentJson, msg = message))
         }
-        val _student: Student = studentService.findById(enrolmentJson.studentId, organization.id!!)
+        val _student = studentService.findById(enrolmentJson.studentId, organization.id ?: throw NullPointerException(Constants.ORG_ID_NULL))
                 ?: return responseError("Student not found with given student id ${enrolmentJson.studentId}")
-        val _course: Course = classService.findById(enrolmentJson.classId, organization.id!!)
+        val _course = classService.findById(enrolmentJson.classId, organization.id ?: throw NullPointerException(Constants.ORG_ID_NULL))
                 ?: return responseError("Class/Course not found with given class/course id" + enrolmentJson.classId)
 
         val enrolment: Enrolment = Enrolment().apply {

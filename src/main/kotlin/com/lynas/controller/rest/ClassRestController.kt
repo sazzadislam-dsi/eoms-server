@@ -3,10 +3,7 @@ package com.lynas.controller.rest
 import com.lynas.exception.DuplicateCourseException
 import com.lynas.model.Course
 import com.lynas.service.ClassService
-import com.lynas.util.getLogger
-import com.lynas.util.getOrganizationFromSession
-import com.lynas.util.responseConflict
-import com.lynas.util.responseOK
+import com.lynas.util.*
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -51,7 +48,7 @@ class ClassRestController (val classService: ClassService) {
             logger.warn("Request orgName [{}] and session orgName [{}] does not match", name, organization.name)
             return ArrayList()
         }
-        return classService.findListByOrganizationId(organization.id!!)
+        return classService.findListByOrganizationId(organization.id ?: throw NullPointerException(Constants.ORG_ID_NULL))
     }
 
 }
