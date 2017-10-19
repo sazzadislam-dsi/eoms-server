@@ -28,19 +28,19 @@ class EnrolmentRestController(val enrolmentService: EnrolmentService,
     @PostMapping
     fun post(@RequestBody enrolmentJson: EnrolmentJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit in enrolment create method with {}", enrolmentJson.toString())
-        val organization = getOrganizationFromSession(request)
+        val organizationId = getCurrentUserOrganizationId(request)
         val (isValid, message) = enrolmentService.studentEnrolmentCheck(
                 roleNumber = enrolmentJson.roleNumber,
                 studentId = enrolmentJson.studentId,
                 classId = enrolmentJson.classId,
                 year = enrolmentJson.year,
-                orgId = organization.id ?: throw NullPointerException(Constants.ORG_ID_NULL))
+                orgId = organizationId)
         if (!isValid) {
             return responseError(ErrInf(input = enrolmentJson, msg = message))
         }
-        val _student = studentService.findById(enrolmentJson.studentId, organization.id ?: throw NullPointerException(Constants.ORG_ID_NULL))
+        val _student = studentService.findById(enrolmentJson.studentId, organizationId)
                 ?: return responseError("Student not found with given student id ${enrolmentJson.studentId}")
-        val _course = classService.findById(enrolmentJson.classId, organization.id ?: throw NullPointerException(Constants.ORG_ID_NULL))
+        val _course = classService.findById(enrolmentJson.classId, organizationId)
                 ?: return responseError("Class/Course not found with given class/course id" + enrolmentJson.classId)
 
         val enrolment: Enrolment = Enrolment().apply {
