@@ -59,15 +59,8 @@ class ExamRestController(val examService: ExamService,
     @PatchMapping
     fun updateExamMark(@RequestBody examUpdateJson: ExamUpdateJson, request: HttpServletRequest) : ResponseEntity<*> {
         logger.info("Update examId [{}], with updated obtain mark [{}]", examUpdateJson.examId, examUpdateJson.updateObtainMark)
-        return try {
-            examService.update(examUpdateJson)
-            responseOK(examUpdateJson)
-        } catch (e : NotFoundException) {
-            responseError(e.message ?: "")
-        } catch (e : Exception) {
-            responseError(e.message
-                    ?: "(ExamRestController:resultOfClassBySubject:Exception) Error check server")
-        }
+        examService.update(examUpdateJson)
+        return responseOK(examUpdateJson)
     }
 
     @GetMapping("/class/{classId}/subject/{subjectId}/year/{_year}/results")

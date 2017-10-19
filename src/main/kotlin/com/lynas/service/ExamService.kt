@@ -38,7 +38,7 @@ class ExamService(private val examRepository: ExamRepository,
     }
 
     @Transactional
-    fun findById(examId: Long): Exam {
+    fun findById(examId: Long): Exam? {
         return examRepository.findOne(examId)
     }
 
