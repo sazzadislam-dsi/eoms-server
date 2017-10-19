@@ -3,9 +3,9 @@ package com.lynas.controller.rest
 import com.lynas.model.ContactInformation
 import com.lynas.model.Person
 import com.lynas.model.Student
-import com.lynas.model.request.StudentContact
-import com.lynas.model.request.StudentJson
 import com.lynas.model.response.ErrorObject
+import com.lynas.model.util.StudentContact
+import com.lynas.model.util.StudentJson
 import com.lynas.service.StudentService
 import com.lynas.util.*
 import org.springframework.http.ResponseEntity
@@ -64,7 +64,7 @@ class StudentRestController(val studentService: StudentService) {
 
     @GetMapping("/count")
     fun totalStudentCount(request: HttpServletRequest): ResponseEntity<*> {
-        val studentCount = studentService.findStudentCountOfOrganization(getOrganizationFromSession(request).id!!)
+        val studentCount = studentService.findStudentCountOfOrganization(getCurrentUserOrganizationId(request))
         return responseOK(studentCount)
     }
 
@@ -72,7 +72,7 @@ class StudentRestController(val studentService: StudentService) {
     fun studentUpdate(@RequestBody studentJson: StudentJson,
                       request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit student update controller with id {} && {}", studentJson.studentId, studentJson)
-        val student = studentService.findById(studentJson.studentId, getOrganizationFromSession(request).id!!)
+        val student = studentService.findById(studentJson.studentId, getCurrentUserOrganizationId(request))
         if (student?.person == null) return responseError(studentJson)
 
         var _dateOfBirth = Date()
@@ -103,7 +103,7 @@ class StudentRestController(val studentService: StudentService) {
     @PostMapping("/add_contact_info")
     fun postStudentContactInformation(@RequestBody studentContact: StudentContact,
                                       request: HttpServletRequest): ResponseEntity<*> {
-        val student = studentService.findById(studentContact.studentId, getOrganizationFromSession(request).id!!)
+        val student = studentService.findById(studentContact.studentId, getCurrentUserOrganizationId(request))
                 ?: return responseError("Student not found with given student id ${studentContact.studentId}")
         if (null == student.person?.contactInformationList) {
             student.person?.contactInformationList = mutableListOf(

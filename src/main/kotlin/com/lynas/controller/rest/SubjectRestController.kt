@@ -1,11 +1,11 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.Subject
-import com.lynas.model.request.SubjectPostJson
+import com.lynas.model.util.SubjectPostJson
 import com.lynas.service.ClassService
 import com.lynas.service.SubjectService
+import com.lynas.util.getCurrentUserOrganizationId
 import com.lynas.util.getLogger
-import com.lynas.util.getOrganizationFromSession
 import com.lynas.util.responseError
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
@@ -38,7 +38,7 @@ class SubjectRestController constructor(val subjectService: SubjectService,
 
         // Problem in save object
         classService
-                .findById(subjectJson.classId as Long, getOrganizationFromSession(request).id!!)
+                .findById(subjectJson.classId as Long, getCurrentUserOrganizationId(request))
                 ?.let {
                     subject.cls = it
                     subjectService.create(subject)

@@ -48,7 +48,7 @@ fun responseError(responseObject: Any): ResponseEntity<*> {
     return ResponseEntity(responseObject, HttpStatus.BAD_REQUEST)
 }
 
-data class ErrInf(val input: Any, val msg: Any  )
+data class ErrInf(val input: Any, val msg: Any)
 
 @Throws(ParseException::class)
 fun String.convertToDate(): Date {
@@ -67,6 +67,12 @@ fun Date.convertToString() = SimpleDateFormat("dd-MM-yyyy").format(this)
 fun getOrganizationFromSession(request: HttpServletRequest)
         = request.session.getAttribute(AppConstant.organization) as Organization?
         ?: throw NotFoundException("Organization info not found in session")
+
+@Throws(NullPointerException::class)
+fun getCurrentUserOrganizationId(request: HttpServletRequest): Long {
+    val organization = getOrganizationFromSession(request)
+    return organization.id ?: throw NullPointerException("organization has no organization id")
+}
 
 fun getCurrentYear() = LocalDate.now().year
 

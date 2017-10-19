@@ -2,6 +2,7 @@ package com.lynas.controller.view
 
 import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
+import com.lynas.util.getCurrentUserOrganizationId
 import com.lynas.util.getOrganizationFromSession
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -20,7 +21,7 @@ class FeeController(val feeInfoService: FeeInfoService, val classService: ClassS
 
     @RequestMapping("/new/class/{classId}")
     fun feeNew(@PathVariable classId: Long, request: HttpServletRequest, model: Model): String {
-        val course = classService.findById(id = classId, orgId = getOrganizationFromSession(request).id!!)
+        val course = classService.findById(id = classId, orgId = getCurrentUserOrganizationId(request))
         model.addAttribute("courseId", course?.id)
         return "feeNew"
     }

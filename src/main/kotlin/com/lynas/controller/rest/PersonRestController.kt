@@ -1,7 +1,7 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.Person
-import com.lynas.model.request.PersonContact
+import com.lynas.model.util.PersonContact
 import com.lynas.service.PersonService
 import com.lynas.util.getOrganizationFromSession
 import org.springframework.web.bind.annotation.*

@@ -1,13 +1,12 @@
 package com.lynas.repo
 
 import com.lynas.model.Exam
-import com.lynas.model.query.result.ExamListQueryResult
-import com.lynas.model.query.result.ExamQueryResult
-import com.lynas.model.query.result.ResultUpdateQueryResult
+import com.lynas.model.util.ExamListQueryResult
+import com.lynas.model.util.ExamQueryResult
 import com.lynas.model.util.ExamType
+import com.lynas.model.util.ResultUpdateQueryResult
 import org.springframework.data.neo4j.annotation.Query
 import org.springframework.data.neo4j.repository.GraphRepository
-import java.util.*
 
 /**
  * Created by sazzad on 7/18/16

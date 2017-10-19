@@ -7,6 +7,7 @@ import com.lynas.service.ExamServiceJava
 import com.lynas.service.FeeInfoService
 import com.lynas.service.PersonService
 import com.lynas.service.StudentService
+import com.lynas.util.getCurrentUserOrganizationId
 import com.lynas.util.getLogger
 import com.lynas.util.getOrganizationFromSession
 import org.neo4j.ogm.exception.NotFoundException
@@ -41,7 +42,7 @@ class StudentController(val studentService: StudentService,
     @GetMapping("/{studentId}/update")
     fun studentUpdate(model: Model, @PathVariable studentId: Long, request: HttpServletRequest): String {
         model.addAttribute("student",
-                studentService.findById(studentId, getOrganizationFromSession(request).id!!))
+                studentService.findById(studentId, getCurrentUserOrganizationId(request)))
         return "studentUpdate"
     }
 
@@ -54,14 +55,14 @@ class StudentController(val studentService: StudentService,
     @GetMapping("/search/byFirstName")
     fun studentSearch(@RequestParam firstName: String, model: Model, request: HttpServletRequest): String {
         logger.info("Student first name {}", firstName)
-        val list: List<Student> = studentService.searchByFirstName(firstName, getOrganizationFromSession(request).id!!)
+        val list: List<Student> = studentService.searchByFirstName(firstName, getCurrentUserOrganizationId(request))
         model.addAttribute("studentList", list)
         return "studentSearch"
     }
 
     @GetMapping("/{studentId}/details")
     fun viewDetails(@PathVariable studentId: Long, model: Model, request: HttpServletRequest): String {
-        val student = studentService.findById(studentId, getOrganizationFromSession(request).id!!) ?: throw NotFoundException()
+        val student = studentService.findById(studentId, getCurrentUserOrganizationId(request)) ?: throw NotFoundException()
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!)?.contactInformationList
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
@@ -106,7 +107,7 @@ class StudentController(val studentService: StudentService,
 
     @GetMapping("/list")
     fun studentList(model: Model, request: HttpServletRequest): String {
-        model.addAttribute("studentList", studentService.findAll(getOrganizationFromSession(request).id!!))
+        model.addAttribute("studentList", studentService.findAll(getCurrentUserOrganizationId(request)))
         return "studentList"
     }
 

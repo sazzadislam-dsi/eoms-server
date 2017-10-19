@@ -1,6 +1,5 @@
 package com.lynas.service.dto
 
-import com.lynas.model.Exam
 import com.lynas.model.util.ExamType
 import java.util.*
 

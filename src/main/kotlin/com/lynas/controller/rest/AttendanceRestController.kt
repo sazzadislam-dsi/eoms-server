@@ -1,8 +1,8 @@
 package com.lynas.controller.rest
 
 import com.lynas.exception.SameDateAttendanceException
-import com.lynas.model.request.AttendanceJsonWrapper
 import com.lynas.model.response.ErrorObject
+import com.lynas.model.util.AttendanceJsonWrapper
 import com.lynas.service.AttendanceService
 import com.lynas.util.*
 import org.springframework.http.ResponseEntity
@@ -25,12 +25,12 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
     @PostMapping
     @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
     fun post(@RequestBody attendanceJson: AttendanceJsonWrapper,
-                       request: HttpServletRequest): ResponseEntity<*> {
+             request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
         try {
             attendanceService.create(
                     attendanceJsonWrapper = attendanceJson,
-                    orgId = getOrganizationFromSession(request).id!!)
+                    orgId = getCurrentUserOrganizationId(request))
             logger.info("Post successfully attendance book")
         } catch (ex: SameDateAttendanceException) {
             logger.error("Duplicate attendance entry found on date [{}], class ID [{}]", attendanceJson.date, attendanceJson.classId)
@@ -69,7 +69,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
         val result = attendanceService.getAttendanceOfAClassOnDate(
                 date = dateOf.time,
                 classId = classId,
-                orgId = getOrganizationFromSession(request).id!!)
+                orgId = getCurrentUserOrganizationId(request))
 
         return responseOK(result)
     }

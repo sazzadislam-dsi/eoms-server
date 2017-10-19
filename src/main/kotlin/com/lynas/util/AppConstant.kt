@@ -7,4 +7,5 @@ package com.lynas.util
 object Constants {
     val INVALID_DATE_FORMAT = "Invalid date format"
     val EXPECTED_DATE_FORMAT = "Expected date format 15-12-2002"
+    val ORG_ID_NULL = "Null found for organization ID"
 }
