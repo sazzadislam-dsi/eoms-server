@@ -2,6 +2,7 @@ package com.lynas.controller.rest
 
 import com.lynas.exception.DuplicateCourseException
 import com.lynas.model.Course
+import com.lynas.model.util.CourseJson
 import com.lynas.service.ClassService
 import com.lynas.util.*
 import org.springframework.dao.DuplicateKeyException
@@ -22,9 +23,13 @@ class ClassRestController (val classService: ClassService) {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun post(@RequestBody cls: Course, request: HttpServletRequest): ResponseEntity<*> {
+    fun post(@RequestBody cls: CourseJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Received Class :: " + cls.toString())
-        var createdClass = cls
+        var createdClass = Course().apply {
+            name = cls.name
+            shift = cls.shift
+            section = cls.section
+        }
         createdClass.organization = getOrganizationFromSession(request)
 
         try {

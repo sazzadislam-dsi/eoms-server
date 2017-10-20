@@ -93,3 +93,10 @@ data class SubjectPostJson(
         var subjectBookAuthor: String? = null,
         var classId: Long? = null
 )
+
+
+class CourseJson(
+        var name: String,
+        var shift: Shift,
+        var section: Section
+)
