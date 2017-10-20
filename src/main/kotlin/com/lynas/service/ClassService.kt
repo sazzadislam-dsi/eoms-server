@@ -73,7 +73,7 @@ class ClassService(val classRepo: ClassRepository) {
 
     fun checkClassAlreadyExist(course: Course, orgId: Long): Boolean {
         val cc = classRepo.findByPropAndOrg(
-                course.name!!,
+                course.name,
                 course.shift.toString(),
                 course.section.toString(),
                 orgId)

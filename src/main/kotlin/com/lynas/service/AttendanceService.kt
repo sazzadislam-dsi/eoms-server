@@ -29,7 +29,7 @@ class AttendanceService constructor(val studentService: StudentService,
                 orgId = orgId)
 
         //TODO catch this exception properly
-        val set = attendanceJsonWrapper.attendanceJson.map {
+        val set = attendanceJsonWrapper.attendanceJson.filter { it.t != 0L }.map {
             StudentAttendance(
                     student = studentService.findById(it.t, orgId)
                             ?: throw NullPointerException("student Not found with given studentId: ${it.t}"),
