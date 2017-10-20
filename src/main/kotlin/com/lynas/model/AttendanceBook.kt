@@ -11,13 +11,14 @@ import java.util.*
  */
 
 @NodeEntity
-class AttendanceBook {
-    @GraphId
-    var id: Long? = null
-    @Relationship(type = "attendanceBookOfAClass", direction = Relationship.INCOMING)
-    var course: Course? = null
-    @DateLong
-    var attendanceDate: Date? = null
-    @Relationship(type = "studentsAttendance", direction = Relationship.OUTGOING)
-    var studentAttendances: MutableSet<StudentAttendance> = mutableSetOf()
+class AttendanceBook(
+        @GraphId
+        var id: Long? = null,
+        @Relationship(type = "attendanceBookOfAClass", direction = Relationship.INCOMING)
+        var course: Course,
+        @DateLong
+        var attendanceDate: Date,
+        @Relationship(type = "studentsAttendance", direction = Relationship.OUTGOING)
+        var studentAttendances: MutableSet<StudentAttendance>) {
+    constructor() : this(null, Course(), Date(), mutableSetOf<StudentAttendance>())
 }

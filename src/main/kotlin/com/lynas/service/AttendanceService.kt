@@ -39,6 +39,8 @@ class AttendanceService constructor(val studentService: StudentService,
             studentAttendances = set
             attendanceDate = _attendanceDate
             course = classService.findById(attendanceJsonWrapper.classId, orgId)
+                    ?: throw NullPointerException(
+                    "Course or class not found with given classID : ${attendanceJsonWrapper.classId}")
         }
         return attendanceRepository.save(attendanceBook)
     }
