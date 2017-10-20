@@ -63,12 +63,12 @@ class StudentController(val studentService: StudentService,
     @GetMapping("/{studentId}/details")
     fun viewDetails(@PathVariable studentId: Long, model: Model, request: HttpServletRequest): String {
         val student = studentService.findById(studentId, getCurrentUserOrganizationId(request)) ?: throw NotFoundException()
-        student.person?.contactInformationList = personService.findPersonById(student.person?.id!!)?.contactInformationList
+        student.person.contactInformationList = personService.findPersonById(student.person.id!!)?.contactInformationList
                 ?: mutableListOf()
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
         val studentFeeList = feeInfoService.findStudentFeeInfoByStudent(studentId)
-                ?.filter { it.feeInfo?.course?.organization?.id == getOrganizationFromSession(request).id }
+                ?.filter { it.feeInfo.course.organization.id == getOrganizationFromSession(request).id }
         model.addAttribute("studentFeeList", studentFeeList)
         return "studentDetails"
     }
@@ -80,12 +80,12 @@ class StudentController(val studentService: StudentService,
                            @PathVariable classId: Long): String {
         val organization = getOrganizationFromSession(request)
         val student = studentService.findById(studentId, organization.id!!) ?: throw NotFoundException()
-        student.person?.contactInformationList = personService.findPersonById(student.person?.id!!)?.contactInformationList
+        student.person.contactInformationList = personService.findPersonById(student.person.id!!)?.contactInformationList
                 ?: mutableListOf()
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
         val studentFeeList = feeInfoService.findStudentFeeInfoByStudent(studentId)
-                ?.filter { it.feeInfo?.course?.organization?.id == organization.id }
+                ?.filter { it.feeInfo.course.organization.id == organization.id }
         model.addAttribute("studentFeeList", studentFeeList)
 
         val resultList = examServiceJava.getResultOfClass(classId, year, organization.id!!)

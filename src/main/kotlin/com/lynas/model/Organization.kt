@@ -9,9 +9,9 @@ import org.neo4j.ogm.annotation.Relationship
  */
 @NodeEntity
 class Organization(
-    @GraphId
-    var id: Long? = null,
-    var name: String,
-    var establishmentYear: Int,
-    @Relationship(type = "organizationHasOrganizationInfo", direction = Relationship.OUTGOING)
-    var organizationInfo: OrganizationInfo)
+        @GraphId
+        var id: Long? = null,
+        var name: String,
+        var establishmentYear: Int,
+        @Relationship(type = "organizationHasOrganizationInfo", direction = Relationship.OUTGOING)
+        var organizationInfo: OrganizationInfo)

@@ -51,15 +51,15 @@ class FeeRestController(val feeInfoService: FeeInfoService,
     @PostMapping("/student/new")
     fun studentPayment(request: HttpServletRequest, @RequestBody feeStudentNew: FeeStudentNew): ResponseEntity<*> {
         val fee = feeInfoService.find(feeStudentNew.feeInfoId)
+                ?: return responseError(ErrorObject(feeStudentNew, "feeInfoId", "not found", ""))
         val studentOf = studentService.findById(feeStudentNew.studentId, getCurrentUserOrganizationId(request))
+                ?: return responseError(ErrorObject(feeStudentNew, "studentId", "not found", ""))
         val pDate = feeStudentNew.paymentDate.convertToDate()
 
-        val studentFee = StudentFee().apply {
-            student = studentOf
-            feeInfo = fee
-            paymentDate = pDate
-
-        }
+        val studentFee = StudentFee(
+                student = studentOf,
+                feeInfo = fee,
+                paymentDate = pDate)
         val savedObj = studentFeeService.create(studentFee)
         return responseOK(savedObj)
     }

@@ -10,18 +10,11 @@ import java.util.*
  * Created by sazzad on 8/8/16
  */
 @NodeEntity
-class Student {
-    @GraphId
-    var id: Long? = null
-    @Relationship(type = "studentIsAPerson")
-    var person: Person? = null
+class Student(
+        @GraphId
+        var id: Long? = null,
+        @Relationship(type = "studentIsAPerson")
+        var person: Person,
 
-    @DateLong
-    val firstAdmissionDate: Date? = null
-
-    override fun toString(): String {
-        return "Student(person=$person, firstAdmissionDate=$firstAdmissionDate)"
-    }
-
-
-}
+        @DateLong
+        val firstAdmissionDate: Date)

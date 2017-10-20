@@ -38,8 +38,8 @@ class StudentRestController(val studentService: StudentService) {
                     Constants.EXPECTED_DATE_FORMAT))
         }
 
-        val student = Student()
-        student.person = Person(
+
+        val person = Person(
                 firstName = studentJson.firstName,
                 lastName = studentJson.lastName,
                 dateOfBirth = _dateOfBirth,
@@ -47,19 +47,9 @@ class StudentRestController(val studentService: StudentService) {
                 religion = studentJson.religion,
                 organization = getOrganizationFromSession(request),
                 contactInformationList = mutableListOf())
+        val student = Student(person = person, firstAdmissionDate = Date())
         studentService.create(student)
-        logger.warn("created student " + student.toString())
         return responseOK(student)
-    }
-
-    @GetMapping
-    fun get(): Student {
-        val student = Student()
-        student.person?.firstName = "ff"
-        student.person?.lastName = "L"
-        student.person?.dateOfBirth = Date()
-
-        return student
     }
 
     @GetMapping("/count")
@@ -87,7 +77,7 @@ class StudentRestController(val studentService: StudentService) {
                     Constants.EXPECTED_DATE_FORMAT))
         }
 
-        student.person?.apply {
+        student.person.apply {
             firstName = studentJson.firstName
             lastName = studentJson.lastName
             dateOfBirth = _dateOfBirth
@@ -105,26 +95,15 @@ class StudentRestController(val studentService: StudentService) {
                                       request: HttpServletRequest): ResponseEntity<*> {
         val student = studentService.findById(studentContact.studentId, getCurrentUserOrganizationId(request))
                 ?: return responseError("Student not found with given student id ${studentContact.studentId}")
-        if (null == student.person?.contactInformationList) {
-            student.person?.contactInformationList = mutableListOf(
-                    ContactInformation(
-                            name = studentContact.name,
-                            address = studentContact.address,
-                            phone_1 = studentContact.phone_1,
-                            phone_2 = studentContact.phone_2,
-                            phone_3 = studentContact.phone_3,
-                            contactType = studentContact.contactType))
-        } else {
-            student.person?.contactInformationList?.add(ContactInformation(
-                    name = studentContact.name,
-                    address = studentContact.address,
-                    phone_1 = studentContact.phone_1,
-                    phone_2 = studentContact.phone_2,
-                    phone_3 = studentContact.phone_3,
+        student.person.contactInformationList.add(ContactInformation(
+                name = studentContact.name,
+                address = studentContact.address,
+                phone_1 = studentContact.phone_1,
+                phone_2 = studentContact.phone_2,
+                phone_3 = studentContact.phone_3,
                 contactType = studentContact.contactType
 
-            ))
-        }
+        ))
         return responseOK(studentService.create(student))
     }
 

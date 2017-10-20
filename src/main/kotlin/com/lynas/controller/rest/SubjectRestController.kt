@@ -1,6 +1,7 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.Subject
+import com.lynas.model.response.ErrorObject
 import com.lynas.model.util.SubjectPostJson
 import com.lynas.service.ClassService
 import com.lynas.service.SubjectService
@@ -29,24 +30,15 @@ class SubjectRestController constructor(val subjectService: SubjectService,
     @PostMapping
     fun post(@RequestBody subjectJson: SubjectPostJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit create method with {}", subjectJson)
-        val subject: Subject = Subject().apply {
-            subjectName = subjectJson.subjectName
-            subjectDescription = subjectJson.subjectDescription
-            subjectBookAuthor = subjectJson.subjectBookAuthor
-
-        }
-
-        // Problem in save object
-        classService
-                .findById(subjectJson.classId as Long, getCurrentUserOrganizationId(request))
-                ?.let {
-                    subject.cls = it
-                    subjectService.create(subject)
-                    logger.info("Post subject successful for class id [{}]", it.id)
-                    return responseOK(subjectJson)
-                }
-
-        return responseError(subjectJson)
+        val course = classService.findById(subjectJson.classId, getCurrentUserOrganizationId(request))
+                ?: return responseError(ErrorObject(subjectJson, "classId", "Not found", ""))
+        val subject = Subject(
+                subjectName = subjectJson.subjectName,
+                subjectDescription = subjectJson.subjectDescription,
+                subjectBookAuthor = subjectJson.subjectBookAuthor,
+                cls = course)
+        subjectService.create(subject)
+        return responseOK(subjectJson)
     }
 
 }

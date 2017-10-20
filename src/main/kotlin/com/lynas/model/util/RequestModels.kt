@@ -86,11 +86,10 @@ data class StudentJson(
 
 
 data class SubjectPostJson(
-
-        var subjectName: String? = null,
-        var subjectDescription: String? = null,
-        var subjectBookAuthor: String? = null,
-        var classId: Long? = null
+        var subjectName: String,
+        var subjectDescription: String,
+        var subjectBookAuthor: String,
+        var classId: Long
 )
 
 

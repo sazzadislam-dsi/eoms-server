@@ -37,14 +37,14 @@ class ExamService(private val examRepository: ExamRepository,
     }
 
     @Transactional
-    fun findById(examId: Long): Exam {
+    fun findById(examId: Long): Exam? {
         return examRepository.findOne(examId)
     }
 
     @Transactional
     fun update(examUpdateJson: ExamUpdateJson) {
         val exam = findById(examUpdateJson.examId) ?: throw NotFoundException("examId : $examUpdateJson.examId")
-        if (exam.totalNumber!! < examUpdateJson.updateObtainMark)
+        if (exam.totalNumber < examUpdateJson.updateObtainMark)
             throw IllegalStateException("updated mark : ${examUpdateJson.updateObtainMark} is grater then " +
                     "total mark ${exam.totalNumber} of exam")
         exam.obtainedNumber = examUpdateJson.updateObtainMark
@@ -63,7 +63,7 @@ class ExamService(private val examRepository: ExamRepository,
         }
 
         val studentRollNumberToResultMap = resultList.associateBy(
-                { it.roleNumber }, { it.exam.map { (it.percentile!! * it.obtainedNumber!!) / 100 }.sum() })
+                { it.roleNumber }, { it.exam.map { (it.percentile * it.obtainedNumber) / 100 }.sum() })
 
         resultList.forEach {
             val student = ExamResponse.Student().apply {
@@ -111,7 +111,7 @@ class ExamService(private val examRepository: ExamRepository,
         })
 
         response.resultBySubject = resultList.associateBy(
-                { it.subject }, { it.exam.map { (it.percentile!! * it.obtainedNumber!!) / 100 }.sum() })
+                { it.subject }, { it.exam.map { (it.percentile * it.obtainedNumber) / 100 }.sum() })
         return response
     }
 
@@ -138,7 +138,7 @@ class ExamService(private val examRepository: ExamRepository,
                                                date: Date,
                                                examType: ExamType,
                                                orgId: Long): ExamOfSubjectUpdateDTO {
-        val examOfSubjectUpdateDTO: ExamOfSubjectUpdateDTO = ExamOfSubjectUpdateDTO()
+        val examOfSubjectUpdateDTO = ExamOfSubjectUpdateDTO()
         examOfSubjectUpdateDTO.classId = classService.findById(classId, orgId)!!.id ?: throw NotFoundException("classId : $classId")
         examOfSubjectUpdateDTO.subjectId = subjectService.findById(subjectId)!!.id ?: throw NotFoundException("subjectId : $subjectId")
         examOfSubjectUpdateDTO.examType = examType
@@ -156,12 +156,12 @@ class ExamService(private val examRepository: ExamRepository,
         examOfSubjectUpdateDTO.resultOfASubjectByExamTypeDate = results
                 .map {
             val exam = it.exam[0]
-            ExamOfStudent(studentId = exam.student!!.id!!,
+                    ExamOfStudent(studentId = exam.student.id!!,
                     name = it.person!!,
                     rollNumber = it.roleNumber!!,
                     examId = exam.id!!,
-                    obtainMark = exam.obtainedNumber!!,
-                    p = exam.isPresent!!)
+                            obtainMark = exam.obtainedNumber,
+                            p = exam.isPresent)
         }
                 .sortedBy { it.rollNumber }
                 .toMutableList()
