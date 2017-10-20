@@ -39,14 +39,14 @@ class StudentRestController(val studentService: StudentService) {
         }
 
         val student = Student()
-        student.person = Person().apply {
-            firstName = studentJson.firstName
-            lastName = studentJson.lastName
-            dateOfBirth = _dateOfBirth
-            sex = studentJson.sex
-            religion = studentJson.religion
-            organization = getOrganizationFromSession(request)
-        }
+        student.person = Person(
+                firstName = studentJson.firstName,
+                lastName = studentJson.lastName,
+                dateOfBirth = _dateOfBirth,
+                sex = studentJson.sex,
+                religion = studentJson.religion,
+                organization = getOrganizationFromSession(request),
+                contactInformationList = mutableListOf())
         studentService.create(student)
         logger.warn("created student " + student.toString())
         return responseOK(student)
@@ -107,25 +107,23 @@ class StudentRestController(val studentService: StudentService) {
                 ?: return responseError("Student not found with given student id ${studentContact.studentId}")
         if (null == student.person?.contactInformationList) {
             student.person?.contactInformationList = mutableListOf(
-                    ContactInformation().apply {
-                        name = studentContact.name
-                        address = studentContact.address
-                        phone_1 = studentContact.phone_1
-                        phone_2 = studentContact.phone_2
-                        phone_3 = studentContact.phone_3
-                        contactType = studentContact.contactType
-
-                    })
+                    ContactInformation(
+                            name = studentContact.name,
+                            address = studentContact.address,
+                            phone_1 = studentContact.phone_1,
+                            phone_2 = studentContact.phone_2,
+                            phone_3 = studentContact.phone_3,
+                            contactType = studentContact.contactType))
         } else {
-            student.person?.contactInformationList?.add(ContactInformation().apply {
-                name = studentContact.name
-                address = studentContact.address
-                phone_1 = studentContact.phone_1
-                phone_2 = studentContact.phone_2
-                phone_3 = studentContact.phone_3
+            student.person?.contactInformationList?.add(ContactInformation(
+                    name = studentContact.name,
+                    address = studentContact.address,
+                    phone_1 = studentContact.phone_1,
+                    phone_2 = studentContact.phone_2,
+                    phone_3 = studentContact.phone_3,
                 contactType = studentContact.contactType
 
-            })
+            ))
         }
         return responseOK(studentService.create(student))
     }

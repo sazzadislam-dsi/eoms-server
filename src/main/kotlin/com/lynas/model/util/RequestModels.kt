@@ -59,10 +59,9 @@ data class FeeStudentNew(
         val paymentDate: String = ""
 )
 
-class PersonContact {
-    var personId: Long = 0
-    var contactInformation: ContactInformation = ContactInformation()
-}
+data class PersonContact(
+        var personId: Long,
+        var contactInformation: ContactInformation)
 
 
 data class StudentContact(

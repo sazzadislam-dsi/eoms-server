@@ -38,23 +38,23 @@ class ExamRestController(val examService: ExamService,
         val _subject = subjectService.findById(examJson.subjectId)
                 ?: return responseError("SubjectId ${examJson.subjectId}".err_notFound())
         val listOfExam = examJson.examJson.map { (mark, studentId, _isPresent) ->
-            Exam().apply {
-                examType = examJson.examType
-                totalNumber = examJson.totalMark
-                percentile = examJson.percentile
-                isPresent = _isPresent
-                date = _date
-                year = examJson.year
-                cls = course
-                subject = _subject
-                obtainedNumber = mark
+            Exam(
+                    examType = examJson.examType,
+                    totalNumber = examJson.totalMark,
+                    percentile = examJson.percentile,
+                    isPresent = _isPresent,
+                    date = _date,
+                    year = examJson.year,
+                    cls = course,
+                    subject = _subject,
+                    obtainedNumber = mark,
                 student = studentService.findById(studentId, organization.id!!)
                         ?: return responseError(ErrorObject(
                         examJson,
                         "subjectId",
                         "student not found with studentID: $studentId",
                         ""))
-            }
+            )
         }
         examService.create(listOfExam)
         return responseOK(examJson)

@@ -18,5 +18,5 @@ class ContactInformation(
         var phone_2: String,
         var phone_3: String,
         var contactType: ContactType) {
-    constructor() : this(null, "", "", "", "", "", ContactType.PRIMARY)
+    protected constructor() : this(null, "", "", "", "", "", ContactType.PRIMARY)
 }

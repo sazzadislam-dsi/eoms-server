@@ -18,6 +18,4 @@ class Course(
         var shift: Shift,
         var section: Section,
         @Relationship(type = "classBelongsToAnOrganization", direction = Relationship.OUTGOING)
-        var organization: Organization) {
-    constructor() : this(null, "", Shift.MORNING, Section.SECTION_1, Organization())
-}
+        var organization: Organization)

@@ -18,16 +18,18 @@ class AppUserController(val appUserService: AppUserService) {
 
     @PostMapping
     fun post(@RequestBody appUser: AppUser, request: HttpServletRequest): AppUser? {
-        val appUserToSave = appUser.copy(
-            password = encodePassword(appUser.password),
-            organization = getOrganizationFromSession(request)
+        val appUserToSave = AppUser(
+                username = appUser.username,
+                authorities = appUser.authorities,
+                password = encodePassword(appUser.password),
+                organization = getOrganizationFromSession(request)
         )
         return appUserService.create(appUserToSave)
     }
 
     @GetMapping
     fun get(@PathVariable username: String): AppUser?
-        = appUserService.findByUserName(username)
+            = appUserService.findByUserName(username)
 
 }
 

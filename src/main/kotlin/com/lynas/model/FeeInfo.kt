@@ -25,6 +25,4 @@ class FeeInfo(
         var dateModified: Date,
 
         @Relationship(type = "feeInfoOfCourse", direction = Relationship.OUTGOING)
-        var course: Course) {
-        constructor() : this(null, "", 0.0, 0, Date(), Date(), Date(), Course())
-}
+        var course: Course)

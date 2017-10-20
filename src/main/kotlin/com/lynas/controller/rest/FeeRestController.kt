@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -35,14 +36,15 @@ class FeeRestController(val feeInfoService: FeeInfoService,
     fun post(@RequestBody feeInfoJson: FeeInfoJson, request: HttpServletRequest): ResponseEntity<*> {
         val courseById = classService.findById(id = feeInfoJson.classId, orgId = getCurrentUserOrganizationId(request))
                 ?: return responseError(ErrorObject(feeInfoJson, "classId", "class Not Found With Given ID", ""))
-        val feeInfo = FeeInfo().apply {
-            type = feeInfoJson.type
-            amount = feeInfoJson.amount
-            year = feeInfoJson.year
-            lastDate = feeInfoJson.lastDate?.convertToDate()
-                    ?: return responseError(ErrorObject(feeInfoJson, "lastDate", "parseError", "dd-mm-yyyy"))
-            course = courseById
-        }
+        val feeInfo = FeeInfo(
+                type = feeInfoJson.type,
+                amount = feeInfoJson.amount,
+                year = feeInfoJson.year,
+                lastDate = feeInfoJson.lastDate?.convertToDate()
+                        ?: return responseError(ErrorObject(feeInfoJson, "lastDate", "parseError", "dd-mm-yyyy")),
+                course = courseById,
+                dateCreated = Date(),
+                dateModified = Date())
         return responseOK(feeInfoService.create(feeInfo))
     }
 

@@ -64,6 +64,7 @@ class StudentController(val studentService: StudentService,
     fun viewDetails(@PathVariable studentId: Long, model: Model, request: HttpServletRequest): String {
         val student = studentService.findById(studentId, getCurrentUserOrganizationId(request)) ?: throw NotFoundException()
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!)?.contactInformationList
+                ?: mutableListOf()
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
         val studentFeeList = feeInfoService.findStudentFeeInfoByStudent(studentId)
@@ -80,6 +81,7 @@ class StudentController(val studentService: StudentService,
         val organization = getOrganizationFromSession(request)
         val student = studentService.findById(studentId, organization.id!!) ?: throw NotFoundException()
         student.person?.contactInformationList = personService.findPersonById(student.person?.id!!)?.contactInformationList
+                ?: mutableListOf()
         model.addAttribute("student", student)
         model.addAttribute("studentJson", ObjectMapper().writeValueAsString(student))
         val studentFeeList = feeInfoService.findStudentFeeInfoByStudent(studentId)
@@ -89,9 +91,7 @@ class StudentController(val studentService: StudentService,
         val resultList = examServiceJava.getResultOfClass(classId, year, organization.id!!)
         var result: ExamClassResponse1? = null
         if (!resultList.isEmpty()) {
-            result = resultList
-                    .filter { it.studentId == studentId }
-                    .first()
+            result = resultList.first { it.studentId == studentId }
         }
 
         model.addAttribute("result", result)

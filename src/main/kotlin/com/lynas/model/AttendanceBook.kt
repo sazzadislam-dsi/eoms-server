@@ -19,6 +19,4 @@ class AttendanceBook(
         @DateLong
         var attendanceDate: Date,
         @Relationship(type = "studentsAttendance", direction = Relationship.OUTGOING)
-        var studentAttendances: MutableSet<StudentAttendance>) {
-    constructor() : this(null, Course(), Date(), mutableSetOf<StudentAttendance>())
-}
+        var studentAttendances: MutableSet<StudentAttendance>)

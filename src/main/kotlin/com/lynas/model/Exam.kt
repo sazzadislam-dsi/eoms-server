@@ -10,7 +10,7 @@ import java.util.*
  * Created by sazzad on 8/31/16
  */
 @NodeEntity
-data class Exam (
+class Exam(
     @GraphId
     var id: Long? = null,
     var examType: ExamType,
@@ -26,6 +26,4 @@ data class Exam (
     @Relationship(type = "examOfSubject", direction = Relationship.OUTGOING)
     var subject: Subject,
     @Relationship(type = "examInfoOfPerson", direction = Relationship.OUTGOING)
-    var student: Student){
-    constructor() : this(null, ExamType.FIRST_TERM, 0, 0.0, 0.0, 100.0, true, Date(), Course(), Subject(), Student())
-}
+    var student: Student)

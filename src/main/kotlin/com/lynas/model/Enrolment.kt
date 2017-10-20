@@ -18,6 +18,4 @@ class Enrolment(
         @StartNode
         var student: Student,
         @EndNode
-        var cls: Course) {
-    constructor() : this(null, 0, 0, Student(), Course())
-}
+        var cls: Course)

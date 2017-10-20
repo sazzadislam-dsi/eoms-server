@@ -14,13 +14,11 @@ import org.neo4j.ogm.annotation.Relationship
 
 
 @NodeEntity
-data class AppUser(
+class AppUser(
         @GraphId
         var id: Long? = null,
         var username: String,
         var password: String,
         var authorities: String,
         @Relationship(type = "appUserBelongsToAnOrganization", direction = Relationship.OUTGOING)
-        var organization: Organization) {
-    constructor() : this(0L, "", "", "", Organization())
-}
+        var organization: Organization)

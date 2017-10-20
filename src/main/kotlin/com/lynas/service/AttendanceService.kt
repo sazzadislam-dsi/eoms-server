@@ -35,13 +35,13 @@ class AttendanceService constructor(val studentService: StudentService,
             }
         }.toMutableSet()
 
-        val attendanceBook = AttendanceBook().apply {
-            studentAttendances = set
-            attendanceDate = _attendanceDate
+        val attendanceBook = AttendanceBook(
+                studentAttendances = set,
+                attendanceDate = _attendanceDate,
             course = classService.findById(attendanceJsonWrapper.classId, orgId)
                     ?: throw NullPointerException(
                     "Course or class not found with given classID : ${attendanceJsonWrapper.classId}")
-        }
+        )
         return attendanceRepository.save(attendanceBook)
     }
 
