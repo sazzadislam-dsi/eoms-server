@@ -9,18 +9,14 @@ import org.neo4j.ogm.annotation.NodeEntity
  */
 
 @NodeEntity
-class ContactInformation {
-    @GraphId
-    var id: Long? = null
-    var name: String? = null
-    var address: String? = null
-    var phone_1: String? = null
-    var phone_2: String? = null
-    var phone_3: String? = null
-    var contactType: ContactType = ContactType.PRIMARY
-    override fun toString(): String {
-        return "ContactInformation(id=$id, name=$name, address=$address, phone_1=$phone_1, phone_2=$phone_2, phone_3=$phone_3, contactType=$contactType)"
-    }
-
-
+class ContactInformation(
+        @GraphId
+        var id: Long? = null,
+        var name: String,
+        var address: String,
+        var phone_1: String,
+        var phone_2: String,
+        var phone_3: String,
+        var contactType: ContactType) {
+    constructor() : this(null, "", "", "", "", "", ContactType.PRIMARY)
 }
