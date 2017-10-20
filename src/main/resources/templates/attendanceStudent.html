@@ -20,7 +20,7 @@
                     <label>Date</label>
                     <input th:required="required" type="text" class="form-control date" id="date" name="date"
                            placeholder="15-12-1989" />
-                    <table class="table table-striped">
+                    <table class="table table-striped student-list">
                         <thead>
                         <tr>
                             <th>Role Number</th>
@@ -56,11 +56,10 @@
     };
     $("form").submit(function (event) {
         var rows = [];
-        $('table tr').each(function (i, n) {
+        $('.student-list tr').each(function (i, n) {
             if (i != 0) {
                 var $row = $(n);
                 var val = $row.find('td:eq(2)').find('input').is(':checked');
-                console.log("val " + val);
                 rows.push({
                     i: val,
                     t: $row.find('td:eq(3)').find('input').val()
@@ -69,7 +68,6 @@
         });
         var data = "{\"attendanceJson\":" + JSON.stringify(rows) + ","
             + "\"classId\":" + $('#clsId').val() + "," + "\"date\":\"" + $('#date').val() + "\"}";
-        console.log(data);
         $.ajax({
             url: "/attendances",
             type: "POST",
