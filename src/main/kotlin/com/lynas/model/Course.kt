@@ -11,7 +11,7 @@ import org.neo4j.ogm.annotation.Relationship
  * Created by LynAs on 7/23/2016
  */
 @NodeEntity(label = "Class")
-class Course(
+data class Course(
         @GraphId
         var id: Long? = null,
         var name: String,

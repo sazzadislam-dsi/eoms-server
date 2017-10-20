@@ -10,7 +10,7 @@ import org.neo4j.ogm.annotation.StartNode
  */
 
 @RelationshipEntity(type = "Enrolment")
-class Enrolment(
+data class Enrolment(
         @GraphId
         var id: Long? = null,
         var year: Int,

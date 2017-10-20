@@ -10,7 +10,7 @@ import java.util.*
  * Created by sazzad on 8/31/16
  */
 @NodeEntity
-class Exam(
+data class Exam(
         @GraphId
         var id: Long? = null,
         var examType: ExamType,

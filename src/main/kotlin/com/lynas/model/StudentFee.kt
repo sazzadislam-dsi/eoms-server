@@ -12,7 +12,7 @@ import java.util.*
  */
 
 @RelationshipEntity(type = "StudentFee")
-class StudentFee(
+data class StudentFee(
         @GraphId
         var id: Long? = null,
         @DateLong

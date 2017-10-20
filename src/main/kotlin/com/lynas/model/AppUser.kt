@@ -14,7 +14,7 @@ import org.neo4j.ogm.annotation.Relationship
 
 
 @NodeEntity
-class AppUser(
+data class AppUser(
         @GraphId
         var id: Long? = null,
         var username: String,

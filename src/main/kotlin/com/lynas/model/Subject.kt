@@ -9,7 +9,7 @@ import org.neo4j.ogm.annotation.Relationship
  */
 
 @NodeEntity
-class Subject(
+data class Subject(
         @GraphId
         var id: Long? = null,
         var subjectName: String,

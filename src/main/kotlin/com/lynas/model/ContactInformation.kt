@@ -9,7 +9,7 @@ import org.neo4j.ogm.annotation.NodeEntity
  */
 
 @NodeEntity
-class ContactInformation(
+data class ContactInformation(
         @GraphId
         var id: Long? = null,
         var name: String,

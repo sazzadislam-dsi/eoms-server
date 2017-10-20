@@ -7,7 +7,7 @@ import org.neo4j.ogm.annotation.NodeEntity
  * Created by LynAs on 7/23/2016
  */
 @NodeEntity
-class OrganizationInfo(
+data class OrganizationInfo(
         @GraphId
         var id: Long? = null,
         var founderName: String,

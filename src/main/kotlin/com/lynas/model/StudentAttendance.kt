@@ -9,7 +9,7 @@ import org.neo4j.ogm.annotation.Relationship
  */
 
 @NodeEntity
-class StudentAttendance(
+data class StudentAttendance(
         @GraphId
         var id: Long? = null,
         @Relationship(type = "ofAStudent", direction = Relationship.OUTGOING)

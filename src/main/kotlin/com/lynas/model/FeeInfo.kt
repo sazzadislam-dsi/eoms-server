@@ -11,7 +11,7 @@ import java.util.*
  */
 
 @NodeEntity
-class FeeInfo(
+data class FeeInfo(
         @GraphId
         var id: Long? = null,
         var type: String,

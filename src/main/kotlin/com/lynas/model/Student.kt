@@ -10,7 +10,7 @@ import java.util.*
  * Created by sazzad on 8/8/16
  */
 @NodeEntity
-class Student(
+data class Student(
         @GraphId
         var id: Long? = null,
         @Relationship(type = "studentIsAPerson")

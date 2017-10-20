@@ -11,7 +11,7 @@ import java.util.*
  */
 
 @NodeEntity
-class AttendanceBook(
+data class AttendanceBook(
         @GraphId
         var id: Long? = null,
         @Relationship(type = "attendanceBookOfAClass", direction = Relationship.INCOMING)
