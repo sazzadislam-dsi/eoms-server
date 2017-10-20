@@ -11,13 +11,16 @@ import org.neo4j.ogm.annotation.Relationship
  * domain must be normal class coz it needs no arg constructor and field
  * needs to be var so that it can be re assign by neo4j ogm
  */
+
+
 @NodeEntity
-class AppUser {
-    @GraphId
-    var id: Long? = null
-    var username: String? = null
-    var password: String? = null
-    var authorities: String? = null
-    @Relationship(type = "appUserBelongsToAnOrganization", direction = Relationship.OUTGOING)
-    var organization: Organization? = null
+data class AppUser(
+        @GraphId
+        var id: Long? = null,
+        var username: String,
+        var password: String,
+        var authorities: String,
+        @Relationship(type = "appUserBelongsToAnOrganization", direction = Relationship.OUTGOING)
+        var organization: Organization) {
+    constructor() : this(0L, "", "", "", Organization())
 }

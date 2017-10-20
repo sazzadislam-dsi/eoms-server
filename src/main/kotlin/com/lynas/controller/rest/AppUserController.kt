@@ -18,11 +18,11 @@ class AppUserController(val appUserService: AppUserService) {
 
     @PostMapping
     fun post(@RequestBody appUser: AppUser, request: HttpServletRequest): AppUser? {
-
-        return appUserService.create(appUser.apply {
-            password = encodePassword(appUser.password)
+        val appUserToSave = appUser.copy(
+            password = encodePassword(appUser.password),
             organization = getOrganizationFromSession(request)
-        })
+        )
+        return appUserService.create(appUserToSave)
     }
 
     @GetMapping
