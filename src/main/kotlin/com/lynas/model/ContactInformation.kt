@@ -17,6 +17,4 @@ class ContactInformation(
         var phone_1: String,
         var phone_2: String,
         var phone_3: String,
-        var contactType: ContactType) {
-    protected constructor() : this(null, "", "", "", "", "", ContactType.PRIMARY)
-}
+        var contactType: ContactType)
