@@ -37,7 +37,7 @@ class ExamRestController(val examService: ExamService,
                 ?: return responseError("ClassId/CourseId ${examJson.classId}".err_notFound())
         val _subject = subjectService.findById(examJson.subjectId)
                 ?: return responseError("SubjectId ${examJson.subjectId}".err_notFound())
-        val listOfExam = examJson.examJson.map { (mark, studentId, _isPresent) ->
+        val listOfExam = examJson.examJson.filter { (_, studentId, _) -> studentId != 0L }.map { (mark, studentId, _isPresent) ->
             Exam(
                     examType = examJson.examType,
                     totalNumber = examJson.totalMark,
@@ -48,12 +48,12 @@ class ExamRestController(val examService: ExamService,
                     cls = course,
                     subject = _subject,
                     obtainedNumber = mark,
-                student = studentService.findById(studentId, organization.id!!)
-                        ?: return responseError(ErrorObject(
-                        examJson,
-                        "subjectId",
-                        "student not found with studentID: $studentId",
-                        ""))
+                    student = studentService.findById(studentId, organization.id!!)
+                            ?: return responseError(ErrorObject(
+                            examJson,
+                            "subjectId",
+                            "student not found with studentID: $studentId",
+                            ""))
             )
         }
         examService.create(listOfExam)
@@ -128,7 +128,7 @@ class ExamRestController(val examService: ExamService,
                         name = it.value[0].person
                         resultOfSubjects = it.value.associateBy({ it.subject }, {
                             it.exam
-                                    .map { (it.percentile!! * it.obtainedNumber!!) / 100 }
+                                    .map { (it.percentile * it.obtainedNumber) / 100 }
                                     .sum()
                         })
                     }
