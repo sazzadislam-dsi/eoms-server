@@ -2,6 +2,7 @@ package com.lynas.controller.rest
 
 import com.lynas.exception.DuplicateCourseException
 import com.lynas.model.Course
+import com.lynas.model.util.CourseJson
 import com.lynas.service.ClassService
 import com.lynas.util.*
 import org.springframework.dao.DuplicateKeyException
@@ -16,24 +17,27 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("classes")
-class ClassRestController (val classService: ClassService) {
+class ClassRestController(val classService: ClassService) {
 
     private val logger = getLogger(this.javaClass)
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun post(@RequestBody cls: Course, request: HttpServletRequest): ResponseEntity<*> {
+    fun post(@RequestBody cls: CourseJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Received Class :: " + cls.toString())
-        var createdClass = cls
-        createdClass.organization = getOrganizationFromSession(request)
+        var createdClass = Course(
+                name = cls.name,
+                shift = cls.shift,
+                section = cls.section,
+                organization = getOrganizationFromSession(request))
+
 
         try {
             createdClass = classService.create(createdClass)
-        }
-        catch (ex: DuplicateCourseException) {
+        } catch (ex: DuplicateCourseException) {
             logger.warn("Duplicate class info found, class name [{}], shift [{}], section [{}]", cls.name, cls.shift, cls.section)
             return responseConflict(cls)
-        }catch (ex: DuplicateKeyException){
+        } catch (ex: DuplicateKeyException) {
             return responseConflict(cls)
         }
         logger.info("Saved Class :: " + createdClass.toString())

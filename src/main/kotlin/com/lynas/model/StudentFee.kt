@@ -12,15 +12,12 @@ import java.util.*
  */
 
 @RelationshipEntity(type = "StudentFee")
-class StudentFee {
-
-    @GraphId
-    var id: Long? = null
-    @DateLong
-    var paymentDate: Date? = null
-    @StartNode
-    var student: Student? = null
-    @EndNode
-    var feeInfo: FeeInfo? = null
-
-}
+data class StudentFee(
+        @GraphId
+        var id: Long? = null,
+        @DateLong
+        var paymentDate: Date,
+        @StartNode
+        var student: Student,
+        @EndNode
+        var feeInfo: FeeInfo)

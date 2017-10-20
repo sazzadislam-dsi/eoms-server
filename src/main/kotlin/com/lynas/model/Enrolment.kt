@@ -10,13 +10,12 @@ import org.neo4j.ogm.annotation.StartNode
  */
 
 @RelationshipEntity(type = "Enrolment")
-class Enrolment {
-    @GraphId
-    var id: Long? = null
-    var year: Int? = null
-    var roleNumber: Int? = null
-    @StartNode
-    var student: Student? = null
-    @EndNode
-    var cls: Course? = null
-}
+data class Enrolment(
+        @GraphId
+        var id: Long? = null,
+        var year: Int,
+        var roleNumber: Int,
+        @StartNode
+        var student: Student,
+        @EndNode
+        var cls: Course)

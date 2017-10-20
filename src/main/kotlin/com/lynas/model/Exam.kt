@@ -10,22 +10,20 @@ import java.util.*
  * Created by sazzad on 8/31/16
  */
 @NodeEntity
-class Exam {
-    @GraphId
-    var id: Long? = null
-    var examType: ExamType? = null
-    var year: Int? = null
-    var totalNumber: Double? = null
-    var obtainedNumber: Double? = null
-    var percentile: Double? = 100.0
-    var isPresent: Boolean? = null
-    var date: Date? = null
+data class Exam(
+        @GraphId
+        var id: Long? = null,
+        var examType: ExamType,
+        var year: Int,
+        var totalNumber: Double,
+        var obtainedNumber: Double,
+        var percentile: Double,
+        var isPresent: Boolean,
+        var date: Date,
 
-    @Relationship(type = "examOfClass", direction = Relationship.OUTGOING)
-    var cls: Course? = null
-    @Relationship(type = "examOfSubject", direction = Relationship.OUTGOING)
-    var subject: Subject? = null
-    @Relationship(type = "examInfoOfPerson", direction = Relationship.OUTGOING)
-    var student: Student? = null
-
-}
+        @Relationship(type = "examOfClass", direction = Relationship.OUTGOING)
+        var cls: Course,
+        @Relationship(type = "examOfSubject", direction = Relationship.OUTGOING)
+        var subject: Subject,
+        @Relationship(type = "examInfoOfPerson", direction = Relationship.OUTGOING)
+        var student: Student)

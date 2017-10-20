@@ -1,6 +1,7 @@
 package com.lynas.controller.rest
 
 import com.lynas.model.Exam
+import com.lynas.model.response.ErrorObject
 import com.lynas.model.response.ExamClassResponse
 import com.lynas.model.util.ExamJsonWrapper
 import com.lynas.model.util.ExamUpdateJson
@@ -9,7 +10,6 @@ import com.lynas.util.*
 import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.text.ParseException
 import java.time.LocalDate
 import java.util.*
 import javax.servlet.http.HttpServletRequest
@@ -32,35 +32,46 @@ class ExamRestController(val examService: ExamService,
     fun post(@RequestBody examJson: ExamJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("hit in create controller with {}", examJson)
         val organization = getOrganizationFromSession(request)
-        val _date : Date? = try {examJson.date.convertToDate()} catch (e : ParseException) {return responseError(examJson)}
+        val _date: Date = examJson.date.convertToDate()
         val course = classService.findById(examJson.classId, organization.id!!)
                 ?: return responseError("ClassId/CourseId ${examJson.classId}".err_notFound())
         val _subject = subjectService.findById(examJson.subjectId)
                 ?: return responseError("SubjectId ${examJson.subjectId}".err_notFound())
-        val listOfExam = examJson.examJson.map {
-            (mark, studentId, _isPresent) ->
-            Exam().apply {
-                examType = examJson.examType
-                totalNumber = examJson.totalMark
-                percentile = examJson.percentile
-                isPresent = _isPresent
-                date = _date
-                year = examJson.year
-                cls = course
-                subject = _subject
-                obtainedNumber = mark
+        val listOfExam = examJson.examJson.map { (mark, studentId, _isPresent) ->
+            Exam(
+                    examType = examJson.examType,
+                    totalNumber = examJson.totalMark,
+                    percentile = examJson.percentile,
+                    isPresent = _isPresent,
+                    date = _date,
+                    year = examJson.year,
+                    cls = course,
+                    subject = _subject,
+                    obtainedNumber = mark,
                 student = studentService.findById(studentId, organization.id!!)
-            }
+                        ?: return responseError(ErrorObject(
+                        examJson,
+                        "subjectId",
+                        "student not found with studentID: $studentId",
+                        ""))
+            )
         }
         examService.create(listOfExam)
         return responseOK(examJson)
     }
 
     @PatchMapping
-    fun updateExamMark(@RequestBody examUpdateJson: ExamUpdateJson, request: HttpServletRequest) : ResponseEntity<*> {
+    fun updateExamMark(@RequestBody examUpdateJson: ExamUpdateJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Update examId [{}], with updated obtain mark [{}]", examUpdateJson.examId, examUpdateJson.updateObtainMark)
-        examService.update(examUpdateJson)
-        return responseOK(examUpdateJson)
+        return try {
+            examService.update(examUpdateJson)
+            responseOK(examUpdateJson)
+        } catch (e: NotFoundException) {
+            responseError(e.message ?: "")
+        } catch (e: Exception) {
+            responseError(e.message
+                    ?: "(ExamRestController:resultOfClassBySubject:Exception) Error check server")
+        }
     }
 
     @GetMapping("/class/{classId}/subject/{subjectId}/year/{_year}/results")
@@ -95,8 +106,8 @@ class ExamRestController(val examService: ExamService,
 
     @GetMapping("/class/{classId}/student/{studentId}/year/{_year}/results")
     fun resultOfStudentByYear(@PathVariable classId: Long,
-                               @PathVariable studentId: Long,
-                               @PathVariable _year: Int,
+                              @PathVariable studentId: Long,
+                              @PathVariable _year: Int,
                               request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, studentId, _year)
         val organization = getOrganizationFromSession(request)
@@ -105,21 +116,23 @@ class ExamRestController(val examService: ExamService,
 
     @GetMapping("/class/{classId}/year/{_year}/results")
     fun resultOfClassByYear(@PathVariable classId: Long,
-                               @PathVariable _year: Int,
-                              request: HttpServletRequest): ResponseEntity<*> {
+                            @PathVariable _year: Int,
+                            request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, _year)
         val organization = getOrganizationFromSession(request)
         // TODO why following code was written
         val result = examService.resultOfClass(classId, _year, organization.id!!).groupBy { it.roleNumber }
-                .map { ExamClassResponse().apply {
-                    roll = it.key
-                    name = it.value[0].person
-                    resultOfSubjects = it.value.associateBy({it.subject}, {
-                        it.exam
-                                .map { (it.percentile!! * it.obtainedNumber!!) / 100 }
-                                .sum()
-                    })
-                } }
+                .map {
+                    ExamClassResponse().apply {
+                        roll = it.key
+                        name = it.value[0].person
+                        resultOfSubjects = it.value.associateBy({ it.subject }, {
+                            it.exam
+                                    .map { (it.percentile!! * it.obtainedNumber!!) / 100 }
+                                    .sum()
+                        })
+                    }
+                }
 
         return responseOK(examService.resultOfClass(classId, _year, organization.id!!))
     }

@@ -67,7 +67,7 @@ class ClassController constructor(val classService: ClassService,
         model.addAttribute("cls", classService.findById(classId, organization.id!!))
         model.addAttribute("clsSize", classDetails.size)
         val feeInfoList = feeInfoService.findFeeInfoByClass(classId)
-                .filter { it.course?.organization?.id == getOrganizationFromSession(request).id }
+                .filter { it.course.organization.id == getOrganizationFromSession(request).id }
                 .sortedBy { it.type }
         model.addAttribute("feeList", feeInfoList)
         model.addAttribute("subjectList", subjectService.findAllByClassId(classId, organization.id!!))

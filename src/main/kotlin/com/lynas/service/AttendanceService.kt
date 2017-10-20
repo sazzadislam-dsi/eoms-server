@@ -28,18 +28,21 @@ class AttendanceService constructor(val studentService: StudentService,
                 classId = attendanceJsonWrapper.classId,
                 orgId = orgId)
 
-        val set = attendanceJsonWrapper.attendanceJson.map { i ->
-            StudentAttendance().apply {
-                student = studentService.findById(i.t, orgId)
-                attendanceStatus = i.i
-            }
+        //TODO catch this exception properly
+        val set = attendanceJsonWrapper.attendanceJson.map {
+            StudentAttendance(
+                    student = studentService.findById(it.t, orgId)
+                            ?: throw NullPointerException("student Not found with given studentId: ${it.t}"),
+                    attendanceStatus = it.i)
         }.toMutableSet()
 
-        val attendanceBook = AttendanceBook().apply {
-            studentAttendances = set
-            attendanceDate = _attendanceDate
+        val attendanceBook = AttendanceBook(
+                studentAttendances = set,
+                attendanceDate = _attendanceDate,
             course = classService.findById(attendanceJsonWrapper.classId, orgId)
-        }
+                    ?: throw NullPointerException(
+                    "Course or class not found with given classID : ${attendanceJsonWrapper.classId}")
+        )
         return attendanceRepository.save(attendanceBook)
     }
 

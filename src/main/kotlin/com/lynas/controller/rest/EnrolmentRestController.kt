@@ -43,12 +43,11 @@ class EnrolmentRestController(val enrolmentService: EnrolmentService,
         val _course = classService.findById(enrolmentJson.classId, organizationId)
                 ?: return responseError("Class/Course not found with given class/course id" + enrolmentJson.classId)
 
-        val enrolment: Enrolment = Enrolment().apply {
-            year = enrolmentJson.year
-            roleNumber = enrolmentJson.roleNumber
-            student = _student
-            cls = _course
-        }
+        val enrolment: Enrolment = Enrolment(
+                year = enrolmentJson.year,
+                roleNumber = enrolmentJson.roleNumber,
+                student = _student,
+                cls = _course)
 
         enrolmentService.create(enrolment)
         return responseOK(enrolment)

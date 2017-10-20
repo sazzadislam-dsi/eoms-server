@@ -59,10 +59,9 @@ data class FeeStudentNew(
         val paymentDate: String = ""
 )
 
-class PersonContact {
-    var personId: Long = 0
-    var contactInformation: ContactInformation = ContactInformation()
-}
+data class PersonContact(
+        var personId: Long,
+        var contactInformation: ContactInformation)
 
 
 data class StudentContact(
@@ -87,9 +86,15 @@ data class StudentJson(
 
 
 data class SubjectPostJson(
+        var subjectName: String,
+        var subjectDescription: String,
+        var subjectBookAuthor: String,
+        var classId: Long
+)
 
-        var subjectName: String? = null,
-        var subjectDescription: String? = null,
-        var subjectBookAuthor: String? = null,
-        var classId: Long? = null
+
+class CourseJson(
+        var name: String,
+        var shift: Shift,
+        var section: Section
 )

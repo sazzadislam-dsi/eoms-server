@@ -9,13 +9,9 @@ import org.neo4j.ogm.annotation.Relationship
  */
 
 @NodeEntity
-class StudentAttendance {
-
-    @GraphId
-    var id: Long? = null
-
-    @Relationship(type = "ofAStudent", direction = Relationship.OUTGOING)
-    var student: Student? = null
-
-    var attendanceStatus: Boolean? = null
-}
+data class StudentAttendance(
+        @GraphId
+        var id: Long? = null,
+        @Relationship(type = "ofAStudent", direction = Relationship.OUTGOING)
+        var student: Student,
+        var attendanceStatus: Boolean)

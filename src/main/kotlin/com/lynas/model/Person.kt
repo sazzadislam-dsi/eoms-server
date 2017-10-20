@@ -15,27 +15,27 @@ import java.util.*
 
 
 @NodeEntity
-open class Person {
-    @GraphId
-    var id: Long? = null
-    var firstName: String? = null
-    var lastName: String? = null
-    @DateLong
-    var dateOfBirth: Date? = null
-    var sex: Sex? = null
-    var religion: Religion? = null
+data class Person(
+        @GraphId
+        var id: Long? = null,
+        var firstName: String,
+        var lastName: String,
+        @DateLong
+        var dateOfBirth: Date,
+        var sex: Sex,
+        var religion: Religion,
 
-    @Relationship(type = "personBelongsToAnOrganization")
-    var organization: Organization? = null
+        @Relationship(type = "personBelongsToAnOrganization")
+        var organization: Organization,
 
-    @Relationship(type = "personHasListOfContactInformation", direction = Relationship.INCOMING)
-    var contactInformationList: MutableList<ContactInformation>? = null
+        @Relationship(type = "personHasListOfContactInformation", direction = Relationship.INCOMING)
+        var contactInformationList: MutableList<ContactInformation>) {
 
     override fun toString(): String {
         return "Person(firstName='$firstName', lastName='$lastName', dateOfBirth=$dateOfBirth, " +
                 "sex=$sex, religion=$religion, organization=$organization, contactInformationList=$contactInformationList)"
     }
 
-    fun dateInString():String = this.dateOfBirth!!.convertToString()
+    fun dateInString(): String = this.dateOfBirth.convertToString()
 
 }

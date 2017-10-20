@@ -2,6 +2,7 @@ package com.lynas.repo
 
 import com.lynas.model.Student
 import com.lynas.model.util.StudentInfoQueryResult
+import org.springframework.data.neo4j.annotation.Depth
 import org.springframework.data.neo4j.annotation.Query
 import org.springframework.data.neo4j.repository.GraphRepository
 
@@ -15,6 +16,7 @@ interface StudentRepository : GraphRepository<Student> {
             "(p)-[:personBelongsToAnOrganization]->(org:Organization)" +
             "WHERE ID(s) = {0} and ID(org) = {1}" +
             "return s, sp, p")
+    @Depth(3)
     fun findOne(id: Long, orgId: Long): Student
 
     @Query("MATCH (s:Student) -[sp:studentIsAPerson]-> (p:Person)," +
