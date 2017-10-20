@@ -30,7 +30,7 @@ fun getLogger(clazz: Class<*>): Logger {
 }
 
 fun verifyClassOrganization(cls: Course, request: HttpServletRequest): Boolean {
-    if (cls.organization?.name.equals((request.session.getAttribute(AppConstant.organization) as Organization).name)) {
+    if (cls.organization.name.equals((request.session.getAttribute(AppConstant.organization) as Organization).name)) {
         return true
     }
     return false
