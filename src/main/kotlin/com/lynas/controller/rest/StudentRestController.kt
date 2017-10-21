@@ -96,28 +96,17 @@ class StudentRestController(val studentService: StudentService) {
         val student = studentService.findById(studentContact.studentId, getCurrentUserOrganizationId(request))
                 ?: return responseError("Student not found with given student id ${studentContact.studentId}")
         if (student.person.contactInformationList == null) {
-            student.person.contactInformationList = mutableListOf(ContactInformation(
-                    name = studentContact.name,
-                    address = studentContact.address,
-                    phone_1 = studentContact.phone_1,
-                    phone_2 = studentContact.phone_2,
-                    phone_3 = studentContact.phone_3,
-                    contactType = studentContact.contactType
-
-            ))
-        } else {
-            student.person.contactInformationList.add(ContactInformation(
-                    name = studentContact.name,
-                    address = studentContact.address,
-                    phone_1 = studentContact.phone_1,
-                    phone_2 = studentContact.phone_2,
-                    phone_3 = studentContact.phone_3,
-                    contactType = studentContact.contactType
-
-            ))
-
+            student.person.contactInformationList = mutableListOf()
         }
+        student.person.contactInformationList.add(ContactInformation(
+                name = studentContact.name,
+                address = studentContact.address,
+                phone_1 = studentContact.phone_1,
+                phone_2 = studentContact.phone_2,
+                phone_3 = studentContact.phone_3,
+                contactType = studentContact.contactType
 
+        ))
         return responseOK(studentService.create(student))
     }
 
