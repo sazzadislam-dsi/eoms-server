@@ -37,7 +37,7 @@ class ExamRestController(val examService: ExamService,
                 ?: return responseError("ClassId/CourseId ${examJson.classId}".err_notFound())
         val _subject = subjectService.findById(examJson.subjectId)
                 ?: return responseError("SubjectId ${examJson.subjectId}".err_notFound())
-        val listOfExam = examJson.examJson.filter { (_, studentId, _) -> studentId != 0L }.map { (mark, studentId, _isPresent) ->
+        val listOfExam = examJson.examJson.map { (mark, studentId, _isPresent) ->
             Exam(
                     examType = examJson.examType,
                     totalNumber = examJson.totalMark,

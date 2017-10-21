@@ -82,7 +82,7 @@
 
 
                 <form  id="form_submit" role="form" method="post" action="/exams">
-                    <table class="table table-striped separator">
+                    <table class="table table-striped separator student-list">
 
                         <th>Role Number</th>
                         <th>Student Name</th>
@@ -118,9 +118,10 @@
     };
     $( "form" ).submit(function( event ) {
         var rows = [];
-        $('table tr').each(function(i, n){
+        $('.student-list tr').each(function(i, n){
             if (i != 0) {
                 var $row = $(n);
+                console.log(i);
                 rows.push({
                     mark:       $row.find('td:eq(2)').find('input').val(),
                     isPresent:  $row.find('td:eq(3)').find('input').is(':checked'),
@@ -128,6 +129,7 @@
                 });
             }
         });
+        console.log(JSON.stringify(rows));
         var data = "{" +
             "\"examJson\":"+ JSON.stringify(rows) + ","
             + "\"classId\":" + $('#clsId').val() + ","
