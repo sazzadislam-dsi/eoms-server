@@ -1,11 +1,9 @@
 package com.lynas.controller.rest
 
-import com.lynas.exception.DuplicateCourseException
 import com.lynas.model.Course
 import com.lynas.model.util.CourseJson
 import com.lynas.service.ClassService
 import com.lynas.util.*
-import org.springframework.dao.DuplicateKeyException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
@@ -30,16 +28,7 @@ class ClassRestController(val classService: ClassService) {
                 shift = cls.shift,
                 section = cls.section,
                 organization = getOrganizationFromSession(request))
-
-
-        try {
-            createdClass = classService.create(createdClass)
-        } catch (ex: DuplicateCourseException) {
-            logger.warn("Duplicate class info found, class name [{}], shift [{}], section [{}]", cls.name, cls.shift, cls.section)
-            return responseConflict(cls)
-        } catch (ex: DuplicateKeyException) {
-            return responseConflict(cls)
-        }
+        createdClass = classService.create(createdClass)
         logger.info("Saved Class :: " + createdClass.toString())
         return responseOK(createdClass)
     }
@@ -52,6 +41,8 @@ class ClassRestController(val classService: ClassService) {
             logger.warn("Request orgName [{}] and session orgName [{}] does not match", name, organization.name)
             return ArrayList()
         }
+        // TODO should not throw NLP for generic purpose
+        // TODO this check should be in validation work
         return classService.findListByOrganizationId(organization.id ?: throw NullPointerException(Constants.ORG_ID_NULL))
     }
 

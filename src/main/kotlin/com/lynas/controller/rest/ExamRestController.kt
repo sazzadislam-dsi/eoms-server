@@ -1,7 +1,5 @@
 package com.lynas.controller.rest
 
-import com.lynas.model.Exam
-import com.lynas.model.response.ErrorObject
 import com.lynas.model.response.ExamClassResponse
 import com.lynas.model.util.ExamJsonWrapper
 import com.lynas.model.util.ExamUpdateJson
@@ -11,7 +9,6 @@ import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
-import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -22,7 +19,6 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("exams")
 class ExamRestController(val examService: ExamService,
                          val classService: ClassService,
-                         val subjectService: SubjectService,
                          val studentService: StudentService,
                          val examServiceJava: ExamServiceJava) {
 
@@ -32,46 +28,16 @@ class ExamRestController(val examService: ExamService,
     fun post(@RequestBody examJson: ExamJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("hit in create controller with {}", examJson)
         val organization = getOrganizationFromSession(request)
-        val _date: Date = examJson.date.convertToDate()
-        val course = classService.findById(examJson.classId, organization.id!!)
-                ?: return responseError("ClassId/CourseId ${examJson.classId}".err_notFound())
-        val _subject = subjectService.findById(examJson.subjectId)
-                ?: return responseError("SubjectId ${examJson.subjectId}".err_notFound())
-        val listOfExam = examJson.examJson.map { (mark, studentId, _isPresent) ->
-            Exam(
-                    examType = examJson.examType,
-                    totalNumber = examJson.totalMark,
-                    percentile = examJson.percentile,
-                    isPresent = _isPresent,
-                    date = _date,
-                    year = examJson.year,
-                    cls = course,
-                    subject = _subject,
-                    obtainedNumber = mark,
-                    student = studentService.findById(studentId, organization.id!!)
-                            ?: return responseError(ErrorObject(
-                            examJson,
-                            "subjectId",
-                            "student not found with studentID: $studentId",
-                            ""))
-            )
-        }
-        examService.create(listOfExam)
+        examService.create(examJson, organization)
         return responseOK(examJson)
     }
 
     @PatchMapping
     fun updateExamMark(@RequestBody examUpdateJson: ExamUpdateJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Update examId [{}], with updated obtain mark [{}]", examUpdateJson.examId, examUpdateJson.updateObtainMark)
-        return try {
-            examService.update(examUpdateJson)
-            responseOK(examUpdateJson)
-        } catch (e: NotFoundException) {
-            responseError(e.message ?: "")
-        } catch (e: Exception) {
-            responseError(e.message
-                    ?: "(ExamRestController:resultOfClassBySubject:Exception) Error check server")
-        }
+        examService.update(examUpdateJson)
+        return responseOK(examUpdateJson)
+
     }
 
     @GetMapping("/class/{classId}/subject/{subjectId}/year/{_year}/results")

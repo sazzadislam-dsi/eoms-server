@@ -30,12 +30,12 @@
         <h1 class="title">Login</h1>
         <form th:action="@{/login}" method="post">
             <div class="input-container">
-                <input name="username" th:required="required"/>
+                <input name="username" value="admin" th:required="required"/>
                 <label>Username</label>
                 <div class="bar"></div>
             </div>
             <div class="input-container">
-                <input th:required="required" name="password" type="password"/>
+                <input th:required="required" value="123456" name="password" type="password"/>
                 <label>Password</label>
                 <div class="bar"></div>
             </div>

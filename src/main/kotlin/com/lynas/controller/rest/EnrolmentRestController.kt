@@ -1,5 +1,7 @@
 package com.lynas.controller.rest
 
+import com.lynas.exception.DuplicateEntryException
+import com.lynas.exception.EntityNotFoundForGivenIdException
 import com.lynas.model.Enrolment
 import com.lynas.model.util.EnrolmentJson
 import com.lynas.service.ClassService
@@ -36,12 +38,12 @@ class EnrolmentRestController(val enrolmentService: EnrolmentService,
                 year = enrolmentJson.year,
                 orgId = organizationId)
         if (!isValid) {
-            return responseError(ErrInf(input = enrolmentJson, msg = message))
+            throw DuplicateEntryException(message)
         }
         val _student = studentService.findById(enrolmentJson.studentId, organizationId)
-                ?: return responseError("Student not found with given student id ${enrolmentJson.studentId}")
+                ?: throw EntityNotFoundForGivenIdException("Student not found with given student id ${enrolmentJson.studentId}")
         val _course = classService.findById(enrolmentJson.classId, organizationId)
-                ?: return responseError("Class/Course not found with given class/course id" + enrolmentJson.classId)
+                ?: throw EntityNotFoundForGivenIdException("Class/Course not found with given class/course id" + enrolmentJson.classId)
 
         val enrolment: Enrolment = Enrolment(
                 year = enrolmentJson.year,

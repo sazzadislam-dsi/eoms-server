@@ -1,5 +1,6 @@
 package com.lynas.controller.rest
 
+import com.lynas.exception.EntityNotFoundForGivenIdException
 import com.lynas.model.Person
 import com.lynas.model.util.PersonContact
 import com.lynas.service.PersonService
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("persons")
-class PersonRestController (val personService: PersonService) {
+class PersonRestController(val personService: PersonService) {
 
     @PostMapping
     fun post(@RequestBody person: Person, request: HttpServletRequest): Person {
@@ -25,16 +26,16 @@ class PersonRestController (val personService: PersonService) {
     @PatchMapping
     fun patch(@RequestBody person: Person): Person? {
         if (null != person.id) {
-            val personFromDB = personService.findPersonById(person.id as Long)
+            val personFromDB = personService.findPersonById(person.id as Long) ?: throw EntityNotFoundForGivenIdException(
+                    "Person info not found for person id [$person.id]"
+            )
             personFromDB?.apply {
                 firstName = person.firstName
                 lastName = person.lastName
                 dateOfBirth = person.dateOfBirth
                 sex = person.sex
             }
-            if (null != personFromDB) {
-                personService.create(personFromDB)
-            }
+            personService.create(personFromDB)
             return personFromDB
         }
         return person

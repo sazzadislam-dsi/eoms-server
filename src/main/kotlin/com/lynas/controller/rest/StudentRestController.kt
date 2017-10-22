@@ -26,18 +26,7 @@ class StudentRestController(val studentService: StudentService) {
     fun post(@RequestBody studentJson: StudentJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.warn("received student " + studentJson.toString())
 
-        val _dateOfBirth: Date
-        try {
-            _dateOfBirth = studentJson.dateOfBirth.convertToDate()
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-            return responseError(ErrorObject(
-                    studentJson,
-                    "dateOfBirth",
-                    Constants.INVALID_DATE_FORMAT,
-                    Constants.EXPECTED_DATE_FORMAT))
-        }
-
+        val _dateOfBirth: Date = studentJson.dateOfBirth.convertToDate()
 
         val person = Person(
                 firstName = studentJson.firstName,

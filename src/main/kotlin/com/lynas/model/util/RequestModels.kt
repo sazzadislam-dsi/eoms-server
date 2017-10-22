@@ -2,23 +2,24 @@ package com.lynas.model.util
 
 import com.lynas.model.ContactInformation
 
-
+// TODO rename variable name
 data class AttendanceJson(
         var i: Boolean = false,
         var t: Long = 0
 )
 
 
-class AttendanceJsonOfDay {
-    val classId: Long = 0
-    val date: String = ""
-}
+data class AttendanceJsonOfDay (
+    val classId: Long,
+    val date: String
+)
 
-class AttendanceJsonWrapper {
-    val classId: Long = 0
-    val date: String = ""
-    val attendanceJson: Array<AttendanceJson> = arrayOf()
-}
+data class AttendanceJsonWrapper (
+    val classId: Long,
+    val date: String,
+    val attendanceJson: Array<AttendanceJson>
+)
+
 
 data class EnrolmentJson(
         var studentId: Long = 1,
@@ -93,7 +94,7 @@ data class SubjectPostJson(
 )
 
 
-class CourseJson(
+data class CourseJson(
         var name: String,
         var shift: Shift,
         var section: Section

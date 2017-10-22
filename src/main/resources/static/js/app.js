@@ -341,7 +341,6 @@
                         examId = obj.examId;
                     }
                 });
-                /*table +=  '<input type="hidden" value="'+ examId + '"/>';*/
                 table += '<td>' + '<a class=\" html-to-modal \" id="' + examId + '"> ' + obtainMark + '</a> ' + '</td>';
             }
             table += '<td>' + Number(obj.result).toFixed(2) + '</td>';
