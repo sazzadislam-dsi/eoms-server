@@ -1,5 +1,6 @@
 package com.lynas.controller.rest
 
+import com.lynas.exception.EntityNotFoundForGivenIdException
 import com.lynas.model.ContactInformation
 import com.lynas.service.ContactInformationService
 import com.lynas.util.getLogger
@@ -16,27 +17,28 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("contactInformations")
-class ContactInformationRestController (val contactInformationService: ContactInformationService) {
+class ContactInformationRestController(val contactInformationService: ContactInformationService) {
 
     private val logger = getLogger(this.javaClass)
 
     @PatchMapping
     fun patch(@RequestBody contactInformation: ContactInformation): ResponseEntity<*> {
         logger.info("contact info is going to update :: {}", contactInformation)
+        // TODO contactInformation.id validation check in bean validation
         if (null != contactInformation.id) {
-            val contactInfo = contactInformationService.findById(contactInformation.id as Long)
-            if (null != contactInfo) {
-                contactInfo.apply {
-                    name = contactInformation.name
-                    address = contactInformation.address
-                    phone_1 = contactInformation.phone_1
-                    phone_2 = contactInformation.phone_2
-                    phone_3 = contactInformation.phone_3
-                    contactType = contactInformation.contactType
-                }
-                contactInformationService.create(contactInfo)
-                return responseOK(contactInfo)
+            val contactInfo = contactInformationService.findById(contactInformation.id as Long) ?: throw EntityNotFoundForGivenIdException(
+                    message = "Contact Info not found for id [${contactInformation.id}]"
+            )
+            contactInfo.apply {
+                name = contactInformation.name
+                address = contactInformation.address
+                phone_1 = contactInformation.phone_1
+                phone_2 = contactInformation.phone_2
+                phone_3 = contactInformation.phone_3
+                contactType = contactInformation.contactType
             }
+            contactInformationService.create(contactInfo)
+            return responseOK(contactInfo)
         }
         return responseOK(contactInformation)
     }

@@ -1,6 +1,6 @@
 package com.lynas.service
 
-import com.lynas.exception.DuplicateCourseException
+import com.lynas.exception.DuplicateEntryException
 import com.lynas.model.Course
 import com.lynas.model.util.ClassDetailQueryResult
 import com.lynas.repo.ClassRepository
@@ -25,7 +25,7 @@ class ClassService(val classRepo: ClassRepository) {
                 .isEmpty()
                 .not()
         if (foundDuplicate) {
-            throw DuplicateCourseException("Duplicate Class Found")
+            throw DuplicateEntryException("Duplicate Class Found, name = [${course.name}], shift = [${course.shift}], section = [${course.shift}]")
         }
         return classRepo.save(course)
     }

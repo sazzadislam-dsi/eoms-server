@@ -1,8 +1,11 @@
 package com.lynas.service
 
+import com.lynas.exception.EntityNotFoundForGivenIdException
 import com.lynas.model.Exam
+import com.lynas.model.Organization
 import com.lynas.model.response.ExamResponse
 import com.lynas.model.response.ExamStudentResponse
+import com.lynas.model.util.ExamJsonWrapper
 import com.lynas.model.util.ExamQueryResult
 import com.lynas.model.util.ExamType
 import com.lynas.model.util.ExamUpdateJson
@@ -10,6 +13,8 @@ import com.lynas.repo.ExamRepository
 import com.lynas.service.dto.ExamListDTO
 import com.lynas.service.dto.ExamOfStudent
 import com.lynas.service.dto.ExamOfSubjectUpdateDTO
+import com.lynas.util.convertToDate
+import com.lynas.util.err_notFound
 import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -27,8 +32,29 @@ class ExamService(private val examRepository: ExamRepository,
                   private val studentService: StudentService) {
 
     @Transactional
-    fun create(exam: Collection<Exam>) {
-        examRepository.save(exam)
+    fun create( examJson: ExamJsonWrapper, organization: Organization) {
+        val _date: Date = examJson.date.convertToDate()
+
+        val course = classService.findById(examJson.classId, organization.id!!)
+                ?: throw EntityNotFoundForGivenIdException("ClassId/CourseId ${examJson.classId}".err_notFound())
+        val _subject = subjectService.findById(examJson.subjectId)
+                ?: throw EntityNotFoundForGivenIdException("SubjectId ${examJson.subjectId}".err_notFound())
+        val listOfExam = examJson.examJson.map { (mark, studentId, _isPresent) ->
+            Exam(
+                    examType = examJson.examType,
+                    totalNumber = examJson.totalMark,
+                    percentile = examJson.percentile,
+                    isPresent = _isPresent,
+                    date = _date,
+                    year = examJson.year,
+                    cls = course,
+                    subject = _subject,
+                    obtainedNumber = mark,
+                    student = studentService.findById(studentId, organization.id!!)
+                            ?:throw EntityNotFoundForGivenIdException("student not found with studentID: $studentId")
+            )
+        }
+        examRepository.save(listOfExam)
     }
 
     @Transactional

@@ -1,3 +1,6 @@
 package com.lynas.errorhandlers
 
-data class ErrorDTO (val code: Int, val message: String?)
+import org.springframework.http.HttpStatus
+
+
+data class ErrorDTO (val code: Int, val message: String?, val httpStatus: HttpStatus)

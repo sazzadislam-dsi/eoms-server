@@ -1,5 +1,7 @@
 package com.lynas.util
 
+import com.lynas.exception.DateFormatParseException
+import com.lynas.exception.EntityNotFoundForGivenIdException
 import com.lynas.model.Course
 import com.lynas.model.Organization
 import org.neo4j.ogm.exception.NotFoundException
@@ -48,9 +50,13 @@ fun responseError(responseObject: Any): ResponseEntity<*> {
     return ResponseEntity(responseObject, HttpStatus.BAD_REQUEST)
 }
 
+fun responseNotFound(responseObject: Any): ResponseEntity<*> {
+    return ResponseEntity(responseObject, HttpStatus.NOT_FOUND)
+}
+
 data class ErrInf(val input: Any, val msg: Any)
 
-@Throws(ParseException::class)
+@Throws(DateFormatParseException::class)
 fun String.convertToDate(): Date {
     val pattern = if (this.matches(kotlin.text.Regex("[A-Za-z]+ [A-Za-z]+ \\d?\\d \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3} \\d{4}"))) {
         "EEE MMM dd HH:mm:ss Z yyyy"
@@ -58,7 +64,10 @@ fun String.convertToDate(): Date {
         "dd-MM-yyyy"
     }
     val dateFormatter = SimpleDateFormat(pattern)
-    return dateFormatter.parse(this)
+    return try { dateFormatter.parse(this) }
+            catch (e : ParseException) {
+                throw DateFormatParseException("Invalid date format [${this}], Expected date format ${Constants.EXPECTED_DATE_FORMAT}", e.errorOffset)
+            }
 }
 
 fun Date.convertToString() = SimpleDateFormat("dd-MM-yyyy").format(this)
@@ -66,7 +75,7 @@ fun Date.convertToString() = SimpleDateFormat("dd-MM-yyyy").format(this)
 @Throws(NotFoundException::class)
 fun getOrganizationFromSession(request: HttpServletRequest)
         = request.session.getAttribute(AppConstant.organization) as Organization?
-        ?: throw NotFoundException("Organization info not found in session")
+        ?: throw EntityNotFoundForGivenIdException("Organization info not found in session")
 
 @Throws(NullPointerException::class)
 fun getCurrentUserOrganizationId(request: HttpServletRequest): Long {

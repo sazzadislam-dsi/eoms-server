@@ -1,6 +1,7 @@
 package com.lynas.service
 
-import com.lynas.exception.SameDateAttendanceException
+import com.lynas.exception.DuplicateEntryException
+import com.lynas.exception.EntityNotFoundForGivenIdException
 import com.lynas.model.AttendanceBook
 import com.lynas.model.StudentAttendance
 import com.lynas.model.util.AttendanceJsonWrapper
@@ -23,37 +24,30 @@ class AttendanceService constructor(val studentService: StudentService,
     fun create(attendanceJsonWrapper: AttendanceJsonWrapper, orgId: Long): AttendanceBook {
         //TODO what happens if user gives invalid date format
         val _attendanceDate = attendanceJsonWrapper.date.convertToDate()
-        checkExistingAttendanceOnGivenDate(
-                _attendanceDate = _attendanceDate,
-                classId = attendanceJsonWrapper.classId,
-                orgId = orgId)
+        val course = classService.findById(attendanceJsonWrapper.classId, orgId)
+                ?: throw EntityNotFoundForGivenIdException(
+                "Course or class not found with given classID : ${attendanceJsonWrapper.classId}")
+        val foundDuplicate = checkExistingAttendanceOnGivenDate(_attendanceDate, attendanceJsonWrapper.classId, orgId)
+        if (foundDuplicate) {
+            throw DuplicateEntryException("Attendance duplicate entry found at date $_attendanceDate")
+        }
 
         //TODO catch this exception properly
-        val set = attendanceJsonWrapper.attendanceJson.filter { it.t != 0L }.map {
+        val set = attendanceJsonWrapper.attendanceJson.map {
             StudentAttendance(
                     student = studentService.findById(it.t, orgId)
-                            ?: throw NullPointerException("student Not found with given studentId: ${it.t}"),
+                            ?: throw EntityNotFoundForGivenIdException("student Not found with given studentId: ${it.t}"),
                     attendanceStatus = it.i)
         }.toMutableSet()
 
-        val attendanceBook = AttendanceBook(
-                studentAttendances = set,
-                attendanceDate = _attendanceDate,
-            course = classService.findById(attendanceJsonWrapper.classId, orgId)
-                    ?: throw NullPointerException(
-                    "Course or class not found with given classID : ${attendanceJsonWrapper.classId}")
-        )
+        val attendanceBook = AttendanceBook(studentAttendances = set, attendanceDate = _attendanceDate, course = course)
         return attendanceRepository.save(attendanceBook)
     }
 
-    private fun checkExistingAttendanceOnGivenDate(_attendanceDate: Date, classId: Long, orgId: Long) {
-        val foundDuplicate = attendanceRepository
-                .findAttendanceBookOfClass(_attendanceDate.time, classId, orgId)
+    private fun checkExistingAttendanceOnGivenDate(_attendanceDate: Date, classId: Long, orgId: Long): Boolean {
+        return attendanceRepository.findAttendanceBookOfClass(_attendanceDate.time, classId, orgId)
                 .isEmpty()
                 .not()
-        if (foundDuplicate) {
-            throw SameDateAttendanceException("Attendance duplicate entry found")
-        }
     }
 
 

@@ -1,6 +1,5 @@
 package com.lynas.controller.rest
 
-import com.lynas.exception.SameDateAttendanceException
 import com.lynas.model.response.ErrorObject
 import com.lynas.model.util.AttendanceJsonWrapper
 import com.lynas.service.AttendanceService
@@ -24,28 +23,10 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
 
     @PostMapping
     @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
-    fun post(@RequestBody attendanceJson: AttendanceJsonWrapper,
-             request: HttpServletRequest): ResponseEntity<*> {
+    fun post(@RequestBody attendanceJson: AttendanceJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
-        try {
-            attendanceService.create(
-                    attendanceJsonWrapper = attendanceJson,
-                    orgId = getCurrentUserOrganizationId(request))
-            logger.info("Post successfully attendance book")
-        } catch (ex: SameDateAttendanceException) {
-            logger.error("Duplicate attendance entry found on date [{}], class ID [{}]", attendanceJson.date, attendanceJson.classId)
-            return responseConflict(attendanceJson)
-        } catch (ex: Exception) {
-            val cause = ex.cause
-            if (cause is ParseException) {
-                logger.error(cause.message)
-            }
-            return responseError(ErrorObject(
-                    receivedObject = attendanceJson,
-                    errorField = "date",
-                    errorMessage = Constants.INVALID_DATE_FORMAT,
-                    errorSuggestion = Constants.EXPECTED_DATE_FORMAT))
-        }
+        attendanceService.create( attendanceJsonWrapper = attendanceJson, orgId = getCurrentUserOrganizationId(request))
+        logger.info("Post successfully attendance book")
         return responseOK(attendanceJson)
     }
 

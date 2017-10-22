@@ -1,5 +1,6 @@
 package com.lynas.controller.rest
 
+import com.lynas.exception.EntityNotFoundForGivenIdException
 import com.lynas.model.FeeInfo
 import com.lynas.model.StudentFee
 import com.lynas.model.response.ErrorObject
@@ -35,7 +36,9 @@ class FeeRestController(val feeInfoService: FeeInfoService,
     @PostMapping
     fun post(@RequestBody feeInfoJson: FeeInfoJson, request: HttpServletRequest): ResponseEntity<*> {
         val courseById = classService.findById(id = feeInfoJson.classId, orgId = getCurrentUserOrganizationId(request))
-                ?: return responseError(ErrorObject(feeInfoJson, "classId", "class Not Found With Given ID", ""))
+                ?: throw EntityNotFoundForGivenIdException("class Not Found With Given ID [${feeInfoJson.classId}]")
+
+        // TODO feeInfoJson.lastDate?.convertToDate() error handling should be placed in controller advice
         val feeInfo = FeeInfo(
                 type = feeInfoJson.type,
                 amount = feeInfoJson.amount,
@@ -51,9 +54,9 @@ class FeeRestController(val feeInfoService: FeeInfoService,
     @PostMapping("/student/new")
     fun studentPayment(request: HttpServletRequest, @RequestBody feeStudentNew: FeeStudentNew): ResponseEntity<*> {
         val fee = feeInfoService.find(feeStudentNew.feeInfoId)
-                ?: return responseError(ErrorObject(feeStudentNew, "feeInfoId", "not found", ""))
+                ?: throw EntityNotFoundForGivenIdException("fee info not found for id [${feeStudentNew.feeInfoId}]")
         val studentOf = studentService.findById(feeStudentNew.studentId, getCurrentUserOrganizationId(request))
-                ?: return responseError(ErrorObject(feeStudentNew, "studentId", "not found", ""))
+                ?: throw EntityNotFoundForGivenIdException ("student not found for id [${feeStudentNew.studentId}]")
         val pDate = feeStudentNew.paymentDate.convertToDate()
 
         val studentFee = StudentFee(
