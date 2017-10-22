@@ -79,13 +79,13 @@
                 request.setRequestHeader("Accept", "application/json");
             },
             success: function (response) {
-                console.log("Ajax call success");
                 console.dir(response);
                 alert("Attendance save success");
                 location.reload();
             },
             error: function (xhr) {
-                alert(xhr.status + "Problem with ajax call");
+                console.dir(xhr);
+                alert(xhr.status + " " + xhr.responseText);
             }
         });
 
