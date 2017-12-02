@@ -24,13 +24,18 @@ public class SpringSecurityUser implements UserDetails {
         super();
     }
 
-    public SpringSecurityUser(Long id, String username, String password, String email, Date lastPasswordReset,
+    public SpringSecurityUser(String username, String password, String email, Date lastPasswordReset,
                               Collection<? extends GrantedAuthority> authorities) {
-        this.setId(id);
         this.setUsername(username);
         this.setPassword(password);
         this.setEmail(email);
         this.setLastPasswordReset(lastPasswordReset);
+        this.setAuthorities(authorities);
+    }
+
+
+    public SpringSecurityUser(String username, Collection<? extends GrantedAuthority> authorities) {
+        this.setUsername(username);
         this.setAuthorities(authorities);
     }
 

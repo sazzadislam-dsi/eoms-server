@@ -1,34 +1,38 @@
 package com.lynas.service
 
 import com.lynas.exception.ConstraintsViolationException
-import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.AppUser
+import com.lynas.model.util.SpringSecurityUser
 import com.lynas.repo.AppUserRepository
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.ScopedProxyMode
+import org.springframework.security.core.authority.AuthorityUtils
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
-/**
- * Created by sazzad on 7/19/16
- */
 
 @Service
-@ComponentScan(scopedProxy = ScopedProxyMode.INTERFACES)
-class AppUserService(val appUserRepository: AppUserRepository) {
+class AppUserService(private val repository: AppUserRepository) : UserDetailsService {
 
-    @Transactional
     fun create(appUser: AppUser): AppUser {
         try {
-            return appUserRepository.save(appUser)
+            return repository.save(appUser)
         } catch (e: Exception) {
-            throw ConstraintsViolationException("Unable to save with given entity : " + appUser.toString())
+            e.printStackTrace()
+            throw ConstraintsViolationException("unable to create user with given entity : " + appUser.toString())
         }
     }
 
-    @Transactional
-    fun findByUserName(username: String): AppUser {
-        return appUserRepository.findByUsername(username)
-                ?: throw EntityNotFoundException("username not found with username : " + username)
+    override fun loadUserByUsername(username: String): UserDetails {
+        val appUser = repository.findByUsername(username)
+        return if (appUser == null) {
+            throw UsernameNotFoundException("No user found with given username : " + username)
+        } else {
+            SpringSecurityUser(
+                    appUser.username,
+                    appUser.password, null, null,
+                    AuthorityUtils.commaSeparatedStringToAuthorityList(appUser.authorities)
+            )
+        }
     }
 }
