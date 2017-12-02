@@ -3,9 +3,8 @@ package com.lynas.controller
 import com.lynas.model.Course
 import com.lynas.model.util.CourseJson
 import com.lynas.service.ClassService
-import com.lynas.util.Constants
+import com.lynas.util.AuthUtil
 import com.lynas.util.getLogger
-import com.lynas.util.getOrganizationFromSession
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -18,7 +17,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("classes")
-class ClassRestController(val classService: ClassService) {
+class ClassRestController(val classService: ClassService, val util: AuthUtil) {
 
     private val logger = getLogger(this.javaClass)
 
@@ -30,23 +29,17 @@ class ClassRestController(val classService: ClassService) {
                 name = cls.name,
                 shift = cls.shift,
                 section = cls.section,
-                organization = getOrganizationFromSession(request))
+                organization = util.getOrganizationFromToken(request))
         createdClass = classService.create(createdClass)
         logger.info("Saved Class :: " + createdClass.toString())
         return responseOK(createdClass)
     }
 
-    @GetMapping("/getCollection/orgName/{name}")
+    @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun getCollection(@PathVariable name: String, request: HttpServletRequest): List<Course> {
-        val organization = getOrganizationFromSession(request)
-        if (organization.name != name) {
-            logger.warn("Request orgName [{}] and session orgName [{}] does not match", name, organization.name)
-            return ArrayList()
-        }
-        // TODO should not throw NLP for generic purpose
-        // TODO this check should be in validation work
-        return classService.findListByOrganizationId(organization.id ?: throw NullPointerException(Constants.ORG_ID_NULL))
+    fun getAll(request: HttpServletRequest): List<Course> {
+        val findListByOrganizationId: List<Course> = classService.findListByOrganizationId(util.getOrganizationIdFromToken(request))
+        return findListByOrganizationId
     }
 
 }

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("attendances")
-class AttendanceRestController constructor(val attendanceService: AttendanceService) {
+class AttendanceRestController constructor(val attendanceService: AttendanceService, val util: AuthUtil) {
 
     val logger = getLogger(this.javaClass)
 
@@ -25,7 +25,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
     @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
     fun post(@RequestBody attendanceJson: AttendanceJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
-        attendanceService.create( attendanceJsonWrapper = attendanceJson, orgId = getCurrentUserOrganizationId(request))
+        attendanceService.create(attendanceJsonWrapper = attendanceJson, orgId = util.getOrganizationIdFromToken(request))
         logger.info("Post successfully attendance book")
         return responseOK(attendanceJson)
     }
@@ -50,7 +50,7 @@ class AttendanceRestController constructor(val attendanceService: AttendanceServ
         val result = attendanceService.getAttendanceOfAClassOnDate(
                 date = dateOf.time,
                 classId = classId,
-                orgId = getCurrentUserOrganizationId(request))
+                orgId = util.getOrganizationIdFromToken(request))
 
         return responseOK(result)
     }

@@ -1,6 +1,8 @@
 package com.lynas.config.security;
 
 
+import com.lynas.model.Organization;
+import com.lynas.model.OrganizationInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 public class JwtTokenUtil {
 
     private String CLAIM_KEY_USERNAME = "sub";
+    private String CLAIM_KEY_ORD_ID = "org_id";
+    private String CLAIM_KEY_ORD_name = "org_name";
     private String CLAIM_KEY_AUDIENCE = "audience";
     private String CLAIM_KEY_CREATED = "created";
     private String CLAIM_KEY_EXPIRED = "exp";
@@ -49,6 +53,13 @@ public class JwtTokenUtil {
             username = null;
         }
         return username;
+    }
+
+    public Organization getOrganizationFromToken(String token) {
+        Claims claimsFromToken = getClaimsFromToken(token);
+        Long orgId = Long.parseLong("" + claimsFromToken.get(CLAIM_KEY_ORD_ID));
+        String orgName = (String) claimsFromToken.get(CLAIM_KEY_ORD_name);
+        return new Organization(orgId, orgName, 0, new OrganizationInfo(null, "", ""));
     }
 
     public String getUserRoleFromToken(String token) {
@@ -138,11 +149,13 @@ public class JwtTokenUtil {
         return (this.AUDIENCE_TABLET.equals(audience) || this.AUDIENCE_MOBILE.equals(audience));
     }
 
-    public String generateToken(UserDetails userDetails, Device device) {
+    public String generateToken(UserDetails userDetails, Device device, Organization org) {
         List<String> authorities = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         HashMap<String, Object> claims = new HashMap<>();
         long now = new Date().getTime();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+        claims.put(CLAIM_KEY_ORD_ID, org.getId());
+        claims.put(CLAIM_KEY_ORD_name, org.getName());
         claims.put(CLAIM_KEY_AUDIENCE, generateAudience(device));
         claims.put(CLAIM_KEY_EXPIRED, now + 172800000);
         claims.put(CLAIM_KEY_CREATED, now);

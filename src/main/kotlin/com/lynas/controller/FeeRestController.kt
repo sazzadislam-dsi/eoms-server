@@ -10,8 +10,8 @@ import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
 import com.lynas.service.StudentFeeService
 import com.lynas.service.StudentService
+import com.lynas.util.AuthUtil
 import com.lynas.util.convertToDate
-import com.lynas.util.getCurrentUserOrganizationId
 import com.lynas.util.responseError
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
@@ -31,11 +31,12 @@ import javax.servlet.http.HttpServletRequest
 class FeeRestController(val feeInfoService: FeeInfoService,
                         val classService: ClassService,
                         val studentService: StudentService,
-                        val studentFeeService: StudentFeeService) {
+                        val studentFeeService: StudentFeeService,
+                        val authUtil: AuthUtil) {
 
     @PostMapping
     fun post(@RequestBody feeInfoJson: FeeInfoJson, request: HttpServletRequest): ResponseEntity<*> {
-        val courseById = classService.findById(id = feeInfoJson.classId, orgId = getCurrentUserOrganizationId(request))
+        val courseById = classService.findById(id = feeInfoJson.classId, orgId = authUtil.getOrganizationIdFromToken(request))
                 ?: throw EntityNotFoundException("class Not Found With Given ID [${feeInfoJson.classId}]")
 
         // TODO feeInfoJson.lastDate?.convertToDate() error handling should be placed in controller advice
@@ -55,7 +56,7 @@ class FeeRestController(val feeInfoService: FeeInfoService,
     fun studentPayment(request: HttpServletRequest, @RequestBody feeStudentNew: FeeStudentNew): ResponseEntity<*> {
         val fee = feeInfoService.find(feeStudentNew.feeInfoId)
                 ?: throw EntityNotFoundException("fee info not found for id [${feeStudentNew.feeInfoId}]")
-        val studentOf = studentService.findById(feeStudentNew.studentId, getCurrentUserOrganizationId(request))
+        val studentOf = studentService.findById(feeStudentNew.studentId, authUtil.getOrganizationIdFromToken(request))
                 ?: throw EntityNotFoundException("student not found for id [${feeStudentNew.studentId}]")
         val pDate = feeStudentNew.paymentDate.convertToDate()
 

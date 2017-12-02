@@ -7,7 +7,7 @@ import com.lynas.model.util.EnrolmentJson
 import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
 import com.lynas.service.StudentService
-import com.lynas.util.getCurrentUserOrganizationId
+import com.lynas.util.AuthUtil
 import com.lynas.util.getLogger
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
@@ -25,14 +25,15 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("enrolments")
 class EnrolmentRestController(val enrolmentService: EnrolmentService,
                               val studentService: StudentService,
-                              val classService: ClassService) {
+                              val classService: ClassService,
+                              val authUtil: AuthUtil) {
 
     val logger = getLogger(this.javaClass)
 
     @PostMapping
     fun post(@RequestBody enrolmentJson: EnrolmentJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit in enrolment create method with {}", enrolmentJson.toString())
-        val organizationId = getCurrentUserOrganizationId(request)
+        val organizationId = authUtil.getOrganizationIdFromToken(request)
         val (isValid, message) = enrolmentService.studentEnrolmentCheck(
                 roleNumber = enrolmentJson.roleNumber,
                 studentId = enrolmentJson.studentId,

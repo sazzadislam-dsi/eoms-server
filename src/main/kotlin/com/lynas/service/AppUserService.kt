@@ -1,6 +1,7 @@
 package com.lynas.service
 
 import com.lynas.exception.ConstraintsViolationException
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.AppUser
 import com.lynas.model.util.SpringSecurityUser
 import com.lynas.repo.AppUserRepository
@@ -21,6 +22,12 @@ class AppUserService(private val repository: AppUserRepository) : UserDetailsSer
             e.printStackTrace()
             throw ConstraintsViolationException("unable to create user with given entity : " + appUser.toString())
         }
+    }
+
+    fun findByUsername(username: String): AppUser {
+        return repository.findByUsername(username)
+                ?: throw EntityNotFoundException("AppUser not found with : " + username)
+
     }
 
     override fun loadUserByUsername(username: String): UserDetails {

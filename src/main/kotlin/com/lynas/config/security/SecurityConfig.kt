@@ -3,7 +3,6 @@ package com.lynas.config.security
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -18,10 +17,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class SecurityConfig(
-        private val userDetailsService: UserDetailsService,
-        private val jwtAuthenticationEntryPoint: JWTAuthenticationEntryPoint,
-        private val filterBefore: JwtAuthenticationTokenFilter) : WebSecurityConfigurerAdapter() {
+class SecurityConfig(val userDetailsService: UserDetailsService,
+                     val jwtAuthenticationEntryPoint: JWTAuthenticationEntryPoint,
+                     val filter: JwtAuthenticationTokenFilter) : WebSecurityConfigurerAdapter() {
 
 
     @Bean
@@ -30,34 +28,21 @@ class SecurityConfig(
     }
 
     @Autowired
+    @Throws(Exception::class)
     fun configureAuthentication(authenticationManagerBuilder: AuthenticationManagerBuilder) {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder())
     }
 
 
+    @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http.csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers(
-                        HttpMethod.GET,
-                        "/",
-                        "/*.html",
-                        "/*.js",
-                        "/favicon.ico",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.png",
-                        "/webjars/**",
-                        "/configuration/**",
-                        "/v2/**",
-                        "/swagger-resources/**",
-                        "/**/*.js"
-                ).permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated()
-        http.addFilterBefore(filterBefore, UsernamePasswordAuthenticationFilter::class.java)
+        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter::class.java)
         http.headers().cacheControl()
     }
 }

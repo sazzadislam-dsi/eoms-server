@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("students")
-class StudentRestController(val studentService: StudentService) {
+class StudentRestController(val studentService: StudentService, val authUtil: AuthUtil) {
     private val logger = getLogger(this.javaClass)
 
     @PostMapping
@@ -34,7 +34,7 @@ class StudentRestController(val studentService: StudentService) {
                 dateOfBirth = _dateOfBirth,
                 sex = studentJson.sex,
                 religion = studentJson.religion,
-                organization = getOrganizationFromSession(request),
+                organization = authUtil.getOrganizationFromToken(request),
                 contactInformationList = mutableListOf())
         val student = Student(person = person, firstAdmissionDate = Date())
         studentService.create(student)
@@ -43,7 +43,7 @@ class StudentRestController(val studentService: StudentService) {
 
     @GetMapping("/count")
     fun totalStudentCount(request: HttpServletRequest): ResponseEntity<*> {
-        val studentCount = studentService.findStudentCountOfOrganization(getCurrentUserOrganizationId(request))
+        val studentCount = studentService.findStudentCountOfOrganization(authUtil.getOrganizationIdFromToken(request))
         return responseOK(studentCount)
     }
 
@@ -51,7 +51,7 @@ class StudentRestController(val studentService: StudentService) {
     fun studentUpdate(@RequestBody studentJson: StudentJson,
                       request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit student update controller with id {} && {}", studentJson.studentId, studentJson)
-        val student = studentService.findById(studentJson.studentId, getCurrentUserOrganizationId(request))
+        val student = studentService.findById(studentJson.studentId, authUtil.getOrganizationIdFromToken(request))
         if (student?.person == null) return responseError(studentJson)
 
         var _dateOfBirth = Date()
@@ -82,7 +82,7 @@ class StudentRestController(val studentService: StudentService) {
     @PostMapping("/add_contact_info")
     fun postStudentContactInformation(@RequestBody studentContact: StudentContact,
                                       request: HttpServletRequest): ResponseEntity<*> {
-        val student = studentService.findById(studentContact.studentId, getCurrentUserOrganizationId(request))
+        val student = studentService.findById(studentContact.studentId, authUtil.getOrganizationIdFromToken(request))
                 ?: return responseError("Student not found with given student id ${studentContact.studentId}")
         if (student.person.contactInformationList == null) {
             student.person.contactInformationList = mutableListOf()
@@ -106,7 +106,7 @@ class StudentRestController(val studentService: StudentService) {
             return responseError("")
         }
         logger.info("search with student name [{}]", name)
-        val organization = getOrganizationFromSession(request)
+        val organization = authUtil.getOrganizationFromToken(request)
         val studentList = studentService.searchByFirstName(name, organization.id!!)
         return responseOK(studentList)
 

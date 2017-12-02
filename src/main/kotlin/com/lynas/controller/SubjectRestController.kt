@@ -5,7 +5,7 @@ import com.lynas.model.Subject
 import com.lynas.model.util.SubjectPostJson
 import com.lynas.service.ClassService
 import com.lynas.service.SubjectService
-import com.lynas.util.getCurrentUserOrganizationId
+import com.lynas.util.AuthUtil
 import com.lynas.util.getLogger
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
@@ -22,14 +22,15 @@ import javax.servlet.http.HttpServletRequest
 @RestController
 @RequestMapping("/subjects")
 class SubjectRestController constructor(val subjectService: SubjectService,
-                                        val classService: ClassService) {
+                                        val classService: ClassService,
+                                        val authUtil: AuthUtil) {
 
     val logger = getLogger(this.javaClass)
 
     @PostMapping
     fun post(@RequestBody subjectJson: SubjectPostJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit create method with {}", subjectJson)
-        val course = classService.findById(subjectJson.classId, getCurrentUserOrganizationId(request))
+        val course = classService.findById(subjectJson.classId, authUtil.getOrganizationIdFromToken(request))
                 ?: throw EntityNotFoundException("Class can't find for id [${subjectJson.classId}")
         val subject = Subject(
                 subjectName = subjectJson.subjectName,

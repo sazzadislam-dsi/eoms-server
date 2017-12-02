@@ -1,10 +1,8 @@
 package com.lynas.util
 
 import com.lynas.exception.DateFormatParseException
-import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Course
 import com.lynas.model.Organization
-import org.neo4j.ogm.exception.NotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -64,24 +62,14 @@ fun String.convertToDate(): Date {
         "dd-MM-yyyy"
     }
     val dateFormatter = SimpleDateFormat(pattern)
-    return try { dateFormatter.parse(this) }
-            catch (e : ParseException) {
-                throw DateFormatParseException("Invalid date format [${this}], Expected date format ${Constants.EXPECTED_DATE_FORMAT}", e.errorOffset)
-            }
+    return try {
+        dateFormatter.parse(this)
+    } catch (e: ParseException) {
+        throw DateFormatParseException("Invalid date format [${this}], Expected date format ${Constants.EXPECTED_DATE_FORMAT}", e.errorOffset)
+    }
 }
 
 fun Date.convertToString() = SimpleDateFormat("dd-MM-yyyy").format(this)
-
-@Throws(NotFoundException::class)
-fun getOrganizationFromSession(request: HttpServletRequest)
-        = request.session.getAttribute(AppConstant.organization) as Organization?
-        ?: throw EntityNotFoundException("Organization info not found in session")
-
-@Throws(NullPointerException::class)
-fun getCurrentUserOrganizationId(request: HttpServletRequest): Long {
-    val organization = getOrganizationFromSession(request)
-    return organization.id ?: throw NullPointerException("organization has no organization id")
-}
 
 fun getCurrentYear() = LocalDate.now().year
 

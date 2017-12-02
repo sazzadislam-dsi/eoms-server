@@ -1,0 +1,12 @@
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+< input.json
+
+###
+
+http://localhost:8080/classes/
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYXp6YWQiLCJhdWRpZW5jZSI6IndlYiIsIm9yZ19pZCI6MjA0LCJjcmVhdGVkIjoxNTEyMjI5NzE0MjkyLCJybHUiOiJST0xFX1VTRVIsUk9MRV9BRE1JTiIsIm9yZ19uYW1lIjoiQmFpdHVsIE1va2FkZGVtIiwiZXhwIjoxNTEyODM0NTE0fQ.sWGFISV1lX220UsXuToX7Ms_0tt7xLU-YzIx32YwZ4i-4BsQOzWN6pfsM8f_jSjpqKZxmlWfo_VGH3KjGNajFA
+
+###

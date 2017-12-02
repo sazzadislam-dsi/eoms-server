@@ -3,11 +3,13 @@ package com.lynas.controller
 import com.lynas.model.response.ExamClassResponse
 import com.lynas.model.util.ExamJsonWrapper
 import com.lynas.model.util.ExamUpdateJson
-import com.lynas.service.ClassService
 import com.lynas.service.ExamService
 import com.lynas.service.ExamServiceJava
 import com.lynas.service.StudentService
-import com.lynas.util.*
+import com.lynas.util.AuthUtil
+import com.lynas.util.getLogger
+import com.lynas.util.responseError
+import com.lynas.util.responseOK
 import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -21,16 +23,16 @@ import javax.servlet.http.HttpServletRequest
 @RestController
 @RequestMapping("exams")
 class ExamRestController(val examService: ExamService,
-                         val classService: ClassService,
                          val studentService: StudentService,
-                         val examServiceJava: ExamServiceJava) {
+                         val examServiceJava: ExamServiceJava,
+                         val authUtil: AuthUtil) {
 
     val logger = getLogger(this.javaClass)
 
     @PostMapping
     fun post(@RequestBody examJson: ExamJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("hit in create controller with {}", examJson)
-        val organization = getOrganizationFromSession(request)
+        val organization = authUtil.getOrganizationFromToken(request)
         examService.create(examJson, organization)
         return responseOK(examJson)
     }
@@ -54,7 +56,7 @@ class ExamRestController(val examService: ExamService,
                     classId = classId,
                     subjectId = subjectId,
                     _year = _year,
-                    orgId = getCurrentUserOrganizationId(request)))
+                    orgId = authUtil.getOrganizationIdFromToken(request)))
         } catch (e: NotFoundException) {
             responseError(e.message
                     ?: "(ExamRestController:resultOfClassBySubject:NotFoundException) Error check server")
@@ -67,7 +69,7 @@ class ExamRestController(val examService: ExamService,
     @GetMapping("student/{studentId}/results")
     fun resultOfStudentByYear(@PathVariable studentId: Long, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result for student id [{}]", studentId)
-        val organization = getOrganizationFromSession(request)
+        val organization = authUtil.getOrganizationFromToken(request)
         val year = LocalDate.now().year
         val studentInfo = studentService.studentInfoByYear(id = studentId, year = year, orgId = organization.id!!)
         return responseOK(examService.resultOfStudentByYear(studentInfo.classId, studentId, year, organization.id!!))
@@ -79,7 +81,7 @@ class ExamRestController(val examService: ExamService,
                               @PathVariable _year: Int,
                               request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, studentId, _year)
-        val organization = getOrganizationFromSession(request)
+        val organization = authUtil.getOrganizationFromToken(request)
         return responseOK(examService.resultOfStudentByYear(classId, studentId, _year, organization.id!!))
     }
 
@@ -88,7 +90,7 @@ class ExamRestController(val examService: ExamService,
                             @PathVariable _year: Int,
                             request: HttpServletRequest): ResponseEntity<*> {
         logger.info("return result of class id {} and student id {} and year {}", classId, _year)
-        val organization = getOrganizationFromSession(request)
+        val organization = authUtil.getOrganizationFromToken(request)
         // TODO why following code was written
         val result = examService.resultOfClass(classId, _year, organization.id!!).groupBy { it.roleNumber }
                 .map {
@@ -110,7 +112,7 @@ class ExamRestController(val examService: ExamService,
     fun resultOfClass(@PathVariable classId: Long,
                       @PathVariable _year: Int,
                       request: HttpServletRequest): ResponseEntity<*> {
-        val organization = getOrganizationFromSession(request)
+        val organization = authUtil.getOrganizationFromToken(request)
         logger.info("Hit method with classId [{}], year [{}], organization [{}]", classId, _year, organization.id)
         val result = examServiceJava.getResultOfClass(classId, _year, organization.id!!)
         return responseOK(result)

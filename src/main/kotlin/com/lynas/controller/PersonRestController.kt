@@ -4,7 +4,7 @@ import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Person
 import com.lynas.model.util.PersonContact
 import com.lynas.service.PersonService
-import com.lynas.util.getOrganizationFromSession
+import com.lynas.util.AuthUtil
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
@@ -14,11 +14,11 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("persons")
-class PersonRestController(val personService: PersonService) {
+class PersonRestController(val personService: PersonService, val authUtil: AuthUtil) {
 
     @PostMapping
     fun post(@RequestBody person: Person, request: HttpServletRequest): Person {
-        person.organization = getOrganizationFromSession(request)
+        person.organization = authUtil.getOrganizationFromToken(request)
         personService.create(person)
         return person
     }

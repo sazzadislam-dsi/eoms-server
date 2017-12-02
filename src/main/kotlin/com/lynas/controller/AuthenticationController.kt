@@ -31,8 +31,9 @@ class AuthenticationController(val appUserService: AppUserService,
                 UsernamePasswordAuthenticationToken(
                         authenticationRequestDTO.username, authenticationRequestDTO.password))
         SecurityContextHolder.getContext().authentication = authentication
+        val appUser = appUserService.findByUsername(username = authenticationRequestDTO.username)
         val userDetails = appUserService.loadUserByUsername(authenticationRequestDTO.username)
-        val token = jwtTokenUtil.generateToken(userDetails, device)
+        val token = jwtTokenUtil.generateToken(userDetails, device, appUser.organization)
         return AuthenticationResponseDTO(token)
 
     }
