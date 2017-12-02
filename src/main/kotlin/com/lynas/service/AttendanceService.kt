@@ -1,7 +1,7 @@
 package com.lynas.service
 
 import com.lynas.exception.DuplicateEntryException
-import com.lynas.exception.EntityNotFoundForGivenIdException
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.AttendanceBook
 import com.lynas.model.StudentAttendance
 import com.lynas.model.util.AttendanceJsonWrapper
@@ -25,7 +25,7 @@ class AttendanceService constructor(val studentService: StudentService,
         //TODO what happens if user gives invalid date format
         val _attendanceDate = attendanceJsonWrapper.date.convertToDate()
         val course = classService.findById(attendanceJsonWrapper.classId, orgId)
-                ?: throw EntityNotFoundForGivenIdException(
+                ?: throw EntityNotFoundException(
                 "Course or class not found with given classID : ${attendanceJsonWrapper.classId}")
         val foundDuplicate = checkExistingAttendanceOnGivenDate(_attendanceDate, attendanceJsonWrapper.classId, orgId)
         if (foundDuplicate) {
@@ -36,7 +36,7 @@ class AttendanceService constructor(val studentService: StudentService,
         val set = attendanceJsonWrapper.attendanceJson.map {
             StudentAttendance(
                     student = studentService.findById(it.t, orgId)
-                            ?: throw EntityNotFoundForGivenIdException("student Not found with given studentId: ${it.t}"),
+                            ?: throw EntityNotFoundException("student Not found with given studentId: ${it.t}"),
                     attendanceStatus = it.i)
         }.toMutableSet()
 

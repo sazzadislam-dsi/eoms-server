@@ -1,14 +1,12 @@
 package com.lynas.controller.rest
 
-import com.lynas.exception.EntityNotFoundForGivenIdException
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Subject
-import com.lynas.model.response.ErrorObject
 import com.lynas.model.util.SubjectPostJson
 import com.lynas.service.ClassService
 import com.lynas.service.SubjectService
 import com.lynas.util.getCurrentUserOrganizationId
 import com.lynas.util.getLogger
-import com.lynas.util.responseError
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -32,7 +30,7 @@ class SubjectRestController constructor(val subjectService: SubjectService,
     fun post(@RequestBody subjectJson: SubjectPostJson, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit create method with {}", subjectJson)
         val course = classService.findById(subjectJson.classId, getCurrentUserOrganizationId(request))
-                ?: throw EntityNotFoundForGivenIdException("Class can't find for id [${subjectJson.classId}")
+                ?: throw EntityNotFoundException("Class can't find for id [${subjectJson.classId}")
         val subject = Subject(
                 subjectName = subjectJson.subjectName,
                 subjectDescription = subjectJson.subjectDescription,

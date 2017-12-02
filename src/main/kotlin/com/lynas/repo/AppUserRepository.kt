@@ -8,5 +8,5 @@ import org.springframework.data.neo4j.repository.GraphRepository
  */
 
 interface AppUserRepository : GraphRepository<AppUser> {
-    fun findByUsername(username: String) : AppUser
+    fun findByUsername(username: String): AppUser?
 }

@@ -1,6 +1,6 @@
 package com.lynas.service
 
-import com.lynas.exception.EntityNotFoundForGivenIdException
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Exam
 import com.lynas.model.Organization
 import com.lynas.model.response.ExamResponse
@@ -36,9 +36,9 @@ class ExamService(private val examRepository: ExamRepository,
         val _date: Date = examJson.date.convertToDate()
 
         val course = classService.findById(examJson.classId, organization.id!!)
-                ?: throw EntityNotFoundForGivenIdException("ClassId/CourseId ${examJson.classId}".err_notFound())
+                ?: throw EntityNotFoundException("ClassId/CourseId ${examJson.classId}".err_notFound())
         val _subject = subjectService.findById(examJson.subjectId)
-                ?: throw EntityNotFoundForGivenIdException("SubjectId ${examJson.subjectId}".err_notFound())
+                ?: throw EntityNotFoundException("SubjectId ${examJson.subjectId}".err_notFound())
         val listOfExam = examJson.examJson.map { (mark, studentId, _isPresent) ->
             Exam(
                     examType = examJson.examType,
@@ -51,7 +51,7 @@ class ExamService(private val examRepository: ExamRepository,
                     subject = _subject,
                     obtainedNumber = mark,
                     student = studentService.findById(studentId, organization.id!!)
-                            ?:throw EntityNotFoundForGivenIdException("student not found with studentID: $studentId")
+                            ?: throw EntityNotFoundException("student not found with studentID: $studentId")
             )
         }
         examRepository.save(listOfExam)

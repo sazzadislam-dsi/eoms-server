@@ -2,7 +2,7 @@ package com.lynas.errorhandlers
 
 import com.lynas.exception.DateFormatParseException
 import com.lynas.exception.DuplicateEntryException
-import com.lynas.exception.EntityNotFoundForGivenIdException
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.util.getLogger
 import com.lynas.util.responseError
 import com.lynas.util.responseNotFound
@@ -24,8 +24,8 @@ class GlobalExceptionHandler {
         return responseError(ErrorDTO(message = exception.message, code = HttpStatus.NOT_FOUND.value(), httpStatus = HttpStatus.NOT_FOUND))
     }
 
-    @ExceptionHandler(EntityNotFoundForGivenIdException::class)
-    fun entityNotFoundForGivenIdExceptionHandler(exception: EntityNotFoundForGivenIdException,
+    @ExceptionHandler(EntityNotFoundException::class)
+    fun entityNotFoundForGivenIdExceptionHandler(exception: EntityNotFoundException,
                                                  request: HttpServletRequest): ResponseEntity<*> {
         logger.error("URL [{}], message [{}]", request.requestURI, exception.message)
         return responseNotFound(ErrorDTO(message = exception.message, code = HttpStatus.NOT_FOUND.value(), httpStatus = HttpStatus.NOT_FOUND))

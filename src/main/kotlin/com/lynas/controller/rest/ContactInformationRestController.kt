@@ -1,6 +1,6 @@
 package com.lynas.controller.rest
 
-import com.lynas.exception.EntityNotFoundForGivenIdException
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.ContactInformation
 import com.lynas.service.ContactInformationService
 import com.lynas.util.getLogger
@@ -26,7 +26,7 @@ class ContactInformationRestController(val contactInformationService: ContactInf
         logger.info("contact info is going to update :: {}", contactInformation)
         // TODO contactInformation.id validation check in bean validation
         if (null != contactInformation.id) {
-            val contactInfo = contactInformationService.findById(contactInformation.id as Long) ?: throw EntityNotFoundForGivenIdException(
+            val contactInfo = contactInformationService.findById(contactInformation.id as Long) ?: throw EntityNotFoundException(
                     message = "Contact Info not found for id [${contactInformation.id}]"
             )
             contactInfo.apply {

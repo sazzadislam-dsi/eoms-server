@@ -1,6 +1,6 @@
 package com.lynas.controller.rest
 
-import com.lynas.exception.EntityNotFoundForGivenIdException
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Person
 import com.lynas.model.util.PersonContact
 import com.lynas.service.PersonService
@@ -26,7 +26,7 @@ class PersonRestController(val personService: PersonService) {
     @PatchMapping
     fun patch(@RequestBody person: Person): Person? {
         if (null != person.id) {
-            val personFromDB = personService.findPersonById(person.id as Long) ?: throw EntityNotFoundForGivenIdException(
+            val personFromDB = personService.findPersonById(person.id as Long) ?: throw EntityNotFoundException(
                     "Person info not found for person id [$person.id]"
             )
             personFromDB?.apply {

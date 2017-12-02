@@ -1,13 +1,15 @@
 package com.lynas.controller.rest
 
 import com.lynas.exception.DuplicateEntryException
-import com.lynas.exception.EntityNotFoundForGivenIdException
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Enrolment
 import com.lynas.model.util.EnrolmentJson
 import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
 import com.lynas.service.StudentService
-import com.lynas.util.*
+import com.lynas.util.getCurrentUserOrganizationId
+import com.lynas.util.getLogger
+import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -41,9 +43,9 @@ class EnrolmentRestController(val enrolmentService: EnrolmentService,
             throw DuplicateEntryException(message)
         }
         val _student = studentService.findById(enrolmentJson.studentId, organizationId)
-                ?: throw EntityNotFoundForGivenIdException("Student not found with given student id ${enrolmentJson.studentId}")
+                ?: throw EntityNotFoundException("Student not found with given student id ${enrolmentJson.studentId}")
         val _course = classService.findById(enrolmentJson.classId, organizationId)
-                ?: throw EntityNotFoundForGivenIdException("Class/Course not found with given class/course id" + enrolmentJson.classId)
+                ?: throw EntityNotFoundException("Class/Course not found with given class/course id" + enrolmentJson.classId)
 
         val enrolment: Enrolment = Enrolment(
                 year = enrolmentJson.year,

@@ -1,7 +1,7 @@
 package com.lynas.util
 
 import com.lynas.exception.DateFormatParseException
-import com.lynas.exception.EntityNotFoundForGivenIdException
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Course
 import com.lynas.model.Organization
 import org.neo4j.ogm.exception.NotFoundException
@@ -75,7 +75,7 @@ fun Date.convertToString() = SimpleDateFormat("dd-MM-yyyy").format(this)
 @Throws(NotFoundException::class)
 fun getOrganizationFromSession(request: HttpServletRequest)
         = request.session.getAttribute(AppConstant.organization) as Organization?
-        ?: throw EntityNotFoundForGivenIdException("Organization info not found in session")
+        ?: throw EntityNotFoundException("Organization info not found in session")
 
 @Throws(NullPointerException::class)
 fun getCurrentUserOrganizationId(request: HttpServletRequest): Long {
