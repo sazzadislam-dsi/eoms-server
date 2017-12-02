@@ -42,12 +42,9 @@ dependencies {
             'org.springframework.boot:spring-boot-starter-aop',
             'org.springframework.boot:spring-boot-starter-data-neo4j',
             'org.springframework.boot:spring-boot-starter-security',
-            'org.springframework.boot:spring-boot-starter-thymeleaf',
             'org.springframework.boot:spring-boot-starter-web',
             "org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}",
             "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}",
-            'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect',
-            'com.github.mxab.thymeleaf.extras:thymeleaf-extras-data-attribute',
             'com.fasterxml.jackson.module:jackson-module-kotlin',
             'org.neo4j:neo4j-ogm-bolt-driver:2.1.2')
 

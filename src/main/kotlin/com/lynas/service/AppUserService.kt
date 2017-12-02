@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 class AppUserService(val appUserRepository: AppUserRepository) {
 
     @Transactional
-    fun create(appUser: AppUser): AppUser? {
+    fun create(appUser: AppUser): AppUser {
         try {
             return appUserRepository.save(appUser)
         } catch (e: Exception) {
@@ -27,7 +27,6 @@ class AppUserService(val appUserRepository: AppUserRepository) {
     }
 
     @Transactional
-    @Throws(EntityNotFoundException::class)
     fun findByUserName(username: String): AppUser {
         return appUserRepository.findByUsername(username)
                 ?: throw EntityNotFoundException("username not found with username : " + username)
