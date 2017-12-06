@@ -42,9 +42,8 @@ class StudentRestController(val studentService: StudentService, val authUtil: Au
     }
 
     @GetMapping("/count")
-    fun totalStudentCount(request: HttpServletRequest): ResponseEntity<*> {
-        val studentCount = studentService.findStudentCountOfOrganization(authUtil.getOrganizationIdFromToken(request))
-        return responseOK(studentCount)
+    fun totalStudentCount(request: HttpServletRequest): Int {
+        return studentService.findStudentCountOfOrganization(authUtil.getOrganizationIdFromToken(request))
     }
 
     @PatchMapping

@@ -37,9 +37,7 @@ class ClassRestController(val classService: ClassService, val util: AuthUtil) {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun getAll(request: HttpServletRequest): List<Course> {
-        val findListByOrganizationId: List<Course> = classService.findListByOrganizationId(util.getOrganizationIdFromToken(request))
-        return findListByOrganizationId
-    }
+    fun getAll(request: HttpServletRequest)
+            = classService.findListByOrganizationId(util.getOrganizationIdFromToken(request))
 
 }
