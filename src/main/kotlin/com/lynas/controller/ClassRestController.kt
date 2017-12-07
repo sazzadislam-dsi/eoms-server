@@ -11,10 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
-/**
- * Created by sazzad on 8/15/16
- */
-
 @RestController
 @RequestMapping("classes")
 class ClassRestController(val classService: ClassService, val util: AuthUtil) {
@@ -39,5 +35,11 @@ class ClassRestController(val classService: ClassService, val util: AuthUtil) {
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     fun getAll(request: HttpServletRequest)
             = classService.findListByOrganizationId(util.getOrganizationIdFromToken(request))
+
+
+    @GetMapping("/count")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    fun totalNumberOfClasses(request: HttpServletRequest)
+            = classService.findListCountByOrganizationName(util.getOrganizationIdFromToken(request))
 
 }
