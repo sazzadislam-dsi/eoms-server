@@ -12,6 +12,7 @@ import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+
 @Component
 class JwtAuthenticationTokenFilter(private val jwtTokenUtil: JwtTokenUtil) : OncePerRequestFilter() {
 
@@ -19,6 +20,7 @@ class JwtAuthenticationTokenFilter(private val jwtTokenUtil: JwtTokenUtil) : Onc
     private val tokenHeader: String? = null
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+        println(logRequest(request))
         val authToken = request.getHeader(this.tokenHeader)
         val username = jwtTokenUtil.getUsernameFromToken(authToken)
         if (username != null && !jwtTokenUtil.isTokenExpired(authToken)
@@ -31,5 +33,19 @@ class JwtAuthenticationTokenFilter(private val jwtTokenUtil: JwtTokenUtil) : Onc
             SecurityContextHolder.getContext().authentication = authentication
         }
         filterChain.doFilter(request, response)
+    }
+
+
+    private fun logRequest(request: HttpServletRequest) {
+        println("**************URL************")
+        println(request.requestURI)
+        println("**************HEADER************")
+        val headerNames = request.headerNames
+        while (headerNames.hasMoreElements()) {
+            val key = headerNames.nextElement() as String
+            val value = request.getHeader(key)
+            println("header $key --- $value")
+        }
+        println("**************************")
     }
 }
