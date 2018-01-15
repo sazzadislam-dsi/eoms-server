@@ -69,6 +69,10 @@ class FeeRestController(val feeInfoService: FeeInfoService,
     fun getFeeInfoByClassId(@PathVariable classId: Long, request: HttpServletRequest) = feeInfoService.findFeeInfoByClass(classId)
             .filter { it.course.organization.id == authUtil.getOrganizationIdFromToken(request) }
 
+    @GetMapping("/students/{id}")
+    fun getFeesOfStudent(@PathVariable id: Long, request: HttpServletRequest) =
+            feeInfoService.findStudentFeeInfoByStudent(id, authUtil.getOrganizationIdFromToken(request))
+
 }
 
 

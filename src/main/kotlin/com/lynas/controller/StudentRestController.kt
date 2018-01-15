@@ -1,11 +1,13 @@
 package com.lynas.controller
 
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.ContactInformation
 import com.lynas.model.Person
 import com.lynas.model.Student
 import com.lynas.model.response.ErrorObject
 import com.lynas.model.util.StudentContact
 import com.lynas.model.util.StudentJson
+import com.lynas.service.PersonService
 import com.lynas.service.StudentService
 import com.lynas.util.*
 import org.springframework.http.ResponseEntity
@@ -19,7 +21,9 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("students")
-class StudentRestController(val studentService: StudentService, val authUtil: AuthUtil) {
+class StudentRestController(val studentService: StudentService,
+                            val personService: PersonService,
+                            val authUtil: AuthUtil ) {
     private val logger = getLogger(this.javaClass)
 
     @PostMapping
@@ -38,6 +42,16 @@ class StudentRestController(val studentService: StudentService, val authUtil: Au
                 contactInformationList = mutableListOf())
         val student = Student(person = person, firstAdmissionDate = Date())
         studentService.create(student)
+        return responseOK(student)
+    }
+
+    @GetMapping("/{id}")
+    fun studentById(@PathVariable id: Long, request: HttpServletRequest): ResponseEntity<*> {
+        val orgId = authUtil.getOrganizationIdFromToken(request)
+        val student = studentService.findById(id, orgId) ?:
+                throw EntityNotFoundException("Student not found for given id [$id]")
+        student.person.contactInformationList = personService.findPersonById(student.person.id!!)?.contactInformationList
+                ?: mutableListOf()
         return responseOK(student)
     }
 
