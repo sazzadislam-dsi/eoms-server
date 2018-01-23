@@ -15,10 +15,7 @@ import com.lynas.util.convertToDate
 import com.lynas.util.responseError
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
@@ -67,6 +64,15 @@ class FeeRestController(val feeInfoService: FeeInfoService,
         val savedObj = studentFeeService.create(studentFee)
         return responseOK(savedObj)
     }
+
+    @GetMapping("/class/{classId}")
+    fun getFeeInfoByClassId(@PathVariable classId: Long, request: HttpServletRequest) = feeInfoService.findFeeInfoByClass(classId)
+            .filter { it.course.organization.id == authUtil.getOrganizationIdFromToken(request) }
+
+    @GetMapping("/students/{id}")
+    fun getFeesOfStudent(@PathVariable id: Long, request: HttpServletRequest) =
+            feeInfoService.findStudentFeeInfoByStudent(id, authUtil.getOrganizationIdFromToken(request))
+
 }
 
 
