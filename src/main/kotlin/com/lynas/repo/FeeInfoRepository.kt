@@ -29,5 +29,5 @@ interface FeeInfoRepository : GraphRepository<FeeInfo> {
     @Query("match (st:Student)-[r1:StudentFee]->(fi:FeeInfo)-[r2:feeInfoOfCourse]->(cls:Class)-" +
             "[r3:classBelongsToAnOrganization]->(org:Organization) where ID(st) = {0} " +
             "return st,fi,cls,org,r1,r2,r3")
-    fun findStudentFeeInfoByStudent(id: Long): List<StudentFee>
+    fun findStudentFeeInfoByStudent(id: Long): List<StudentFee>?
 }

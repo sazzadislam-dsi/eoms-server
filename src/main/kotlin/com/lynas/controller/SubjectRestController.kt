@@ -9,10 +9,7 @@ import com.lynas.util.AuthUtil
 import com.lynas.util.getLogger
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -39,6 +36,13 @@ class SubjectRestController constructor(val subjectService: SubjectService,
                 cls = course)
         subjectService.create(subject)
         return responseOK(subjectJson)
+    }
+
+    @GetMapping("/class/{classId}")
+    fun getAllSubjectsOfClass(@PathVariable classId: Long, request: HttpServletRequest) : List<com.lynas.model.util.Subject> {
+        return subjectService.findAllByClassId(classId, authUtil.getOrganizationIdFromToken(request))
+                .map { com.lynas.model.util.Subject(id = it.id, subjectName = it.subjectName, subjectDescription = it.subjectDescription, subjectBookAuthor = it.subjectBookAuthor) }
+                .toList()
     }
 
 }
