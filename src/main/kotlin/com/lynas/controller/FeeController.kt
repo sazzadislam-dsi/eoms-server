@@ -25,11 +25,11 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("fees")
-class FeeRestController(val feeInfoService: FeeInfoService,
-                        val classService: ClassService,
-                        val studentService: StudentService,
-                        val studentFeeService: StudentFeeService,
-                        val authUtil: AuthUtil) {
+class FeeController(val feeInfoService: FeeInfoService,
+                    val classService: ClassService,
+                    val studentService: StudentService,
+                    val studentFeeService: StudentFeeService,
+                    val authUtil: AuthUtil) {
 
     @PostMapping
     fun post(@RequestBody feeInfoJson: FeeInfoJson, request: HttpServletRequest): ResponseEntity<*> {

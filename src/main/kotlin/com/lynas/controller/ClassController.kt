@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("classes")
-class ClassRestController(val classService: ClassService, val util: AuthUtil) {
+class ClassController(val classService: ClassService, val util: AuthUtil) {
 
     private val logger = getLogger(this.javaClass)
 

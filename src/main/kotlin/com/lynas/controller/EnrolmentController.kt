@@ -23,10 +23,10 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("enrolments")
-class EnrolmentRestController(val enrolmentService: EnrolmentService,
-                              val studentService: StudentService,
-                              val classService: ClassService,
-                              val authUtil: AuthUtil) {
+class EnrolmentController(val enrolmentService: EnrolmentService,
+                          val studentService: StudentService,
+                          val classService: ClassService,
+                          val authUtil: AuthUtil) {
 
     val logger = getLogger(this.javaClass)
 

@@ -40,7 +40,19 @@ class SecurityConfig(val userDetailsService: UserDetailsService,
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/auth/**",
+                        "/",
+                        "/*.html",
+                        "/*.js",
+                        "/favicon.ico",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.png",
+                        "/webjars/**",
+                        "/configuration/**",
+                        "/v2/**",
+                        "/swagger-resources/**",
+                        "/**/*.js").permitAll()
                 .anyRequest().authenticated()
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter::class.java)
         http.headers().cacheControl()

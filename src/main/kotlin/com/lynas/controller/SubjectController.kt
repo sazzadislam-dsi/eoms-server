@@ -18,9 +18,9 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("/subjects")
-class SubjectRestController constructor(val subjectService: SubjectService,
-                                        val classService: ClassService,
-                                        val authUtil: AuthUtil) {
+class SubjectController constructor(val subjectService: SubjectService,
+                                    val classService: ClassService,
+                                    val authUtil: AuthUtil) {
 
     val logger = getLogger(this.javaClass)
 

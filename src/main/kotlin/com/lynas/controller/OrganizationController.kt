@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("organizations")
-class OrganizationRestController (val organizationService: OrganizationService) {
+class OrganizationController(val organizationService: OrganizationService) {
 
     val logger = getLogger(this.javaClass)
 

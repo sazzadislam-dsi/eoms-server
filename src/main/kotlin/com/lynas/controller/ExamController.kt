@@ -22,10 +22,10 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("exams")
-class ExamRestController(val examService: ExamService,
-                         val studentService: StudentService,
-                         val examServiceJava: ExamServiceJava,
-                         val authUtil: AuthUtil) {
+class ExamController(val examService: ExamService,
+                     val studentService: StudentService,
+                     val examServiceJava: ExamServiceJava,
+                     val authUtil: AuthUtil) {
 
     val logger = getLogger(this.javaClass)
 
@@ -59,10 +59,10 @@ class ExamRestController(val examService: ExamService,
                     orgId = authUtil.getOrganizationIdFromToken(request)))
         } catch (e: NotFoundException) {
             responseError(e.message
-                    ?: "(ExamRestController:resultOfClassBySubject:NotFoundException) Error check server")
+                    ?: "(ExamController:resultOfClassBySubject:NotFoundException) Error check server")
         } catch (e: Exception) {
             responseError(e.message
-                    ?: "(ExamRestController:resultOfClassBySubject:Exception) Error check server")
+                    ?: "(ExamController:resultOfClassBySubject:Exception) Error check server")
         }
     }
 

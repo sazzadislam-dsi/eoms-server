@@ -4,6 +4,7 @@ import com.lynas.model.response.ErrorObject
 import com.lynas.model.util.AttendanceJsonWrapper
 import com.lynas.service.AttendanceService
 import com.lynas.util.*
+import io.swagger.annotations.Api
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
@@ -15,9 +16,10 @@ import javax.servlet.http.HttpServletRequest
  * Created by seal on 1/13/2017
  */
 
+@Api("attendance")
 @RestController
 @RequestMapping("attendances")
-class AttendanceRestController constructor(val attendanceService: AttendanceService, val util: AuthUtil) {
+class AttendanceController constructor(val attendanceService: AttendanceService, val util: AuthUtil) {
 
     val logger = getLogger(this.javaClass)
 

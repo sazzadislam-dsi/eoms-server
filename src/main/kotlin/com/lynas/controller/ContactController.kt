@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("contactInformations")
-class ContactInformationRestController(val contactInformationService: ContactInformationService) {
+class ContactController(val contactInformationService: ContactInformationService) {
 
     private val logger = getLogger(this.javaClass)
 

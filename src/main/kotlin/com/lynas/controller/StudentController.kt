@@ -21,9 +21,9 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("students")
-class StudentRestController(val studentService: StudentService,
-                            val personService: PersonService,
-                            val authUtil: AuthUtil ) {
+class StudentController(val studentService: StudentService,
+                        val personService: PersonService,
+                        val authUtil: AuthUtil ) {
     private val logger = getLogger(this.javaClass)
 
     @PostMapping

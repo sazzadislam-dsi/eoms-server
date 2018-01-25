@@ -2,6 +2,7 @@ buildscript {
     ext {
         kotlinVersion = '1.1.61'
         springBootVersion = '1.5.9.RELEASE'
+        swaggerVersion = '2.3.1'
     }
     repositories {
         mavenCentral()
@@ -42,15 +43,14 @@ dependencies {
             'org.springframework.boot:spring-boot-starter-security',
             'org.springframework.boot:spring-boot-starter-web',
             'org.springframework.boot:spring-boot-starter-mobile',
-
-
-
-
             "org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}",
             "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}",
             'com.fasterxml.jackson.module:jackson-module-kotlin',
             'io.jsonwebtoken:jjwt:0.6.0',
-            'org.neo4j:neo4j-ogm-bolt-driver:2.1.2')
+            'org.neo4j:neo4j-ogm-bolt-driver:2.1.2',
+            "io.springfox:springfox-swagger2:${swaggerVersion}",
+            "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+    )
 
 
     runtime('org.springframework.boot:spring-boot-devtools')

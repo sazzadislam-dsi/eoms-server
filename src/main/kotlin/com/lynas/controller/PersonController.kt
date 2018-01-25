@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("persons")
-class PersonRestController(val personService: PersonService, val authUtil: AuthUtil) {
+class PersonController(val personService: PersonService, val authUtil: AuthUtil) {
 
     @PostMapping
     fun post(@RequestBody person: Person, request: HttpServletRequest): Person {
