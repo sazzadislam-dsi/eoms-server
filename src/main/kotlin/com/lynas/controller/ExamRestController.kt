@@ -117,4 +117,11 @@ class ExamRestController(val examService: ExamService,
         val result = examServiceJava.getResultOfClass(classId, _year, organization.id!!)
         return responseOK(result)
     }
+
+    @GetMapping("/taken_exam_list/class/{classId}/subject/{subjectId}/year/{_year}")
+    fun examTakenOfSubject(@PathVariable classId: Long,
+                           @PathVariable subjectId: Long,
+                           @PathVariable _year: Int,
+                           request: HttpServletRequest)
+            = responseOK(examService.examListOfSubject(classId, subjectId, _year, authUtil.getOrganizationIdFromToken(request)))
 }
