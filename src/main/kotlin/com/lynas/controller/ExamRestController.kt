@@ -122,8 +122,7 @@ class ExamRestController(val examService: ExamService,
     fun examTakenOfSubject(@PathVariable classId: Long,
                            @PathVariable subjectId: Long,
                            @PathVariable _year: Int,
-                           request: HttpServletRequest)
-            = responseOK(examService.examListOfSubject(classId, subjectId, _year, authUtil.getOrganizationIdFromToken(request)))
+                           request: HttpServletRequest) = responseOK(examService.examListOfSubject(classId, subjectId, _year, authUtil.getOrganizationIdFromToken(request)))
 
     @GetMapping("/result/update/classId/{classId}/subjectId/{subjectId}/year/{_year}/date/{date}/examType/{examType}")
     fun getSubjectResultByDate(@PathVariable classId: Long,
@@ -131,11 +130,15 @@ class ExamRestController(val examService: ExamService,
                                @PathVariable _year: Int,
                                @PathVariable date: String,
                                @PathVariable examType: ExamType,
-                               request: HttpServletRequest) : ResponseEntity<*> {
+                               request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Result update for classId [{}], subjectId [{}], year [{}], date [{}], examType [{}]",
                 classId, subjectId, _year, date, examType)
         val _date: Date = date.convertToDate()
         return responseOK(examService.findByClassIdSubjectIdYearDateExamType(
                 classId, subjectId, _year, _date, examType, authUtil.getOrganizationIdFromToken(request)))
     }
+
+    @GetMapping("/classId/{classId}/year/{year}/results")
+    fun getResultOfClass(@PathVariable classId: Long, @PathVariable year: Int, request: HttpServletRequest)
+            = responseOK(examServiceJava.getResultOfClass(classId, year, authUtil.getOrganizationIdFromToken(request)))
 }
