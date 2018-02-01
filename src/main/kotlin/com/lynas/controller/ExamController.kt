@@ -2,18 +2,18 @@ package com.lynas.controller
 
 import com.lynas.model.response.ExamClassResponse
 import com.lynas.model.util.ExamJsonWrapper
+import com.lynas.model.util.ExamType
 import com.lynas.model.util.ExamUpdateJson
 import com.lynas.service.ExamService
 import com.lynas.service.ExamServiceJava
 import com.lynas.service.StudentService
-import com.lynas.util.AuthUtil
-import com.lynas.util.getLogger
-import com.lynas.util.responseError
-import com.lynas.util.responseOK
+import com.lynas.service.dto.ExamOfSubjectUpdateDTO
+import com.lynas.util.*
 import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -116,5 +116,26 @@ class ExamController(val examService: ExamService,
         logger.info("Hit method with classId [{}], year [{}], organization [{}]", classId, _year, organization.id)
         val result = examServiceJava.getResultOfClass(classId, _year, organization.id!!)
         return responseOK(result)
+    }
+
+    @GetMapping("/taken_exam_list/class/{classId}/subject/{subjectId}/year/{_year}")
+    fun examTakenOfSubject(@PathVariable classId: Long,
+                           @PathVariable subjectId: Long,
+                           @PathVariable _year: Int,
+                           request: HttpServletRequest)
+            = responseOK(examService.examListOfSubject(classId, subjectId, _year, authUtil.getOrganizationIdFromToken(request)))
+
+    @GetMapping("/result/update/classId/{classId}/subjectId/{subjectId}/year/{_year}/date/{date}/examType/{examType}")
+    fun getSubjectResultByDate(@PathVariable classId: Long,
+                               @PathVariable subjectId: Long,
+                               @PathVariable _year: Int,
+                               @PathVariable date: String,
+                               @PathVariable examType: ExamType,
+                               request: HttpServletRequest) : ResponseEntity<*> {
+        logger.info("Result update for classId [{}], subjectId [{}], year [{}], date [{}], examType [{}]",
+                classId, subjectId, _year, date, examType)
+        val _date: Date = date.convertToDate()
+        return responseOK(examService.findByClassIdSubjectIdYearDateExamType(
+                classId, subjectId, _year, _date, examType, authUtil.getOrganizationIdFromToken(request)))
     }
 }
