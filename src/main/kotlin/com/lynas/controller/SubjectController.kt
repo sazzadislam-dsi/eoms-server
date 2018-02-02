@@ -45,4 +45,7 @@ class SubjectController constructor(val subjectService: SubjectService,
                 .toList()
     }
 
+    @GetMapping("/student/{id}")
+    fun getAllByStudentId(@PathVariable id: Long, request: HttpServletRequest) = subjectService.findAllByStudentId(id, authUtil.getOrganizationIdFromToken(request))
+
 }

@@ -6,10 +6,8 @@ import com.lynas.service.ContactInformationService
 import com.lynas.util.getLogger
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 
 /**
  * Created by sazzad on 8/15/16
@@ -20,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController
 class ContactController(val contactInformationService: ContactInformationService) {
 
     private val logger = getLogger(this.javaClass)
+
+    @GetMapping("/{id}")
+    fun getById(@PathVariable id: Long, request: HttpServletRequest) = contactInformationService.findById(id)
 
     @PatchMapping
     fun patch(@RequestBody contactInformation: ContactInformation): ResponseEntity<*> {
