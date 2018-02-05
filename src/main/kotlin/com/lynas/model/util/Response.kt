@@ -16,3 +16,11 @@ data class FeeInfoOfStudentResponse(
         val studentId: Long,
         var feeInfo: FeeInfo
 )
+
+data class EnrolmentDelete(
+        val enrolmentId: Long,
+        val studentId: Long,
+        val year: Int,
+        val roleNumber: Int,
+        val isDeleted: Boolean
+)

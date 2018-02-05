@@ -11,10 +11,7 @@ import com.lynas.util.AuthUtil
 import com.lynas.util.getLogger
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -56,6 +53,15 @@ class EnrolmentController(val enrolmentService: EnrolmentService,
 
         enrolmentService.create(enrolment)
         return responseOK(enrolment)
+    }
+
+    @DeleteMapping("/{id}/studentId/{stdId}/year/{year}")
+    fun delete(@PathVariable id: Long,
+               @PathVariable stdId: Long,
+               @PathVariable year: Int,
+               request: HttpServletRequest): ResponseEntity<*> {
+        // TODO is it always be in response ok
+        return responseOK(enrolmentService.delete(id, stdId, year, authUtil.getOrganizationIdFromToken(request)))
     }
 
 
