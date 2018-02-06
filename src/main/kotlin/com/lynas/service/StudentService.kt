@@ -2,7 +2,6 @@ package com.lynas.service
 
 import com.lynas.model.Student
 import com.lynas.model.util.StudentInfoQueryResult
-import com.lynas.model.util.StudentResponse
 import com.lynas.repo.StudentRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
