@@ -1,10 +1,10 @@
 package com.lynas.service
 
 import com.lynas.model.Enrolment
+import com.lynas.model.util.EnrolmentDelete
 import com.lynas.repo.EnrolmentRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 /**
  * Created by sazzad on 7/19/16
@@ -19,13 +19,14 @@ class EnrolmentService(val enrolmentRepository: EnrolmentRepository) {
     }
 
     @Transactional
-    fun delete(enrolmentId: Long, studentId: Long, year: Int, orgId: Long): Boolean {
+    fun delete(enrolmentId: Long, studentId: Long, year: Int, orgId: Long): EnrolmentDelete {
         val enrolment:Enrolment? = enrolmentRepository.findEnrollmentOfStudentByYear(studentId, year, orgId)
         return if (enrolment != null && enrolment.id == enrolmentId) {
             enrolmentRepository.delete(enrolmentId)
-            true
+            return EnrolmentDelete(enrolmentId, studentId, year, enrolment.roleNumber, true)
         } else {
-            false
+            // TODO don't understand why the heck it's like == enrolment?.roleNumber!!
+            return EnrolmentDelete(enrolmentId, studentId, year, enrolment?.roleNumber!!, false)
         }
     }
 

@@ -60,6 +60,10 @@ class StudentController(val studentService: StudentService,
         return studentService.findStudentCountOfOrganization(authUtil.getOrganizationIdFromToken(request))
     }
 
+    @GetMapping("/list")
+    fun studentList(request: HttpServletRequest)
+            = studentService.findAll(authUtil.getOrganizationIdFromToken(request))
+
     @PatchMapping
     fun studentUpdate(@RequestBody studentJson: StudentJson,
                       request: HttpServletRequest): ResponseEntity<*> {
@@ -124,6 +128,4 @@ class StudentController(val studentService: StudentService,
         return responseOK(studentList)
 
     }
-
-
 }
