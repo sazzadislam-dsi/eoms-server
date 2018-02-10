@@ -1,6 +1,7 @@
 package com.lynas.config.security
 
 import com.lynas.model.util.SpringSecurityUser
+import com.lynas.util.getLogger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.AuthorityUtils
@@ -12,15 +13,16 @@ import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-
 @Component
 class JwtAuthenticationTokenFilter(private val jwtTokenUtil: JwtTokenUtil) : OncePerRequestFilter() {
 
+    val log = getLogger(this.javaClass)
     @Value("\${jwt.header}")
     private val tokenHeader: String? = null
 
-    override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
-        println(logRequest(request))
+    override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse,
+                                  filterChain: FilterChain) {
+        logRequest(request)
         val authToken = request.getHeader(this.tokenHeader)
         val username = jwtTokenUtil.getUsernameFromToken(authToken)
         if (username != null && !jwtTokenUtil.isTokenExpired(authToken)
@@ -37,15 +39,15 @@ class JwtAuthenticationTokenFilter(private val jwtTokenUtil: JwtTokenUtil) : Onc
 
 
     private fun logRequest(request: HttpServletRequest) {
-        println("**************URL************")
-        println(request.requestURI)
-        println("**************HEADER************")
+        log.info("**************URL************")
+        log.info(request.requestURI)
+        log.info("**************HEADER************")
         val headerNames = request.headerNames
         while (headerNames.hasMoreElements()) {
             val key = headerNames.nextElement() as String
             val value = request.getHeader(key)
-            println("header $key --- $value")
+            log.info("header $key --- $value")
         }
-        println("**************************")
+        log.info("**************************")
     }
 }

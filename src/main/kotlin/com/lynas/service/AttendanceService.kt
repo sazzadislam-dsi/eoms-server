@@ -1,11 +1,11 @@
 package com.lynas.service
 
+import com.lynas.dto.AttendanceDTOofClass
+import com.lynas.dto.AttendanceViewQueryResult
 import com.lynas.exception.DuplicateEntryException
 import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.AttendanceBook
 import com.lynas.model.StudentAttendance
-import com.lynas.model.util.AttendanceJsonWrapper
-import com.lynas.model.util.AttendanceViewQueryResult
 import com.lynas.repo.AttendanceRepository
 import com.lynas.util.convertToDate
 import org.springframework.stereotype.Service
@@ -21,26 +21,25 @@ class AttendanceService constructor(val studentService: StudentService,
                                     val attendanceRepository: AttendanceRepository) {
 
     @Transactional
-    fun create(attendanceJsonWrapper: AttendanceJsonWrapper, orgId: Long): AttendanceBook {
-        //TODO what happens if user gives invalid date format
-        val _attendanceDate = attendanceJsonWrapper.date.convertToDate()
-        val course = classService.findById(attendanceJsonWrapper.classId, orgId)
+    fun create(attendanceDto: AttendanceDTOofClass, orgId: Long): AttendanceBook {
+        val attendanceDate = attendanceDto.date.convertToDate()
+        val course = classService.findById(attendanceDto.classId, orgId)
                 ?: throw EntityNotFoundException(
-                "Course or class not found with given classID : ${attendanceJsonWrapper.classId}")
-        val foundDuplicate = checkExistingAttendanceOnGivenDate(_attendanceDate, attendanceJsonWrapper.classId, orgId)
+                        "Course or class not found with given classID : ${attendanceDto.classId}")
+        val foundDuplicate = checkExistingAttendanceOnGivenDate(attendanceDate, attendanceDto.classId, orgId)
         if (foundDuplicate) {
-            throw DuplicateEntryException("Attendance duplicate entry found at date $_attendanceDate")
+            throw DuplicateEntryException("Attendance duplicate entry found at date $attendanceDate")
         }
 
         //TODO catch this exception properly
-        val set = attendanceJsonWrapper.attendanceJson.map {
+        val set = attendanceDto.attendanceDTO.map {
             StudentAttendance(
                     student = studentService.findById(it.t, orgId)
                             ?: throw EntityNotFoundException("student Not found with given studentId: ${it.t}"),
                     attendanceStatus = it.i)
         }.toMutableSet()
 
-        val attendanceBook = AttendanceBook(studentAttendances = set, attendanceDate = _attendanceDate, course = course)
+        val attendanceBook = AttendanceBook(studentAttendances = set, attendanceDate = attendanceDate, course = course)
         return attendanceRepository.save(attendanceBook)
     }
 

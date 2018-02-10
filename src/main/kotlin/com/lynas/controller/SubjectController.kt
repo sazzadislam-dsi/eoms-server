@@ -1,8 +1,9 @@
 package com.lynas.controller
 
+import com.lynas.dto.SubjectDTO
+import com.lynas.dto.SubjectResponseDTO
 import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Subject
-import com.lynas.model.util.SubjectPostJson
 import com.lynas.service.ClassService
 import com.lynas.service.SubjectService
 import com.lynas.util.AuthUtil
@@ -25,7 +26,7 @@ class SubjectController constructor(val subjectService: SubjectService,
     val logger = getLogger(this.javaClass)
 
     @PostMapping
-    fun post(@RequestBody subjectJson: SubjectPostJson, request: HttpServletRequest): ResponseEntity<*> {
+    fun post(@RequestBody subjectJson: SubjectDTO, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Hit create method with {}", subjectJson)
         val course = classService.findById(subjectJson.classId, authUtil.getOrganizationIdFromToken(request))
                 ?: throw EntityNotFoundException("Class can't find for id [${subjectJson.classId}")
@@ -39,9 +40,13 @@ class SubjectController constructor(val subjectService: SubjectService,
     }
 
     @GetMapping("/class/{classId}")
-    fun getAllSubjectsOfClass(@PathVariable classId: Long, request: HttpServletRequest) : List<com.lynas.model.util.Subject> {
+    fun getAllSubjectsOfClass(@PathVariable classId: Long, request: HttpServletRequest)
+            : List<SubjectResponseDTO> {
         return subjectService.findAllByClassId(classId, authUtil.getOrganizationIdFromToken(request))
-                .map { com.lynas.model.util.Subject(id = it.id, subjectName = it.subjectName, subjectDescription = it.subjectDescription, subjectBookAuthor = it.subjectBookAuthor) }
+                .map {
+                    SubjectResponseDTO(id = it.id, subjectName = it.subjectName,
+                            subjectDescription = it.subjectDescription, subjectBookAuthor = it.subjectBookAuthor)
+                }
                 .toList()
     }
 

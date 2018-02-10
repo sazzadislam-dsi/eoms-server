@@ -1,9 +1,9 @@
 package com.lynas.controller
 
+import com.lynas.dto.EnrolmentDTO
 import com.lynas.exception.DuplicateEntryException
 import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Enrolment
-import com.lynas.model.util.EnrolmentJson
 import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
 import com.lynas.service.StudentService
@@ -20,36 +20,32 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("enrolments")
-class EnrolmentController(val enrolmentService: EnrolmentService,
-                          val studentService: StudentService,
-                          val classService: ClassService,
-                          val authUtil: AuthUtil) {
+class EnrolmentController(val enrolmentService: EnrolmentService, val studentService: StudentService,
+                          val classService: ClassService, val authUtil: AuthUtil) {
 
-    val logger = getLogger(this.javaClass)
+    val log = getLogger(this.javaClass)
 
     @PostMapping
-    fun post(@RequestBody enrolmentJson: EnrolmentJson, request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("Hit in enrolment create method with {}", enrolmentJson.toString())
+    fun post(@RequestBody enrolmentDTO: EnrolmentDTO, request: HttpServletRequest): ResponseEntity<*> {
+        log.info("Hit in enrolment create method with {}", enrolmentDTO.toString())
         val organizationId = authUtil.getOrganizationIdFromToken(request)
         val (isValid, message) = enrolmentService.studentEnrolmentCheck(
-                roleNumber = enrolmentJson.roleNumber,
-                studentId = enrolmentJson.studentId,
-                classId = enrolmentJson.classId,
-                year = enrolmentJson.year,
+                roleNumber = enrolmentDTO.roleNumber,
+                studentId = enrolmentDTO.studentId,
+                classId = enrolmentDTO.classId,
+                year = enrolmentDTO.year,
                 orgId = organizationId)
         if (!isValid) {
             throw DuplicateEntryException(message)
         }
-        val _student = studentService.findById(enrolmentJson.studentId, organizationId)
-                ?: throw EntityNotFoundException("Student not found with given student id ${enrolmentJson.studentId}")
-        val _course = classService.findById(enrolmentJson.classId, organizationId)
-                ?: throw EntityNotFoundException("Class/Course not found with given class/course id" + enrolmentJson.classId)
+        val student = studentService.findById(enrolmentDTO.studentId, organizationId)
+                ?: throw EntityNotFoundException("Student not found with given student id ${enrolmentDTO.studentId}")
+        val course = classService.findById(enrolmentDTO.classId, organizationId)
+                ?: throw EntityNotFoundException("Class/Course not found with given class/course id"
+                        + enrolmentDTO.classId)
 
-        val enrolment: Enrolment = Enrolment(
-                year = enrolmentJson.year,
-                roleNumber = enrolmentJson.roleNumber,
-                student = _student,
-                cls = _course)
+        val enrolment: Enrolment = Enrolment(year = enrolmentDTO.year, roleNumber = enrolmentDTO.roleNumber,
+                student = student, cls = course)
 
         enrolmentService.create(enrolment)
         return responseOK(enrolment)

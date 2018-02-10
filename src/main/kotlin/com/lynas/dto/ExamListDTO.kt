@@ -1,6 +1,4 @@
-package com.lynas.service.dto
-
-import com.lynas.model.util.ExamListQueryResult
+package com.lynas.dto
 
 data class ExamListDTO (val subjectId: Long,
                         val classId: Long,

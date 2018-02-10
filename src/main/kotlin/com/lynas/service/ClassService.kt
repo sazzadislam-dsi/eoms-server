@@ -1,8 +1,8 @@
 package com.lynas.service
 
+import com.lynas.dto.ClassDetailQueryResult
 import com.lynas.exception.DuplicateEntryException
 import com.lynas.model.Course
-import com.lynas.model.util.ClassDetailQueryResult
 import com.lynas.repo.ClassRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -25,7 +25,8 @@ class ClassService(val classRepo: ClassRepository) {
                 .isEmpty()
                 .not()
         if (foundDuplicate) {
-            throw DuplicateEntryException("Duplicate Class Found, name = [${course.name}], shift = [${course.shift}], section = [${course.shift}]")
+            throw DuplicateEntryException("Duplicate Class Found, name = [${course.name}], " +
+                    "shift = [${course.shift}], section = [${course.shift}]")
         }
         return classRepo.save(course)
     }

@@ -1,7 +1,7 @@
 package com.lynas.service
 
+import com.lynas.dto.EnrolmentDeleteDTO
 import com.lynas.model.Enrolment
-import com.lynas.model.util.EnrolmentDelete
 import com.lynas.repo.EnrolmentRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -19,14 +19,14 @@ class EnrolmentService(val enrolmentRepository: EnrolmentRepository) {
     }
 
     @Transactional
-    fun delete(enrolmentId: Long, studentId: Long, year: Int, orgId: Long): EnrolmentDelete {
+    fun delete(enrolmentId: Long, studentId: Long, year: Int, orgId: Long): EnrolmentDeleteDTO {
         val enrolment:Enrolment? = enrolmentRepository.findEnrollmentOfStudentByYear(studentId, year, orgId)
         return if (enrolment != null && enrolment.id == enrolmentId) {
             enrolmentRepository.delete(enrolmentId)
-            return EnrolmentDelete(enrolmentId, studentId, year, enrolment.roleNumber, true)
+            return EnrolmentDeleteDTO(enrolmentId, studentId, year, enrolment.roleNumber, true)
         } else {
             // TODO don't understand why the heck it's like == enrolment?.roleNumber!!
-            return EnrolmentDelete(enrolmentId, studentId, year, enrolment?.roleNumber!!, false)
+            return EnrolmentDeleteDTO(enrolmentId, studentId, year, enrolment?.roleNumber!!, false)
         }
     }
 
@@ -42,7 +42,8 @@ class EnrolmentService(val enrolmentRepository: EnrolmentRepository) {
     //data class Result(val enrolment: Enrolment?, val isEnroll: Boolean)
 
     @Transactional
-    fun studentEnrolmentCheck(roleNumber: Int, studentId: Long, classId: Long, year: Int, orgId: Long): Pair<Boolean, String> {
+    fun studentEnrolmentCheck(roleNumber: Int, studentId: Long, classId: Long, year: Int, orgId: Long)
+            : Pair<Boolean, String> {
         val enrolment = enrolmentRepository.findEnrollmentOfStudentByYear(studentId, year, orgId)
         return if (enrolment == null) {
             val enrolmentList = enrolmentRepository.findEnrollmentOfRole(roleNumber, year, orgId, classId)

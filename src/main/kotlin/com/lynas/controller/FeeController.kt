@@ -1,18 +1,16 @@
 package com.lynas.controller
 
+import com.lynas.dto.FeeInfoDTO
+import com.lynas.dto.PayFeeDTO
 import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.FeeInfo
 import com.lynas.model.StudentFee
-import com.lynas.model.response.ErrorObject
-import com.lynas.model.util.FeeInfoJson
-import com.lynas.model.util.FeeStudentNew
 import com.lynas.service.ClassService
 import com.lynas.service.FeeInfoService
 import com.lynas.service.StudentFeeService
 import com.lynas.service.StudentService
 import com.lynas.util.AuthUtil
 import com.lynas.util.convertToDate
-import com.lynas.util.responseError
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -32,17 +30,16 @@ class FeeController(val feeInfoService: FeeInfoService,
                     val authUtil: AuthUtil) {
 
     @PostMapping
-    fun post(@RequestBody feeInfoJson: FeeInfoJson, request: HttpServletRequest): ResponseEntity<*> {
-        val courseById = classService.findById(id = feeInfoJson.classId, orgId = authUtil.getOrganizationIdFromToken(request))
-                ?: throw EntityNotFoundException("class Not Found With Given ID [${feeInfoJson.classId}]")
+    fun post(@RequestBody feeInfoDTO: FeeInfoDTO, request: HttpServletRequest): ResponseEntity<*> {
+        val courseById = classService.findById(id = feeInfoDTO.classId,
+                orgId = authUtil.getOrganizationIdFromToken(request))
+                ?: throw EntityNotFoundException("class Not Found With Given ID [${feeInfoDTO.classId}]")
 
-        // TODO feeInfoJson.lastDate?.convertToDate() error handling should be placed in controller advice
         val feeInfo = FeeInfo(
-                type = feeInfoJson.type,
-                amount = feeInfoJson.amount,
-                year = feeInfoJson.year,
-                lastDate = feeInfoJson.lastDate?.convertToDate()
-                        ?: return responseError(ErrorObject(feeInfoJson, "lastDate", "parseError", "dd-mm-yyyy")),
+                type = feeInfoDTO.type,
+                amount = feeInfoDTO.amount,
+                year = feeInfoDTO.year,
+                lastDate = feeInfoDTO.lastDate?.convertToDate()!!,
                 course = courseById,
                 dateCreated = Date(),
                 dateModified = Date())
@@ -50,12 +47,12 @@ class FeeController(val feeInfoService: FeeInfoService,
     }
 
     @PostMapping("/student/new")
-    fun studentPayment(request: HttpServletRequest, @RequestBody feeStudentNew: FeeStudentNew): ResponseEntity<*> {
-        val fee = feeInfoService.find(feeStudentNew.feeInfoId)
-                ?: throw EntityNotFoundException("fee info not found for id [${feeStudentNew.feeInfoId}]")
-        val studentOf = studentService.findById(feeStudentNew.studentId, authUtil.getOrganizationIdFromToken(request))
-                ?: throw EntityNotFoundException("student not found for id [${feeStudentNew.studentId}]")
-        val pDate = feeStudentNew.paymentDate.convertToDate()
+    fun studentPayment(request: HttpServletRequest, @RequestBody payFeeDTO: PayFeeDTO): ResponseEntity<*> {
+        val fee = feeInfoService.find(payFeeDTO.feeInfoId)
+                ?: throw EntityNotFoundException("fee info not found for id [${payFeeDTO.feeInfoId}]")
+        val studentOf = studentService.findById(payFeeDTO.studentId, authUtil.getOrganizationIdFromToken(request))
+                ?: throw EntityNotFoundException("student not found for id [${payFeeDTO.studentId}]")
+        val pDate = payFeeDTO.paymentDate.convertToDate()
 
         val studentFee = StudentFee(
                 student = studentOf,

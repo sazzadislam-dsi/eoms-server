@@ -1,4 +1,4 @@
-package com.lynas.service.dto
+package com.lynas.dto
 
 import com.lynas.model.util.ExamType
 import java.util.*

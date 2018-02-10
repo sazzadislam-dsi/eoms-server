@@ -56,7 +56,8 @@ data class ErrInf(val input: Any, val msg: Any)
 
 @Throws(DateFormatParseException::class)
 fun String.convertToDate(): Date {
-    val pattern = if (this.matches(kotlin.text.Regex("[A-Za-z]+ [A-Za-z]+ \\d?\\d \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3} \\d{4}"))) {
+    val pattern = if (this.matches(kotlin.text.Regex(
+                    "[A-Za-z]+ [A-Za-z]+ \\d?\\d \\d{1,2}:\\d{1,2}:\\d{1,2} [A-Za-z]{3} \\d{4}"))) {
         "EEE MMM dd HH:mm:ss Z yyyy"
     } else {
         "dd-MM-yyyy"
@@ -65,7 +66,8 @@ fun String.convertToDate(): Date {
     return try {
         dateFormatter.parse(this)
     } catch (e: ParseException) {
-        throw DateFormatParseException("Invalid date format [${this}], Expected date format ${Constants.EXPECTED_DATE_FORMAT}", e.errorOffset)
+        throw DateFormatParseException("Invalid date format [${this}], " +
+                "Expected date format ${Constants.EXPECTED_DATE_FORMAT}", e.errorOffset)
     }
 }
 

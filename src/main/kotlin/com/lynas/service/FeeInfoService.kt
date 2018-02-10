@@ -1,8 +1,8 @@
 package com.lynas.service
 
+import com.lynas.dto.StudentFeeResponseDTO
 import com.lynas.model.FeeInfo
 import com.lynas.model.StudentFee
-import com.lynas.model.util.FeeInfoOfStudentResponse
 import com.lynas.repo.FeeInfoRepository
 import org.neo4j.ogm.session.Session
 import org.springframework.stereotype.Service
@@ -32,13 +32,16 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Sess
     }
 
     @Transactional
-    fun findStudentFeeInfoByStudent(id: Long, orgId: Long): List<FeeInfoOfStudentResponse>? {
+    fun findStudentFeeInfoByStudent(id: Long, orgId: Long): List<StudentFeeResponseDTO>? {
         return feeInfoRepository
                 .findStudentFeeInfoByStudent(id)
                 ?.filter { it.feeInfo.course.organization.id == orgId }
-                ?.map { FeeInfoOfStudentResponse(
-                        id = it.id!!, studentId = it.student.id!!, paymentDate = it.paymentDate, feeInfo = it.feeInfo
-                ) }
+                ?.map {
+                    StudentFeeResponseDTO(
+                            id = it.id!!, studentId = it.student.id!!,
+                            paymentDate = it.paymentDate, feeInfo = it.feeInfo
+                    )
+                }
                 ?.toMutableList()
     }
 

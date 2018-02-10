@@ -14,7 +14,7 @@ import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Created by lynas on 3/18/2017
@@ -28,8 +28,10 @@ class Application : WebMvcConfigurerAdapter() {
     private val tokenHeader: String = "Authorization"
 
     private fun generateApiInfo(): ApiInfo {
-        return ApiInfo("EOMS", "ERP system for Educational organization management system", "Version 1.0",
-                "free", "szlynas@gmail.com", "Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0")
+        return ApiInfo("EOMS",
+                "ERP system for Educational organization management system", "Version 1.0",
+                "free", "szlynas@gmail.com", "Apache 2.0",
+                "http://www.apache.org/licenses/LICENSE-2.0")
     }
 
     @Bean

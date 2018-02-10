@@ -1,13 +1,11 @@
 package com.lynas.controller
 
-import com.lynas.model.response.ExamClassResponse
-import com.lynas.model.util.ExamJsonWrapper
+import com.lynas.dto.ExamJsonWrapper
+import com.lynas.dto.ExamUpdateDTO
 import com.lynas.model.util.ExamType
-import com.lynas.model.util.ExamUpdateJson
 import com.lynas.service.ExamService
 import com.lynas.service.ExamServiceJava
 import com.lynas.service.StudentService
-import com.lynas.service.dto.ExamOfSubjectUpdateDTO
 import com.lynas.util.*
 import org.neo4j.ogm.exception.NotFoundException
 import org.springframework.http.ResponseEntity
@@ -22,35 +20,31 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("exams")
-class ExamController(val examService: ExamService,
-                     val studentService: StudentService,
-                     val examServiceJava: ExamServiceJava,
-                     val authUtil: AuthUtil) {
+class ExamController(val examService: ExamService, val studentService: StudentService,
+                     val examServiceJava: ExamServiceJava, val authUtil: AuthUtil) {
 
-    val logger = getLogger(this.javaClass)
+    private val log = getLogger(this.javaClass)
 
     @PostMapping
     fun post(@RequestBody examJson: ExamJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("hit in create controller with {}", examJson)
+        log.info("hit in create controller with {}", examJson)
         val organization = authUtil.getOrganizationFromToken(request)
         examService.create(examJson, organization)
         return responseOK(examJson)
     }
 
     @PatchMapping
-    fun updateExamMark(@RequestBody examUpdateJson: ExamUpdateJson, request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("Update examId [{}], with updated obtain mark [{}]", examUpdateJson.examId, examUpdateJson.updateObtainMark)
-        examService.update(examUpdateJson)
-        return responseOK(examUpdateJson)
+    fun updateExamMark(@RequestBody examUpdateDTO: ExamUpdateDTO, request: HttpServletRequest): ResponseEntity<*> {
+        log.info("Update examId [{}], with updated obtain mark [{}]", examUpdateDTO.examId, examUpdateDTO.updateObtainMark)
+        examService.update(examUpdateDTO)
+        return responseOK(examUpdateDTO)
 
     }
 
     @GetMapping("/class/{classId}/subject/{subjectId}/year/{_year}/results")
-    fun resultOfClassBySubject(@PathVariable classId: Long,
-                               @PathVariable subjectId: Long,
-                               @PathVariable _year: Int,
-                               request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("return result of class id {} and subject id {} and year {}", classId, subjectId, _year)
+    fun resultOfClassBySubject(@PathVariable classId: Long, @PathVariable subjectId: Long,
+                               @PathVariable _year: Int, request: HttpServletRequest): ResponseEntity<*> {
+        log.info("return result of class id {} and subject id {} and year {}", classId, subjectId, _year)
         return try {
             responseOK(examService.resultOfSubjectByYear(
                     classId = classId,
@@ -68,7 +62,7 @@ class ExamController(val examService: ExamService,
 
     @GetMapping("student/{studentId}/results")
     fun resultOfStudentByYear(@PathVariable studentId: Long, request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("return result for student id [{}]", studentId)
+        log.info("return result for student id [{}]", studentId)
         val organization = authUtil.getOrganizationFromToken(request)
         val year = LocalDate.now().year
         val studentInfo = studentService.studentInfoByYear(id = studentId, year = year, orgId = organization.id!!)
@@ -80,7 +74,7 @@ class ExamController(val examService: ExamService,
                               @PathVariable studentId: Long,
                               @PathVariable _year: Int,
                               request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("return result of class id {} and student id {} and year {}", classId, studentId, _year)
+        log.info("return result of class id {} and student id {} and year {}", classId, studentId, _year)
         val organization = authUtil.getOrganizationFromToken(request)
         return responseOK(examService.resultOfStudentByYear(classId, studentId, _year, organization.id!!))
     }
@@ -89,22 +83,8 @@ class ExamController(val examService: ExamService,
     fun resultOfClassByYear(@PathVariable classId: Long,
                             @PathVariable _year: Int,
                             request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("return result of class id {} and student id {} and year {}", classId, _year)
+        log.info("return result of class id {} and student id {} and year {}", classId, _year)
         val organization = authUtil.getOrganizationFromToken(request)
-        // TODO why following code was written
-        val result = examService.resultOfClass(classId, _year, organization.id!!).groupBy { it.roleNumber }
-                .map {
-                    ExamClassResponse().apply {
-                        roll = it.key
-                        name = it.value[0].person
-                        resultOfSubjects = it.value.associateBy({ it.subject }, {
-                            it.exam
-                                    .map { (it.percentile * it.obtainedNumber) / 100 }
-                                    .sum()
-                        })
-                    }
-                }
-
         return responseOK(examService.resultOfClass(classId, _year, organization.id!!))
     }
 
@@ -113,29 +93,26 @@ class ExamController(val examService: ExamService,
                       @PathVariable _year: Int,
                       request: HttpServletRequest): ResponseEntity<*> {
         val organization = authUtil.getOrganizationFromToken(request)
-        logger.info("Hit method with classId [{}], year [{}], organization [{}]", classId, _year, organization.id)
+        log.info("Hit method with classId [{}], year [{}], organization [{}]", classId, _year, organization.id)
         val result = examServiceJava.getResultOfClass(classId, _year, organization.id!!)
         return responseOK(result)
     }
 
     @GetMapping("/taken_exam_list/class/{classId}/subject/{subjectId}/year/{_year}")
-    fun examTakenOfSubject(@PathVariable classId: Long,
-                           @PathVariable subjectId: Long,
-                           @PathVariable _year: Int,
-                           request: HttpServletRequest) = responseOK(examService.examListOfSubject(classId, subjectId, _year, authUtil.getOrganizationIdFromToken(request)))
+    fun examTakenOfSubject(@PathVariable classId: Long, @PathVariable subjectId: Long, @PathVariable _year: Int,
+                           request: HttpServletRequest) = responseOK(examService.examListOfSubject(classId, subjectId, _year,
+            authUtil.getOrganizationIdFromToken(request)))
 
-    @GetMapping("/result/update/classId/{classId}/subjectId/{subjectId}/year/{_year}/date/{date}/examType/{examType}")
-    fun getSubjectResultByDate(@PathVariable classId: Long,
-                               @PathVariable subjectId: Long,
-                               @PathVariable _year: Int,
-                               @PathVariable date: String,
-                               @PathVariable examType: ExamType,
+    @GetMapping(
+            "/result/update/classId/{classId}/subjectId/{subjectId}/year/{_year}/date/{date}/examType/{examType}")
+    fun getSubjectResultByDate(@PathVariable classId: Long, @PathVariable subjectId: Long, @PathVariable _year: Int,
+                               @PathVariable date: String, @PathVariable examType: ExamType,
                                request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("Result update for classId [{}], subjectId [{}], year [{}], date [{}], examType [{}]",
+        log.info("Result update for classId [{}], subjectId [{}], year [{}], date [{}], examType [{}]",
                 classId, subjectId, _year, date, examType)
-        val _date: Date = date.convertToDate()
+        val date: Date = date.convertToDate()
         return responseOK(examService.findByClassIdSubjectIdYearDateExamType(
-                classId, subjectId, _year, _date, examType, authUtil.getOrganizationIdFromToken(request)))
+                classId, subjectId, _year, date, examType, authUtil.getOrganizationIdFromToken(request)))
     }
 
     @GetMapping("/classId/{classId}/year/{year}/results")

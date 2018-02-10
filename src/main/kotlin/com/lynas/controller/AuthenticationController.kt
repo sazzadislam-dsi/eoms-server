@@ -1,9 +1,9 @@
 package com.lynas.controller
 
 import com.lynas.config.security.JwtTokenUtil
+import com.lynas.dto.AuthenticationRequestDTO
+import com.lynas.dto.AuthenticationResponseDTO
 import com.lynas.service.AppUserService
-import com.lynas.service.dto.AuthenticationRequestDTO
-import com.lynas.service.dto.AuthenticationResponseDTO
 import org.springframework.mobile.device.Device
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -26,7 +26,8 @@ class AuthenticationController(val appUserService: AppUserService,
 
 
     @PostMapping("/login")
-    fun login(@Valid @RequestBody authenticationRequestDTO: AuthenticationRequestDTO, device: Device): AuthenticationResponseDTO {
+    fun login(@Valid @RequestBody authenticationRequestDTO: AuthenticationRequestDTO, device: Device)
+            : AuthenticationResponseDTO {
         val authentication = authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(
                         authenticationRequestDTO.username, authenticationRequestDTO.password))

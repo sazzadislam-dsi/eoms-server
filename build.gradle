@@ -51,7 +51,7 @@ dependencies {
             "io.springfox:springfox-swagger-ui:${swaggerVersion}"
     )
 
-
+    compileOnly('org.projectlombok:lombok:1.16.20')
     runtime('org.springframework.boot:spring-boot-devtools')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 

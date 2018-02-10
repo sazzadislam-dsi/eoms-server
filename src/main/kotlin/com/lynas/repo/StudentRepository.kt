@@ -1,7 +1,7 @@
 package com.lynas.repo
 
+import com.lynas.dto.StudentInfoQueryResult
 import com.lynas.model.Student
-import com.lynas.model.util.StudentInfoQueryResult
 import org.springframework.data.neo4j.annotation.Depth
 import org.springframework.data.neo4j.annotation.Query
 import org.springframework.data.neo4j.repository.GraphRepository

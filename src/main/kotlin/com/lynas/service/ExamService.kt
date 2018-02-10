@@ -1,18 +1,11 @@
 package com.lynas.service
 
+import com.lynas.dto.*
 import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Exam
 import com.lynas.model.Organization
-import com.lynas.model.response.ExamResponse
-import com.lynas.model.response.ExamStudentResponse
-import com.lynas.model.util.ExamJsonWrapper
-import com.lynas.model.util.ExamQueryResult
 import com.lynas.model.util.ExamType
-import com.lynas.model.util.ExamUpdateJson
 import com.lynas.repo.ExamRepository
-import com.lynas.service.dto.ExamListDTO
-import com.lynas.service.dto.ExamOfStudent
-import com.lynas.service.dto.ExamOfSubjectUpdateDTO
 import com.lynas.util.convertToDate
 import com.lynas.util.err_notFound
 import org.neo4j.ogm.exception.NotFoundException
@@ -32,14 +25,14 @@ class ExamService(private val examRepository: ExamRepository,
                   private val studentService: StudentService) {
 
     @Transactional
-    fun create( examJson: ExamJsonWrapper, organization: Organization) {
+    fun create(examJson: ExamJsonWrapper, organization: Organization) {
         val _date: Date = examJson.date.convertToDate()
 
         val course = classService.findById(examJson.classId, organization.id!!)
                 ?: throw EntityNotFoundException("ClassId/CourseId ${examJson.classId}".err_notFound())
         val _subject = subjectService.findById(examJson.subjectId)
                 ?: throw EntityNotFoundException("SubjectId ${examJson.subjectId}".err_notFound())
-        val listOfExam = examJson.examJson.map { (mark, studentId, _isPresent) ->
+        val listOfExam = examJson.examDTO.map { (mark, studentId, _isPresent) ->
             Exam(
                     examType = examJson.examType,
                     totalNumber = examJson.totalMark,
@@ -68,12 +61,12 @@ class ExamService(private val examRepository: ExamRepository,
     }
 
     @Transactional
-    fun update(examUpdateJson: ExamUpdateJson) {
-        val exam = findById(examUpdateJson.examId) ?: throw NotFoundException("examId : $examUpdateJson.examId")
-        if (exam.totalNumber < examUpdateJson.updateObtainMark)
-            throw IllegalStateException("updated mark : ${examUpdateJson.updateObtainMark} is grater then " +
+    fun update(examUpdateDTO: ExamUpdateDTO) {
+        val exam = findById(examUpdateDTO.examId) ?: throw NotFoundException("examId : $examUpdateDTO.examId")
+        if (exam.totalNumber < examUpdateDTO.updateObtainMark)
+            throw IllegalStateException("updated mark : ${examUpdateDTO.updateObtainMark} is grater then " +
                     "total mark ${exam.totalNumber} of exam")
-        exam.obtainedNumber = examUpdateJson.updateObtainMark
+        exam.obtainedNumber = examUpdateDTO.updateObtainMark
         create(exam)
     }
 
@@ -142,11 +135,7 @@ class ExamService(private val examRepository: ExamRepository,
     }
 
     @Transactional
-    fun resultOfClass(classId: Long, _year: Int, orgId: Long): List<ExamQueryResult> {
-        val resultList = examRepository.resultOfClassByYear(classId, _year, orgId)
-        val resultMap = resultList.groupBy { it.roleNumber }
-        return resultList
-    }
+    fun resultOfClass(classId: Long, _year: Int, orgId: Long): List<ExamQueryResult> = examRepository.resultOfClassByYear(classId, _year, orgId)
 
     @Transactional
     fun examListOfSubject(classId: Long, subjectId: Long, _year: Int, orgId: Long): ExamListDTO {
@@ -165,8 +154,10 @@ class ExamService(private val examRepository: ExamRepository,
                                                examType: ExamType,
                                                orgId: Long): ExamOfSubjectUpdateDTO {
         val examOfSubjectUpdateDTO = ExamOfSubjectUpdateDTO()
-        examOfSubjectUpdateDTO.classId = classService.findById(classId, orgId)!!.id ?: throw NotFoundException("classId : $classId")
-        examOfSubjectUpdateDTO.subjectId = subjectService.findById(subjectId)!!.id ?: throw NotFoundException("subjectId : $subjectId")
+        examOfSubjectUpdateDTO.classId = classService.findById(classId, orgId)!!.id
+                ?: throw NotFoundException("classId : $classId")
+        examOfSubjectUpdateDTO.subjectId = subjectService.findById(subjectId)!!.id
+                ?: throw NotFoundException("subjectId : $subjectId")
         examOfSubjectUpdateDTO.examType = examType
         examOfSubjectUpdateDTO.date = date
 
@@ -181,14 +172,14 @@ class ExamService(private val examRepository: ExamRepository,
 
         examOfSubjectUpdateDTO.resultOfASubjectByExamTypeDate = results
                 .map {
-            val exam = it.exam[0]
+                    val exam = it.exam[0]
                     ExamOfStudent(studentId = exam.student.id!!,
-                    name = it.person!!,
-                    rollNumber = it.roleNumber!!,
-                    examId = exam.id!!,
+                            name = it.person!!,
+                            rollNumber = it.roleNumber!!,
+                            examId = exam.id!!,
                             obtainMark = exam.obtainedNumber,
                             p = exam.isPresent)
-        }
+                }
                 .sortedBy { it.rollNumber }
                 .toMutableList()
 

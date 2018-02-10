@@ -1,12 +1,11 @@
 package com.lynas.controller
 
+import com.lynas.dto.StudentContactDTO
+import com.lynas.dto.StudentDTO
 import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.ContactInformation
 import com.lynas.model.Person
 import com.lynas.model.Student
-import com.lynas.model.response.ErrorObject
-import com.lynas.model.util.StudentContact
-import com.lynas.model.util.StudentJson
 import com.lynas.service.PersonService
 import com.lynas.service.StudentService
 import com.lynas.util.*
@@ -21,23 +20,21 @@ import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("students")
-class StudentController(val studentService: StudentService,
-                        val personService: PersonService,
-                        val authUtil: AuthUtil ) {
-    private val logger = getLogger(this.javaClass)
+class StudentController(val studentService: StudentService, val personService: PersonService, val authUtil: AuthUtil) {
+    private val log = getLogger(this.javaClass)
 
     @PostMapping
-    fun post(@RequestBody studentJson: StudentJson, request: HttpServletRequest): ResponseEntity<*> {
-        logger.warn("received student " + studentJson.toString())
+    fun post(@RequestBody studentDTO: StudentDTO, request: HttpServletRequest): ResponseEntity<*> {
+        log.warn("received student " + studentDTO.toString())
 
-        val _dateOfBirth: Date = studentJson.dateOfBirth.convertToDate()
+        val dateOfBirth: Date = studentDTO.dateOfBirth.convertToDate()
 
         val person = Person(
-                firstName = studentJson.firstName,
-                lastName = studentJson.lastName,
-                dateOfBirth = _dateOfBirth,
-                sex = studentJson.sex,
-                religion = studentJson.religion,
+                firstName = studentDTO.firstName,
+                lastName = studentDTO.lastName,
+                dateOfBirth = dateOfBirth,
+                sex = studentDTO.sex,
+                religion = studentDTO.religion,
                 organization = authUtil.getOrganizationFromToken(request),
                 contactInformationList = mutableListOf())
         val student = Student(person = person, firstAdmissionDate = Date())
@@ -65,30 +62,20 @@ class StudentController(val studentService: StudentService,
             = studentService.findAll(authUtil.getOrganizationIdFromToken(request))
 
     @PatchMapping
-    fun studentUpdate(@RequestBody studentJson: StudentJson,
+    fun studentUpdate(@RequestBody studentDTO: StudentDTO,
                       request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("Hit student update controller with id {} && {}", studentJson.studentId, studentJson)
-        val student = studentService.findById(studentJson.studentId, authUtil.getOrganizationIdFromToken(request))
-        if (student?.person == null) return responseError(studentJson)
+        log.info("Hit student update controller with id {} && {}", studentDTO.studentId, studentDTO)
+        val student = studentService.findById(studentDTO.studentId, authUtil.getOrganizationIdFromToken(request))
+        if (student?.person == null) return responseError(studentDTO)
 
-        var _dateOfBirth = Date()
-        try {
-            _dateOfBirth = studentJson.dateOfBirth.convertToDate()
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-            return responseError(ErrorObject(
-                    studentJson,
-                    "dateOfBirth",
-                    Constants.INVALID_DATE_FORMAT,
-                    Constants.EXPECTED_DATE_FORMAT))
-        }
+        val dob = studentDTO.dateOfBirth.convertToDate()
 
         student.person.apply {
-            firstName = studentJson.firstName
-            lastName = studentJson.lastName
-            dateOfBirth = _dateOfBirth
-            sex = studentJson.sex
-            religion = studentJson.religion
+            firstName = studentDTO.firstName
+            lastName = studentDTO.lastName
+            dateOfBirth = dob
+            sex = studentDTO.sex
+            religion = studentDTO.religion
         }
 
         studentService.create(student)
@@ -97,20 +84,21 @@ class StudentController(val studentService: StudentService,
     }
 
     @PostMapping("/add_contact_info")
-    fun postStudentContactInformation(@RequestBody studentContact: StudentContact,
+    fun postStudentContactInformation(@RequestBody studentContactDTO: StudentContactDTO,
                                       request: HttpServletRequest): ResponseEntity<*> {
-        val student = studentService.findById(studentContact.studentId, authUtil.getOrganizationIdFromToken(request))
-                ?: return responseError("Student not found with given student id ${studentContact.studentId}")
+        val student = studentService.findById(studentContactDTO.studentId, authUtil.getOrganizationIdFromToken(request))
+                ?: return responseError(
+                        "Student not found with given student id ${studentContactDTO.studentId}")
         if (student.person.contactInformationList == null) {
             student.person.contactInformationList = mutableListOf()
         }
         student.person.contactInformationList.add(ContactInformation(
-                name = studentContact.name,
-                address = studentContact.address,
-                phone_1 = studentContact.phone_1,
-                phone_2 = studentContact.phone_2,
-                phone_3 = studentContact.phone_3,
-                contactType = studentContact.contactType
+                name = studentContactDTO.name,
+                address = studentContactDTO.address,
+                phone_1 = studentContactDTO.phone_1,
+                phone_2 = studentContactDTO.phone_2,
+                phone_3 = studentContactDTO.phone_3,
+                contactType = studentContactDTO.contactType
 
         ))
         return responseOK(studentService.create(student))
@@ -119,10 +107,10 @@ class StudentController(val studentService: StudentService,
     @PostMapping("/search/name")
     fun studentSearchWithName(@RequestBody name: String, request: HttpServletRequest): ResponseEntity<*> {
         if (name.isEmpty()) {
-            logger.info("student search with Empty string")
+            log.info("student search with Empty string")
             return responseError("")
         }
-        logger.info("search with student name [{}]", name)
+        log.info("search with student name [{}]", name)
         val organization = authUtil.getOrganizationFromToken(request)
         val studentList = studentService.searchByFirstName(name, organization.id!!)
         return responseOK(studentList)

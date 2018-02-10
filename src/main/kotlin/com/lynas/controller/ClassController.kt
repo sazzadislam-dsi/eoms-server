@@ -1,7 +1,7 @@
 package com.lynas.controller
 
+import com.lynas.dto.CourseDTO
 import com.lynas.model.Course
-import com.lynas.model.util.CourseJson
 import com.lynas.service.ClassService
 import com.lynas.util.AuthUtil
 import com.lynas.util.getLogger
@@ -15,19 +15,16 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("classes")
 class ClassController(val classService: ClassService, val util: AuthUtil) {
 
-    private val logger = getLogger(this.javaClass)
+    private val log = getLogger(this.javaClass)
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun post(@RequestBody cls: CourseJson, request: HttpServletRequest): ResponseEntity<*> {
-        logger.info("Received Class :: " + cls.toString())
-        var createdClass = Course(
-                name = cls.name,
-                shift = cls.shift,
-                section = cls.section,
+    fun post(@RequestBody cls: CourseDTO, request: HttpServletRequest): ResponseEntity<*> {
+        log.info("Received Class :: " + cls.toString())
+        var createdClass = Course(name = cls.name, shift = cls.shift, section = cls.section,
                 organization = util.getOrganizationFromToken(request))
         createdClass = classService.create(createdClass)
-        logger.info("Saved Class :: " + createdClass.toString())
+        log.info("Saved Class :: " + createdClass.toString())
         return responseOK(createdClass)
     }
 
@@ -44,9 +41,7 @@ class ClassController(val classService: ClassService, val util: AuthUtil) {
 
     @GetMapping("/class/{classId}/year/{year}/students")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun getAllStudent(@PathVariable classId: Long,
-                      @PathVariable year: Int,
-                      request: HttpServletRequest) = classService.findStudentsByClassId(classId, util.getOrganizationIdFromToken(request), year )
+    fun getAllStudent(@PathVariable classId: Long, @PathVariable year: Int, request: HttpServletRequest) = classService.findStudentsByClassId(classId, util.getOrganizationIdFromToken(request), year)
 
     @GetMapping("/class/{classId}")
     @PreAuthorize("hasAnyRole('ROLE_USER')")

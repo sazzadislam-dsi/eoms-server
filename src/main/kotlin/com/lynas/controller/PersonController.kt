@@ -1,8 +1,9 @@
 package com.lynas.controller
 
+import com.lynas.dto.PersonContactDTO
 import com.lynas.exception.EntityNotFoundException
+import com.lynas.model.ContactInformation
 import com.lynas.model.Person
-import com.lynas.model.util.PersonContact
 import com.lynas.service.PersonService
 import com.lynas.util.AuthUtil
 import org.springframework.web.bind.annotation.*
@@ -29,7 +30,7 @@ class PersonController(val personService: PersonService, val authUtil: AuthUtil)
             val personFromDB = personService.findPersonById(person.id as Long) ?: throw EntityNotFoundException(
                     "Person info not found for person id [$person.id]"
             )
-            personFromDB?.apply {
+            personFromDB.apply {
                 firstName = person.firstName
                 lastName = person.lastName
                 dateOfBirth = person.dateOfBirth
@@ -43,10 +44,12 @@ class PersonController(val personService: PersonService, val authUtil: AuthUtil)
 
 
     @PostMapping("/contactInformation")
-    fun updatePersonContactInfo(@RequestBody personContact: PersonContact) {
-        val person = personService.findPersonById(personContact.personId)
+    fun updatePersonContactInfo(@RequestBody personContactDTO: PersonContactDTO): MutableList<ContactInformation>? {
+        val person = personService.findPersonById(personContactDTO.personId)
         val contactInformationList = person?.contactInformationList
-        contactInformationList?.add(personContact.contactInformation)
+        contactInformationList?.add(personContactDTO.contactInformation)
+        //todo no db operation ?
+        return contactInformationList
     }
 }
 

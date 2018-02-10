@@ -3,7 +3,7 @@
 open terminal & run
  - gradlew bootRun
 
-then go to following url for api defination
+then go to following url for api definition
  - http://localhost:8008/swagger-ui.html
  
 

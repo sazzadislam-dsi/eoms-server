@@ -1,8 +1,8 @@
 package com.lynas.service;
 
+import com.lynas.dto.ExamClassResponse1;
+import com.lynas.dto.ExamQueryResult;
 import com.lynas.model.Exam;
-import com.lynas.model.response.ExamClassResponse1;
-import com.lynas.model.util.ExamQueryResult;
 import com.lynas.model.util.ExamType;
 import com.lynas.repo.ExamRepository;
 import org.springframework.stereotype.Service;

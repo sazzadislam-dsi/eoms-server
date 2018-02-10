@@ -1,7 +1,7 @@
 package com.lynas.controller
 
-import com.lynas.model.response.ErrorObject
-import com.lynas.model.util.AttendanceJsonWrapper
+import com.lynas.dto.AttendanceDTOofClass
+import com.lynas.dto.ErrorObject
 import com.lynas.service.AttendanceService
 import com.lynas.util.*
 import io.swagger.annotations.Api
@@ -25,9 +25,10 @@ class AttendanceController constructor(val attendanceService: AttendanceService,
 
     @PostMapping
     @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
-    fun post(@RequestBody attendanceJson: AttendanceJsonWrapper, request: HttpServletRequest): ResponseEntity<*> {
+    fun post(@RequestBody attendanceJson: AttendanceDTOofClass, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
-        attendanceService.create(attendanceJsonWrapper = attendanceJson, orgId = util.getOrganizationIdFromToken(request))
+        attendanceService.create(attendanceDto = attendanceJson,
+                orgId = util.getOrganizationIdFromToken(request))
         logger.info("Post successfully attendance book")
         return responseOK(attendanceJson)
     }
