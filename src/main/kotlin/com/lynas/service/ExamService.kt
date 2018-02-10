@@ -135,7 +135,8 @@ class ExamService(private val examRepository: ExamRepository,
     }
 
     @Transactional
-    fun resultOfClass(classId: Long, _year: Int, orgId: Long): List<ExamQueryResult> = examRepository.resultOfClassByYear(classId, _year, orgId)
+    fun resultOfClass(classId: Long, _year: Int, orgId: Long): List<ExamQueryResult>
+            = examRepository.resultOfClassByYear(classId, _year, orgId)
 
     @Transactional
     fun examListOfSubject(classId: Long, subjectId: Long, _year: Int, orgId: Long): ExamListDTO {

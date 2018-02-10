@@ -41,9 +41,11 @@ class ClassController(val classService: ClassService, val util: AuthUtil) {
 
     @GetMapping("/class/{classId}/year/{year}/students")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun getAllStudent(@PathVariable classId: Long, @PathVariable year: Int, request: HttpServletRequest) = classService.findStudentsByClassId(classId, util.getOrganizationIdFromToken(request), year)
+    fun getAllStudent(@PathVariable classId: Long, @PathVariable year: Int, request: HttpServletRequest)
+            = classService.findStudentsByClassId(classId, util.getOrganizationIdFromToken(request), year)
 
     @GetMapping("/class/{classId}")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun getCourseById(@PathVariable classId: Long, request: HttpServletRequest) = classService.findById(classId, util.getOrganizationIdFromToken(request))
+    fun getCourseById(@PathVariable classId: Long, request: HttpServletRequest)
+            = classService.findById(classId, util.getOrganizationIdFromToken(request))
 }

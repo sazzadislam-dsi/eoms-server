@@ -35,7 +35,8 @@ class ExamController(val examService: ExamService, val studentService: StudentSe
 
     @PatchMapping
     fun updateExamMark(@RequestBody examUpdateDTO: ExamUpdateDTO, request: HttpServletRequest): ResponseEntity<*> {
-        log.info("Update examId [{}], with updated obtain mark [{}]", examUpdateDTO.examId, examUpdateDTO.updateObtainMark)
+        log.info("Update examId [{}], with updated obtain mark [{}]", examUpdateDTO.examId,
+                examUpdateDTO.updateObtainMark)
         examService.update(examUpdateDTO)
         return responseOK(examUpdateDTO)
 
@@ -100,7 +101,8 @@ class ExamController(val examService: ExamService, val studentService: StudentSe
 
     @GetMapping("/taken_exam_list/class/{classId}/subject/{subjectId}/year/{_year}")
     fun examTakenOfSubject(@PathVariable classId: Long, @PathVariable subjectId: Long, @PathVariable _year: Int,
-                           request: HttpServletRequest) = responseOK(examService.examListOfSubject(classId, subjectId, _year,
+                           request: HttpServletRequest)
+            = responseOK(examService.examListOfSubject(classId, subjectId, _year,
             authUtil.getOrganizationIdFromToken(request)))
 
     @GetMapping(

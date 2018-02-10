@@ -63,7 +63,8 @@ class FeeController(val feeInfoService: FeeInfoService,
     }
 
     @GetMapping("/class/{classId}")
-    fun getFeeInfoByClassId(@PathVariable classId: Long, request: HttpServletRequest) = feeInfoService.findFeeInfoByClass(classId)
+    fun getFeeInfoByClassId(@PathVariable classId: Long, request: HttpServletRequest)
+            = feeInfoService.findFeeInfoByClass(classId)
             .filter { it.course.organization.id == authUtil.getOrganizationIdFromToken(request) }
 
     @GetMapping("/students/{id}")

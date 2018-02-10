@@ -27,9 +27,10 @@ class ContactController(val contactInformationService: ContactInformationService
         logger.info("contact info is going to update :: {}", contactInformation)
         // TODO contactInformation.id validation check in bean validation
         if (null != contactInformation.id) {
-            val contactInfo = contactInformationService.findById(contactInformation.id as Long) ?: throw EntityNotFoundException(
-                    message = "Contact Info not found for id [${contactInformation.id}]"
-            )
+            val contactInfo = contactInformationService.findById(contactInformation.id as Long)
+                    ?: throw EntityNotFoundException(
+                        message = "Contact Info not found for id [${contactInformation.id}]"
+                    )
             contactInfo.apply {
                 name = contactInformation.name
                 address = contactInformation.address
