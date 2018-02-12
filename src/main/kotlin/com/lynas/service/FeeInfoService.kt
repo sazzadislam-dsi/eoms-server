@@ -1,6 +1,7 @@
 package com.lynas.service
 
 import com.lynas.dto.StudentFeeResponseDTO
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.FeeInfo
 import com.lynas.model.StudentFee
 import com.lynas.repo.FeeInfoRepository
@@ -46,8 +47,8 @@ class FeeInfoService(val feeInfoRepository: FeeInfoRepository, val session: Sess
     }
 
     @Transactional
-    fun find(id: Long): FeeInfo? {
-        return feeInfoRepository.findOne(id, 2)
+    fun find(id: Long): FeeInfo {
+        return feeInfoRepository.findOne(id, 2) ?: throw EntityNotFoundException("FeeInfo not found with $id")
     }
 
     @Transactional

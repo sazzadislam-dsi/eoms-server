@@ -49,7 +49,6 @@ class FeeController(val feeInfoService: FeeInfoService,
     @PostMapping("/student/new")
     fun studentPayment(request: HttpServletRequest, @RequestBody payFeeDTO: PayFeeDTO): ResponseEntity<*> {
         val fee = feeInfoService.find(payFeeDTO.feeInfoId)
-                ?: throw EntityNotFoundException("fee info not found for id [${payFeeDTO.feeInfoId}]")
         val studentOf = studentService.findById(payFeeDTO.studentId, authUtil.getOrganizationIdFromToken(request))
                 ?: throw EntityNotFoundException("student not found for id [${payFeeDTO.studentId}]")
         val pDate = payFeeDTO.paymentDate.convertToDate()

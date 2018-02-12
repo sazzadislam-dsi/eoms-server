@@ -1,5 +1,6 @@
 package com.lynas.service
 
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Person
 import com.lynas.repo.PersonRepository
 import org.springframework.stereotype.Service
@@ -18,5 +19,6 @@ class PersonService(val personRepository: PersonRepository) {
     }
 
     @Transactional
-    fun findPersonById(id: Long): Person? = personRepository.findOne(id)
+    fun findPersonById(id: Long): Person = personRepository.findOne(id)
+            ?: throw EntityNotFoundException("Person not found with id: $id")
 }

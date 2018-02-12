@@ -48,8 +48,7 @@ class StudentController(val studentService: StudentService, val personService: P
         val student = studentService.findById(id, orgId) ?:
                 throw EntityNotFoundException("Student not found for given id [$id]")
         student.person.contactInformationList = personService.findPersonById(student.person.id!!)
-                ?.contactInformationList
-                ?: mutableListOf()
+                .contactInformationList
         return responseOK(student)
     }
 

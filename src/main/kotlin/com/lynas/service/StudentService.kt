@@ -1,6 +1,7 @@
 package com.lynas.service
 
 import com.lynas.dto.StudentInfoQueryResult
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Student
 import com.lynas.repo.StudentRepository
 import org.springframework.stereotype.Service
@@ -19,28 +20,14 @@ class StudentService(val studentRepository: StudentRepository) {
     }
 
     @Transactional
-    fun findById(id: Long, orgId: Long): Student? {
-        return studentRepository.findOne(id, orgId)
+    fun findById(id: Long, orgId: Long): Student {
+        return studentRepository.findOne(id, orgId) ?: throw EntityNotFoundException("Student not found with id: $id")
     }
 
     @Transactional
     fun searchByFirstName(name: String, orgId: Long): List<Student> {
         return studentRepository.searchByFirstName(name, orgId)
     }
-
-    /*@Transactional
-    fun findAll(orgId: Long): List<StudentResponse> {
-        return studentRepository.findAll(orgId).map { StudentResponse(
-                studentId = it.id!!,
-                studentName = "${it.person.firstName} ${it.person.lastName}",
-                firstName = it.person.firstName,
-                lastName = it.person.lastName,
-                dateOfBirth = it.person.dateOfBirth,
-                sex = it.person.sex,
-                religion = it.person.religion
-        ) }
-                .toList()
-    }*/
 
     @Transactional
     fun findAll(orgId: Long): List<Student> {

@@ -15,7 +15,7 @@ interface StudentRepository : GraphRepository<Student> {
     @Query("""MATCH (s:Student)-[sp:studentIsAPerson]-> (p:Person), (p)-[:personBelongsToAnOrganization]->
         (org:Organization) WHERE ID(s) = {0} and ID(org) = {1} return s, sp, p""")
     @Depth(3)
-    fun findOne(id: Long, orgId: Long): Student
+    fun findOne(id: Long, orgId: Long): Student?
 
     @Query("""MATCH (s:Student) -[sp:studentIsAPerson]-> (p:Person), (p)-[:personBelongsToAnOrganization]->
         (org:Organization) where lower(p.firstName) contains lower ({0}) and ID(org) = {1} return s, p, sp """)

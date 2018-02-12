@@ -1,5 +1,6 @@
 package com.lynas.service
 
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Subject
 import com.lynas.repo.SubjectRepository
 import org.springframework.stereotype.Service
@@ -17,8 +18,9 @@ class SubjectService constructor(val subjectRepository: SubjectRepository) {
     }
 
     @Transactional
-    fun findById(subjectId: Long): Subject? {
+    fun findById(subjectId: Long): Subject {
         return subjectRepository.findOne(subjectId)
+                ?: throw EntityNotFoundException("Subject not found with id: $subjectId")
     }
 
     @Transactional
