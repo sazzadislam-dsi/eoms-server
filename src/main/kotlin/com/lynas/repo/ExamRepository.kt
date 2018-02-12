@@ -56,6 +56,7 @@ interface ExamRepository : GraphRepository<Exam> {
           -[ss:studentIsAPerson]- (p:Person) where ID(cc) = {0} and ID(sb) = {1} and ID(org) = {3} return
           collect(exam) as exam, sb.subjectName as subject, p.firstName as person, e.roleNumber as roleNumber,
           cc.name as courseName, info,  s, exam.totalNumber as totalNumber, exam.percentile as percentile""")
- fun findByExamTypeAndDate(classId: Long, subjectId: Long, year: Int, orgId: Long, examType: ExamType): List<ResultUpdateQueryResult>
+ fun findByExamTypeAndDate(classId: Long, subjectId: Long, year: Int, orgId: Long, examType: ExamType)
+         : List<ResultUpdateQueryResult>
 
 }

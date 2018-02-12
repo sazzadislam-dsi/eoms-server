@@ -2,6 +2,7 @@ package com.lynas.service
 
 import com.lynas.dto.ClassDetailQueryResult
 import com.lynas.exception.DuplicateEntryException
+import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Course
 import com.lynas.repo.ClassRepository
 import org.springframework.stereotype.Service
@@ -48,7 +49,7 @@ class ClassService(val classRepo: ClassRepository) {
 
     @Transactional
     fun findById(id: Long, orgId: Long): Course? {
-        return classRepo.findById(id, orgId)
+        return classRepo.findById(id, orgId) ?: throw EntityNotFoundException("class not found with id: $id")
     }
 
 

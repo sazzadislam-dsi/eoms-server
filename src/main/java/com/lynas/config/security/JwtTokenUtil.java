@@ -150,7 +150,9 @@ public class JwtTokenUtil {
     }
 
     public String generateToken(UserDetails userDetails, Device device, Organization org) {
-        List<String> authorities = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        List<String> authorities = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
         HashMap<String, Object> claims = new HashMap<>();
         long now = new Date().getTime();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());

@@ -12,7 +12,8 @@ class ExamClassResponse1 {
     var rollNumber: Int? = 0
     var year: Int? = 0
 
-    constructor(studentId: Long, classId: Long, rollNumber: Int, year: Int, grandTotal: GrandTotal, subjects: List<Subjects>) {
+    constructor(studentId: Long, classId: Long, rollNumber: Int, year: Int,
+                grandTotal: GrandTotal, subjects: List<Subjects>) {
         this.studentId = studentId
         this.classId = classId
         this.rollNumber = rollNumber

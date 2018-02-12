@@ -17,7 +17,7 @@ interface ClassRepository : GraphRepository<Course> {
 
     @Query("""MATCH (cl:Class)-[r:classBelongsToAnOrganization]->(org:Organization)
             where ID(cl) = {0} and ID(org) = {1} RETURN cl, r, org""")
-    fun findById(id:Long, orgId: Long): Course
+    fun findById(id:Long, orgId: Long): Course?
 
     @Query("""match (cl:Class{ name:{0},shift:{1}, section:{2}})-[:classBelongsToAnOrganization]->
                     (org:Organization) where ID(org) = {3} return cl""")
