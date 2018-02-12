@@ -2,7 +2,6 @@ package com.lynas.controller
 
 import com.lynas.dto.StudentContactDTO
 import com.lynas.dto.StudentDTO
-import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.ContactInformation
 import com.lynas.model.Person
 import com.lynas.model.Student
@@ -45,10 +44,10 @@ class StudentController(val studentService: StudentService, val personService: P
     @GetMapping("/{id}")
     fun studentById(@PathVariable id: Long, request: HttpServletRequest): ResponseEntity<*> {
         val orgId = authUtil.getOrganizationIdFromToken(request)
-        val student = studentService.findById(id, orgId) ?:
-                throw EntityNotFoundException("Student not found for given id [$id]")
-        student.person.contactInformationList = personService.findPersonById(student.person.id!!)
-                .contactInformationList
+        val student = studentService.findById(id, orgId)
+        val studentContactInformationList: MutableList<ContactInformation>?
+                = personService.findPersonById(student.person.id!!).contactInformationList
+        student.person.contactInformationList = studentContactInformationList ?: mutableListOf()
         return responseOK(student)
     }
 
