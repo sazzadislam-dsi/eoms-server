@@ -29,7 +29,7 @@ class ClassControllerTest {
 
 
     @Test
-    fun testHelloController() {
+    fun testGetCourseList() {
         val result = testRestTemplate.getForEntity("/classes", List::class.java)
         assertEquals(result.statusCode, HttpStatus.OK)
         assertNotNull(result.statusCodeValue)
