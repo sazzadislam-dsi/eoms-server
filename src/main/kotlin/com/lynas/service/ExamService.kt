@@ -147,12 +147,8 @@ class ExamService(private val examRepository: ExamRepository,
     }
 
     @Transactional
-    fun findByClassIdSubjectIdYearDateExamType(classId: Long,
-                                               subjectId: Long,
-                                               year: Int,
-                                               date: Date,
-                                               examType: ExamType,
-                                               orgId: Long): ExamOfSubjectUpdateDTO {
+    fun findByClassIdSubjectIdYearDateExamType(classId: Long, subjectId: Long, year: Int, date: Date,
+                                               examType: ExamType, orgId: Long): ExamOfSubjectUpdateDTO {
         val examOfSubjectUpdateDTO = ExamOfSubjectUpdateDTO()
         examOfSubjectUpdateDTO.classId = classService.findById(classId, orgId)!!.id
                 ?: throw NotFoundException("classId : $classId")
