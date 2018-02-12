@@ -39,12 +39,11 @@ class EnrolmentController(val enrolmentService: EnrolmentService, val studentSer
             throw DuplicateEntryException(message)
         }
         val student = studentService.findById(enrolmentDTO.studentId, organizationId)
-                ?: throw EntityNotFoundException("Student not found with given student id ${enrolmentDTO.studentId}")
         val course = classService.findById(enrolmentDTO.classId, organizationId)
                 ?: throw EntityNotFoundException("Class/Course not found with given class/course id"
                         + enrolmentDTO.classId)
 
-        val enrolment: Enrolment = Enrolment(year = enrolmentDTO.year, roleNumber = enrolmentDTO.roleNumber,
+        val enrolment = Enrolment(year = enrolmentDTO.year, roleNumber = enrolmentDTO.roleNumber,
                 student = student, cls = course)
 
         enrolmentService.create(enrolment)
