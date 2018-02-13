@@ -40,4 +40,14 @@ class ClassControllerTest {
         }
     }
 
+
+    @Test
+    fun testGetCourse() {
+        val result = testRestTemplate.getForEntity("/classes/class/42", HashMap::class.java)
+        assertEquals(result.statusCode, HttpStatus.OK)
+        assertNotNull(result.statusCodeValue)
+        assertEquals(result.body["id"], 42)
+
+    }
+
 }

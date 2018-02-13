@@ -2,7 +2,6 @@ package com.lynas.controller
 
 import com.lynas.model.ContactInformation
 import com.lynas.service.ContactInformationService
-import com.lynas.util.getLogger
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
@@ -14,13 +13,11 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("contactInformations")
 class ContactController(val contactInformationService: ContactInformationService) {
 
-    private val logger = getLogger(this.javaClass)
-
     @GetMapping("/{id}")
     fun getById(@PathVariable id: Long, request: HttpServletRequest) = contactInformationService.findById(id)
 
     @PatchMapping("/{id}")
-    fun patch(@PathVariable id: Long, @RequestBody contactInformation: ContactInformation): ContactInformation {
+    fun updateContactInfo(@PathVariable id: Long, @RequestBody contactInformation: ContactInformation): ContactInformation {
         val contactInfo = contactInformationService.findById(id)
         contactInfo.apply {
             name = contactInformation.name

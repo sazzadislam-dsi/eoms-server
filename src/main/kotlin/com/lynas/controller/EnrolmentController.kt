@@ -8,7 +8,6 @@ import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
 import com.lynas.service.StudentService
 import com.lynas.util.AuthUtil
-import com.lynas.util.getLogger
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -23,11 +22,8 @@ import javax.servlet.http.HttpServletRequest
 class EnrolmentController(val enrolmentService: EnrolmentService, val studentService: StudentService,
                           val classService: ClassService, val authUtil: AuthUtil) {
 
-    val log = getLogger(this.javaClass)
-
     @PostMapping
-    fun post(@RequestBody enrolmentDTO: EnrolmentDTO, request: HttpServletRequest): ResponseEntity<*> {
-        log.info("Hit in enrolment create method with {}", enrolmentDTO.toString())
+    fun createNewEnrolment(@RequestBody enrolmentDTO: EnrolmentDTO, request: HttpServletRequest): ResponseEntity<*> {
         val organizationId = authUtil.getOrganizationIdFromToken(request)
         val (isValid, message) = enrolmentService.studentEnrolmentCheck(
                 roleNumber = enrolmentDTO.roleNumber,
@@ -51,7 +47,7 @@ class EnrolmentController(val enrolmentService: EnrolmentService, val studentSer
     }
 
     @DeleteMapping("/{id}/studentId/{stdId}/year/{year}")
-    fun delete(@PathVariable id: Long,
+    fun deleteEnrolment(@PathVariable id: Long,
                @PathVariable stdId: Long,
                @PathVariable year: Int,
                request: HttpServletRequest): ResponseEntity<*> {

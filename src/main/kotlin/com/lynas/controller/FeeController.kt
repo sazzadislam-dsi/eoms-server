@@ -30,7 +30,7 @@ class FeeController(val feeInfoService: FeeInfoService,
                     val authUtil: AuthUtil) {
 
     @PostMapping
-    fun post(@RequestBody feeInfoDTO: FeeInfoDTO, request: HttpServletRequest): ResponseEntity<*> {
+    fun createNewFee(@RequestBody feeInfoDTO: FeeInfoDTO, request: HttpServletRequest): ResponseEntity<*> {
         val courseById = classService.findById(id = feeInfoDTO.classId,
                 orgId = authUtil.getOrganizationIdFromToken(request))
                 ?: throw EntityNotFoundException("class Not Found With Given ID [${feeInfoDTO.classId}]")
@@ -47,16 +47,11 @@ class FeeController(val feeInfoService: FeeInfoService,
     }
 
     @PostMapping("/student/new")
-    fun studentPayment(request: HttpServletRequest, @RequestBody payFeeDTO: PayFeeDTO): ResponseEntity<*> {
+    fun makeStudentPayment(request: HttpServletRequest, @RequestBody payFeeDTO: PayFeeDTO): ResponseEntity<*> {
         val fee = feeInfoService.find(payFeeDTO.feeInfoId)
         val studentOf = studentService.findById(payFeeDTO.studentId, authUtil.getOrganizationIdFromToken(request))
-                ?: throw EntityNotFoundException("student not found for id [${payFeeDTO.studentId}]")
         val pDate = payFeeDTO.paymentDate.convertToDate()
-
-        val studentFee = StudentFee(
-                student = studentOf,
-                feeInfo = fee,
-                paymentDate = pDate)
+        val studentFee = StudentFee(student= studentOf, feeInfo= fee, paymentDate= pDate)
         val savedObj = studentFeeService.create(studentFee)
         return responseOK(savedObj)
     }

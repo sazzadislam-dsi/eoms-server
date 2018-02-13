@@ -25,7 +25,7 @@ class AttendanceController constructor(val attendanceService: AttendanceService,
 
     @PostMapping
     @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
-    fun post(@RequestBody attendanceJson: AttendanceDTOofClass, request: HttpServletRequest): ResponseEntity<*> {
+    fun createNewAttendance(@RequestBody attendanceJson: AttendanceDTOofClass, request: HttpServletRequest): ResponseEntity<*> {
         logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
         attendanceService.create(attendanceDto = attendanceJson,
                 orgId = util.getOrganizationIdFromToken(request))
@@ -35,10 +35,8 @@ class AttendanceController constructor(val attendanceService: AttendanceService,
 
     @GetMapping("/ofClass/{classId}/onDay/{day}")
     @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
-    fun getAttendanceOfAClassOnDate(
-            request: HttpServletRequest,
-            @PathVariable classId: Long,
-            @PathVariable day: String): ResponseEntity<*> {
+    fun getAttendanceOfClassOnDate(request: HttpServletRequest, @PathVariable classId: Long, @PathVariable day: String)
+            : ResponseEntity<*> {
         val dateOf: Date
         try {
             dateOf = day.convertToDate()
@@ -50,11 +48,8 @@ class AttendanceController constructor(val attendanceService: AttendanceService,
                     errorMessage = Constants.INVALID_DATE_FORMAT,
                     errorSuggestion = Constants.EXPECTED_DATE_FORMAT))
         }
-        val result = attendanceService.getAttendanceOfAClassOnDate(
-                date = dateOf.time,
-                classId = classId,
+        val result = attendanceService.getAttendanceOfAClassOnDate(date = dateOf.time, classId = classId,
                 orgId = util.getOrganizationIdFromToken(request))
-
         return responseOK(result)
     }
 
