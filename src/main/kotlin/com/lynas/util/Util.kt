@@ -40,6 +40,10 @@ fun responseOK(responseObject: Any): ResponseEntity<*> {
     return ResponseEntity(responseObject, HttpStatus.OK)
 }
 
+fun responseCreated(responseObject: Any): ResponseEntity<*> {
+    return ResponseEntity(responseObject, HttpStatus.CREATED)
+}
+
 fun responseConflict(responseObject: Any): ResponseEntity<*> {
     return ResponseEntity(responseObject, HttpStatus.CONFLICT)
 }

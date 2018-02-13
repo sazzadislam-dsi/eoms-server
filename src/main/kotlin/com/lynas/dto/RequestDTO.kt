@@ -93,9 +93,9 @@ data class SubjectDTO(
 
 
 data class CourseDTO(
-        private var name: String,
-        private var shift: Shift,
-        private var section: Section){
+        var name: String,
+        var shift: Shift,
+        var section: Section){
     fun getCourse(organization: Organization):Course{
         return Course(name=name, shift = shift, section = section,organization = organization)
     }

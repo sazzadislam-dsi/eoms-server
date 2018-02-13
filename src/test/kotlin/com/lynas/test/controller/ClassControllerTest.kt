@@ -1,5 +1,8 @@
 package com.lynas.test.controller
 
+import com.lynas.dto.CourseDTO
+import com.lynas.model.util.Section
+import com.lynas.model.util.Shift
 import com.lynas.test.authToken
 import com.lynas.util.getLogger
 import junit.framework.TestCase.assertEquals
@@ -47,6 +50,19 @@ class ClassControllerTest {
         assertEquals(result.statusCode, HttpStatus.OK)
         assertNotNull(result.statusCodeValue)
         assertEquals(result.body["id"], 42)
+
+    }
+
+
+    @Test
+    fun testCreateCourse() {
+        val result = testRestTemplate.postForEntity("/classes",
+                CourseDTO(name = "random class ${Math.random()}",shift = Shift.MORNING,section = Section.SECTION_1),
+                HashMap::class.java)
+        assertEquals(result.statusCode, HttpStatus.CREATED)
+        assertNotNull(result.statusCodeValue)
+        assertNotNull(result.body["id"])
+        log.info("$$$ ${result.body["id"]}")
 
     }
 

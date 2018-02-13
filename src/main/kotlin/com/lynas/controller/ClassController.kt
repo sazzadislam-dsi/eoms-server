@@ -3,7 +3,7 @@ package com.lynas.controller
 import com.lynas.dto.CourseDTO
 import com.lynas.service.ClassService
 import com.lynas.util.AuthUtil
-import com.lynas.util.responseOK
+import com.lynas.util.responseCreated
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
@@ -15,7 +15,7 @@ class ClassController(val classService: ClassService, val util: AuthUtil) {
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     fun createNewClass(@RequestBody courseDTO: CourseDTO, request: HttpServletRequest)
-        = responseOK(classService.create(courseDTO.getCourse(util.getOrganizationFromToken(request))))
+        = responseCreated(classService.create(courseDTO.getCourse(util.getOrganizationFromToken(request))))
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
@@ -25,12 +25,12 @@ class ClassController(val classService: ClassService, val util: AuthUtil) {
 
     @GetMapping("/count")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun getCountOfTotalNumberClasses(request: HttpServletRequest)
+    fun getTotalNumberClasses(request: HttpServletRequest)
             = classService.findListCountByOrganizationName(util.getOrganizationIdFromToken(request))
 
     @GetMapping("/class/{classId}/year/{year}/students")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun getAllStudentByClassIdAndYear(@PathVariable classId: Long, @PathVariable year: Int, request: HttpServletRequest)
+    fun getAllStudentByClassAndYear(@PathVariable classId: Long, @PathVariable year: Int, request: HttpServletRequest)
             = classService.findStudentsByClassId(classId, util.getOrganizationIdFromToken(request), year)
 
     @GetMapping("/class/{classId}")
