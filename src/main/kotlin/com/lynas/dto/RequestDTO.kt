@@ -1,6 +1,8 @@
 package com.lynas.dto
 
 import com.lynas.model.ContactInformation
+import com.lynas.model.Course
+import com.lynas.model.Organization
 import com.lynas.model.util.*
 
 // TODO rename variable name
@@ -91,7 +93,10 @@ data class SubjectDTO(
 
 
 data class CourseDTO(
-        var name: String,
-        var shift: Shift,
-        var section: Section
-)
+        private var name: String,
+        private var shift: Shift,
+        private var section: Section){
+    fun getCourse(organization: Organization):Course{
+        return Course(name=name, shift = shift, section = section,organization = organization)
+    }
+}

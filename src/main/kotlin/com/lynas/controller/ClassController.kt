@@ -1,12 +1,9 @@
 package com.lynas.controller
 
 import com.lynas.dto.CourseDTO
-import com.lynas.model.Course
 import com.lynas.service.ClassService
 import com.lynas.util.AuthUtil
-import com.lynas.util.getLogger
 import com.lynas.util.responseOK
-import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
@@ -15,18 +12,10 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("classes")
 class ClassController(val classService: ClassService, val util: AuthUtil) {
 
-    private val log = getLogger(this.javaClass)
-
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun createNewClass(@RequestBody cls: CourseDTO, request: HttpServletRequest): ResponseEntity<*> {
-        log.info("Received Class :: " + cls.toString())
-        var createdClass = Course(name = cls.name, shift = cls.shift, section = cls.section,
-                organization = util.getOrganizationFromToken(request))
-        createdClass = classService.create(createdClass)
-        log.info("Saved Class :: " + createdClass.toString())
-        return responseOK(createdClass)
-    }
+    fun createNewClass(@RequestBody courseDTO: CourseDTO, request: HttpServletRequest)
+        = responseOK(classService.create(courseDTO.getCourse(util.getOrganizationFromToken(request))))
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
