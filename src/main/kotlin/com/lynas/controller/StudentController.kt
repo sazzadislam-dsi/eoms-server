@@ -64,10 +64,7 @@ class StudentController(val studentService: StudentService, val personService: P
     fun studentUpdate(@RequestBody studentDTO: StudentDTO,
                       request: HttpServletRequest): ResponseEntity<*> {
         val student = studentService.findById(studentDTO.studentId, authUtil.getOrganizationIdFromToken(request))
-        if (student?.person == null) return responseError(studentDTO)
-
         val dob = studentDTO.dateOfBirth.convertToDate()
-
         student.person.apply {
             firstName = studentDTO.firstName
             lastName = studentDTO.lastName

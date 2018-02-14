@@ -70,7 +70,6 @@ class ExamService(private val examRepository: ExamRepository,
     }
 
     @Transactional
-    @Throws(NotFoundException::class)
     fun resultOfSubjectByYear(classId: Long, subjectId: Long, _year: Int, orgId: Long): ExamResponse {
         val resultList = examRepository.resultOfSubjectByYear(classId, subjectId, _year, orgId)
         val subject = subjectService.findById(subjectId)
