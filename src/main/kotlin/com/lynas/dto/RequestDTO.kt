@@ -27,20 +27,20 @@ data class EnrolmentDTO(
 )
 
 data class ExamDTO(
-        val mark: Double,
-        val studentId: Long,
-        val isPresent: Boolean
+        var mark: Double,
+        var studentId: Long,
+        var isPresent: Boolean
 )
 
 data class ExamJsonWrapper(
-        val classId: Long,
-        val subjectId: Long,
-        val totalMark: Double,
-        val percentile: Double,
-        val date: String,
-        val year: Int,
-        val examType: ExamType,
-        val examDTO: Array<ExamDTO>)
+        var classId: Long,
+        var subjectId: Long,
+        var totalMark: Double,
+        var percentile: Double,
+        var date: String,
+        var year: Int,
+        var examType: ExamType,
+        var examDTO: Array<ExamDTO>)
 
 data class ExamUpdateDTO(val examId: Long, val updateObtainMark: Double)
 

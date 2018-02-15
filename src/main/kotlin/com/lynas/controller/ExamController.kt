@@ -8,10 +8,10 @@ import com.lynas.service.ExamServiceJava
 import com.lynas.service.StudentService
 import com.lynas.util.AuthUtil
 import com.lynas.util.convertToDate
+import com.lynas.util.getCurrentYear
 import com.lynas.util.responseOK
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDate
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
@@ -47,7 +47,7 @@ class ExamController(val examService: ExamService, val studentService: StudentSe
     @GetMapping("student/{studentId}/results")
     fun getExamResultOfStudentByYear(@PathVariable studentId: Long, request: HttpServletRequest): ResponseEntity<*> {
         val organization = authUtil.getOrganizationFromToken(request)
-        val year = LocalDate.now().year
+        val year = getCurrentYear()
         val studentInfo = studentService.studentInfoByYear(id = studentId, year = year, orgId = organization.id!!)
         return responseOK(examService.resultOfStudentByYear(studentInfo.classId, studentId, year, organization.id!!))
     }
