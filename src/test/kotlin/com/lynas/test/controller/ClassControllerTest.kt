@@ -67,7 +67,14 @@ class ClassControllerTest {
         assertNotNull(result.statusCodeValue)
         assertNotNull(result.body["id"])
         log.info("$$$ ${result.body["id"]}")
+    }
 
+
+    @Test
+    fun testGetCourseCount() {
+        val result = testRestTemplate.getForEntity("/classes/count", Int::class.java)
+        assertEquals(result.statusCode, HttpStatus.OK)
+        assertEquals((result.body>0), true)
     }
 
 }
