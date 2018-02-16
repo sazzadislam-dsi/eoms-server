@@ -12,6 +12,11 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("classes")
 class ClassController(val classService: ClassService, val util: AuthUtil) {
 
+    @GetMapping("/class/{classId}")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    fun getClassById(@PathVariable classId: Long, request: HttpServletRequest)
+            = classService.findById(classId, util.getOrganizationIdFromToken(request))
+
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     fun createNewClass(@RequestBody courseDTO: CourseDTO, request: HttpServletRequest)
@@ -22,7 +27,6 @@ class ClassController(val classService: ClassService, val util: AuthUtil) {
     fun getAllClasses(request: HttpServletRequest)
             = classService.findListByOrganizationId(util.getOrganizationIdFromToken(request))
 
-
     @GetMapping("/count")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     fun getTotalNumberClasses(request: HttpServletRequest)
@@ -32,9 +36,4 @@ class ClassController(val classService: ClassService, val util: AuthUtil) {
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     fun getAllStudentByClassAndYear(@PathVariable classId: Long, @PathVariable year: Int, request: HttpServletRequest)
             = classService.findStudentsByClassId(classId, util.getOrganizationIdFromToken(request), year)
-
-    @GetMapping("/class/{classId}")
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
-    fun getClassById(@PathVariable classId: Long, request: HttpServletRequest)
-            = classService.findById(classId, util.getOrganizationIdFromToken(request))
 }

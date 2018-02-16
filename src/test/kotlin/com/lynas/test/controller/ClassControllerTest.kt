@@ -77,4 +77,19 @@ class ClassControllerTest {
         assertEquals((result.body>0), true)
     }
 
+    @Test
+    fun testGetStudentByClassInYear(){
+        val result = testRestTemplate.getForEntity("/classes/class/42/year/2018/students", Collection::class.java)
+        assertEquals(result.statusCode, HttpStatus.OK)
+        assertNotNull(result.body)
+        for (student in result.body) {
+            val eachStudent = student as LinkedHashMap<*,*>
+            log.info(eachStudent.toString())
+            assertNotNull(eachStudent["studentId"])
+            assertNotNull(eachStudent["studentName"])
+            assertNotNull(eachStudent["roleNumber"])
+            assertNotNull(eachStudent["enrolmentId"])
+        }
+    }
+
 }
