@@ -3,6 +3,7 @@ package com.lynas.dto
 import com.lynas.model.ContactInformation
 import com.lynas.model.Course
 import com.lynas.model.Organization
+import com.lynas.model.OrganizationInfo
 import com.lynas.model.util.*
 
 // TODO rename variable name
@@ -100,3 +101,24 @@ data class CourseDTO(
         return Course(name=name, shift = shift, section = section,organization = organization)
     }
 }
+
+
+data class OrganizationDTO(
+        var id: Long? = null,
+        var name:String,
+        var establishmentYear:Int,
+        var organizationInfo: OrganizationInfoDTO
+){
+    fun toOrganization() = Organization(
+            name=this.name,
+            establishmentYear = this.establishmentYear,
+            organizationInfo = OrganizationInfo(
+                    founderName = this.organizationInfo.founderName,
+                    founderDescription = this.organizationInfo.founderDescription))
+}
+
+data class OrganizationInfoDTO(
+        var id: Long? = null,
+        var founderName: String,
+        var founderDescription: String
+)

@@ -26,7 +26,7 @@ fun responseOK(responseObject: Any): ResponseEntity<*> {
     return ResponseEntity(responseObject, HttpStatus.OK)
 }
 
-fun responseCreated(responseObject: Any): ResponseEntity<*> {
+fun responseCreated(responseObject: Any?): ResponseEntity<*> {
     return ResponseEntity(responseObject, HttpStatus.CREATED)
 }
 

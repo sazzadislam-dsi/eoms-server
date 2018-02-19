@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional
 class OrganizationService(val orgRepo: OrganizationRepository) {
 
     @Transactional
-    fun create(org: Organization) {
-        orgRepo.save(org)
+    fun create(org: Organization): Organization {
+        return orgRepo.save(org)
     }
 
 
