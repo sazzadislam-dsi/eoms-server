@@ -13,7 +13,7 @@ data class AttendanceDTO(
 )
 
 
-data class AttendanceDTOofClass(
+data class AttendanceOfClassDTO(
     val classId: Long,
     val date: String,
     val attendanceDTO: Array<AttendanceDTO>

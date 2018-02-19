@@ -1,10 +1,10 @@
 package com.lynas.controller
 
-import com.lynas.dto.AttendanceDTOofClass
+import com.lynas.dto.AttendanceOfClassDTO
 import com.lynas.service.AttendanceService
 import com.lynas.util.AuthUtil
 import com.lynas.util.convertToDate
-import com.lynas.util.getLogger
+import com.lynas.util.responseCreated
 import com.lynas.util.responseOK
 import io.swagger.annotations.Api
 import org.springframework.http.ResponseEntity
@@ -21,25 +21,22 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("attendances")
 class AttendanceController constructor(val attendanceService: AttendanceService, val util: AuthUtil) {
 
-    val logger = getLogger(this.javaClass)
-
     @PostMapping
-    @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
-    fun createNewAttendance(@RequestBody attendanceJson: AttendanceDTOofClass, request: HttpServletRequest)
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    fun createNewAttendance(@RequestBody attendanceOfClassDTO: AttendanceOfClassDTO, request: HttpServletRequest)
             : ResponseEntity<*> {
-        logger.info("Post of student attendance list {} for class id {}", attendanceJson, attendanceJson.classId)
-        attendanceService.create(attendanceDto = attendanceJson,
+        attendanceService.create(attendanceOfClassDTO = attendanceOfClassDTO,
                 orgId = util.getOrganizationIdFromToken(request))
-        logger.info("Post successfully attendance book")
-        return responseOK(attendanceJson)
+        return responseCreated(attendanceOfClassDTO)
     }
 
     @GetMapping("/ofClass/{classId}/onDay/{day}")
-    @PreAuthorize("hasAnyRole('USER','ROLE_USER','ROLE_ADMIN','ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     fun getAttendanceOfClassOnDate(request: HttpServletRequest, @PathVariable classId: Long, @PathVariable day: String)
             : ResponseEntity<*> {
-        val dateOf = day.convertToDate()
-        val result = attendanceService.getAttendanceOfAClassOnDate(date = dateOf.time, classId = classId,
+        val result = attendanceService.getAttendanceOfAClassOnDate(
+                date = day.convertToDate().time,
+                classId = classId,
                 orgId = util.getOrganizationIdFromToken(request))
         return responseOK(result)
     }

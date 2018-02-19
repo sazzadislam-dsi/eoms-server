@@ -1,6 +1,6 @@
 package com.lynas.service
 
-import com.lynas.dto.AttendanceDTOofClass
+import com.lynas.dto.AttendanceOfClassDTO
 import com.lynas.dto.AttendanceViewQueryResult
 import com.lynas.exception.DuplicateEntryException
 import com.lynas.exception.EntityNotFoundException
@@ -21,21 +21,20 @@ class AttendanceService constructor(val studentService: StudentService,
                                     val attendanceRepository: AttendanceRepository) {
 
     @Transactional
-    fun create(attendanceDto: AttendanceDTOofClass, orgId: Long): AttendanceBook {
-        val attendanceDate = attendanceDto.date.convertToDate()
-        val course = classService.findById(attendanceDto.classId, orgId)
+    fun create(attendanceOfClassDTO: AttendanceOfClassDTO, orgId: Long): AttendanceBook {
+        val attendanceDate = attendanceOfClassDTO.date.convertToDate()
+        val course = classService.findById(attendanceOfClassDTO.classId, orgId)
                 ?: throw EntityNotFoundException(
-                        "Course or class not found with given classID : ${attendanceDto.classId}")
-        val foundDuplicate = checkExistingAttendanceOnGivenDate(attendanceDate, attendanceDto.classId, orgId)
+                        "Course or class not found with given classID : ${attendanceOfClassDTO.classId}")
+        val foundDuplicate = checkExistingAttendanceOnGivenDate(attendanceDate, attendanceOfClassDTO.classId, orgId)
         if (foundDuplicate) {
             throw DuplicateEntryException("Attendance duplicate entry found at date $attendanceDate")
         }
 
         //TODO catch this exception properly
-        val set = attendanceDto.attendanceDTO.map {
+        val set = attendanceOfClassDTO.attendanceDTO.map {
             StudentAttendance(
-                    student = studentService.findById(it.t, orgId)
-                            ?: throw EntityNotFoundException("student Not found with given studentId: ${it.t}"),
+                    student = studentService.findById(it.t, orgId),
                     attendanceStatus = it.i)
         }.toMutableSet()
 
