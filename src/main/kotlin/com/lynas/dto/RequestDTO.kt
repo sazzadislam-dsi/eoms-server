@@ -6,10 +6,9 @@ import com.lynas.model.Organization
 import com.lynas.model.OrganizationInfo
 import com.lynas.model.util.*
 
-// TODO rename variable name
 data class AttendanceDTO(
-        var i: Boolean = false,
-        var t: Long = 0
+        val isPresent: Boolean,
+        val studentId: Long
 )
 
 
