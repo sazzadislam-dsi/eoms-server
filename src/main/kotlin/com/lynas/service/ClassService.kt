@@ -48,7 +48,7 @@ class ClassService(val classRepo: ClassRepository) {
     }
 
     @Transactional
-    fun findById(id: Long, orgId: Long): Course? {
+    fun findById(id: Long, orgId: Long): Course {
         return classRepo.findById(id, orgId) ?: throw EntityNotFoundException("class not found with id: $id")
     }
 

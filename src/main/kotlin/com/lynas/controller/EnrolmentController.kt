@@ -2,7 +2,6 @@ package com.lynas.controller
 
 import com.lynas.dto.EnrolmentDTO
 import com.lynas.exception.DuplicateEntryException
-import com.lynas.exception.EntityNotFoundException
 import com.lynas.model.Enrolment
 import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
@@ -36,8 +35,6 @@ class EnrolmentController(val enrolmentService: EnrolmentService, val studentSer
         }
         val student = studentService.findById(enrolmentDTO.studentId, organizationId)
         val course = classService.findById(enrolmentDTO.classId, organizationId)
-                ?: throw EntityNotFoundException("Class/Course not found with given class/course id"
-                        + enrolmentDTO.classId)
 
         val enrolment = Enrolment(year = enrolmentDTO.year, roleNumber = enrolmentDTO.roleNumber,
                 student = student, cls = course)
@@ -51,7 +48,6 @@ class EnrolmentController(val enrolmentService: EnrolmentService, val studentSer
                @PathVariable stdId: Long,
                @PathVariable year: Int,
                request: HttpServletRequest): ResponseEntity<*> {
-        // TODO is it always be in response ok
         return responseOK(enrolmentService.delete(id, stdId, year, authUtil.getOrganizationIdFromToken(request)))
     }
 

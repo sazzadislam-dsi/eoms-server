@@ -31,7 +31,6 @@ class AttendanceService constructor(val studentService: StudentService,
             throw DuplicateEntryException("Attendance duplicate entry found at date $attendanceDate")
         }
 
-        //TODO catch this exception properly
         val set = attendanceOfClassDTO.attendanceDTO.map {
             StudentAttendance(
                     student = studentService.findById(it.studentId, orgId),
