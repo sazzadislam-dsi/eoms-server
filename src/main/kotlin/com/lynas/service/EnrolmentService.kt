@@ -25,21 +25,9 @@ class EnrolmentService(val enrolmentRepository: EnrolmentRepository) {
             enrolmentRepository.delete(enrolmentId)
             return EnrolmentDeleteDTO(enrolmentId, studentId, year, enrolment.roleNumber, true)
         } else {
-            // TODO don't understand why the heck it's like == enrolment?.roleNumber!!
             return EnrolmentDeleteDTO(enrolmentId, studentId, year, enrolment?.roleNumber!!, false)
         }
     }
-
-    /**
-     * This method check whether a student enrolled in a class or not in a given year. This method return
-     * two values, the enrollment(this object can be NULL) and boolean value whether the student enrolled or not.
-     *
-     * @param studentId the entity id of the student
-     * @param year      in which year student is going to enroll
-     *
-     * @return enrollment(can be null) object and boolean value (whether the student enrolled or not in the given year)
-     */
-    //data class Result(val enrolment: Enrolment?, val isEnroll: Boolean)
 
     @Transactional
     fun studentEnrolmentCheck(roleNumber: Int, studentId: Long, classId: Long, year: Int, orgId: Long)

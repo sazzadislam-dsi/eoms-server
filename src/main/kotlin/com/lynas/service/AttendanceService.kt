@@ -34,8 +34,8 @@ class AttendanceService constructor(val studentService: StudentService,
         //TODO catch this exception properly
         val set = attendanceOfClassDTO.attendanceDTO.map {
             StudentAttendance(
-                    student = studentService.findById(it.t, orgId),
-                    attendanceStatus = it.i)
+                    student = studentService.findById(it.studentId, orgId),
+                    attendanceStatus = it.isPresent)
         }.toMutableSet()
 
         val attendanceBook = AttendanceBook(studentAttendances = set, attendanceDate = attendanceDate, course = course)
