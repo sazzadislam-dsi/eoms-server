@@ -46,12 +46,7 @@ public class ExamServiceJava {
 
                     Map<String, Double> subjectToObtainMarkMap = subjectToObtainMarkMap(examQueryResultList);
                     double obtainTotal = totalObtainMark(subjectToObtainMarkMap);
-
-                    List<ExamClassResponse1.Subjects> subjectsList = examQueryResultList
-                            .stream()
-                            .map(examQueryResult -> subjectsList(examQueryResult, subjectToObtainMarkMap, subjectTotalMark))
-                            .collect(Collectors.toList());
-
+                    List<ExamClassResponse1.Subjects> subjectsList = subjects(examQueryResultList, subjectToObtainMarkMap, subjectTotalMark);
                     ExamClassResponse1.GrandTotal grandTotalObj = new ExamClassResponse1.GrandTotal(grandTotal, obtainTotal);
                     return new ExamClassResponse1(examQueryResultList.get(0).getStudentId(),
                             classId,
@@ -84,9 +79,18 @@ public class ExamServiceJava {
                 .sum();
     }
 
-    private ExamClassResponse1.Subjects subjectsList(ExamQueryResult examQueryResult,
-                                                           Map<String, Double> subjectToObtainMarkMap,
-                                                           Map<String, Double> subjectTotalMark) {
+    private List<ExamClassResponse1.Subjects> subjects(List<ExamQueryResult> examQueryResultList,
+                                                       Map<String, Double> subjectToObtainMarkMap,
+                                                       Map<String, Double> subjectTotalMark) {
+        return examQueryResultList
+                .stream()
+                .map(examQueryResult -> subject(examQueryResult, subjectToObtainMarkMap, subjectTotalMark))
+                .collect(Collectors.toList());
+    }
+
+    private ExamClassResponse1.Subjects subject(ExamQueryResult examQueryResult,
+                                                     Map<String, Double> subjectToObtainMarkMap,
+                                                     Map<String, Double> subjectTotalMark) {
         ExamClassResponse1.Subjects subjects = new ExamClassResponse1.Subjects();
         subjects.setSubjectName(examQueryResult.getSubject());
         Map<ExamType, Exam> examMap = examTypeToExamMap(examQueryResult);
