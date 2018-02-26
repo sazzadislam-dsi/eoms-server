@@ -41,42 +41,21 @@ public class ExamServiceJava {
                 .entrySet()
                 .stream()
                 .map(i -> {
-                    Map<String, Double> map = new HashMap<>();
-                    i.getValue()
-                            .forEach(j -> {
-                                double total = j.getExam()
-                                        .stream()
-                                        .mapToDouble(k -> (k.getObtainedNumber() * k.getPercentile()) / 100)
-                                        .sum();
-                                map.put(j.getSubject(), total);
-                            });
+                    List<ExamQueryResult> examQueryResultList = i.getValue();
+                    Integer rollNumber = i.getKey();
 
-                    List<ExamClassResponse1.Subjects> subjectsList = i.getValue()
+                    Map<String, Double> subjectToObtainMarkMap = subjectToObtainMarkMap(examQueryResultList);
+                    double obtainTotal = totalObtainMark(subjectToObtainMarkMap);
+
+                    List<ExamClassResponse1.Subjects> subjectsList = examQueryResultList
                             .stream()
-                            .map(j -> {
-                                ExamClassResponse1.Subjects subjects = new ExamClassResponse1.Subjects();
-                                subjects.setSubjectName(j.getSubject());
-                                Map<ExamType, Exam> examMap = j.getExam()
-                                        .stream()
-                                        .collect(Collectors.toMap(Exam::getExamType, Function.identity()));
-                                subjects.setExams(examMap);
-                                double obtainMark = map.get(j.getSubject());
-                                subjects.setObtained(obtainMark);
-                                subjects.setTotal(subjectTotalMark.get(j.getSubject()));
-                                return subjects;
-                            })
+                            .map(examQueryResult -> subjectsList(examQueryResult, subjectToObtainMarkMap, subjectTotalMark))
                             .collect(Collectors.toList());
 
-                    double obtainTotal = map
-                            .values()
-                            .stream()
-                            .mapToDouble(Double::valueOf)
-                            .sum();
-
                     ExamClassResponse1.GrandTotal grandTotalObj = new ExamClassResponse1.GrandTotal(grandTotal, obtainTotal);
-                    return new ExamClassResponse1(i.getValue().get(0).getStudentId(),
+                    return new ExamClassResponse1(examQueryResultList.get(0).getStudentId(),
                             classId,
-                            i.getKey(),
+                            rollNumber,
                             year,
                             grandTotalObj,
                             subjectsList);
@@ -84,6 +63,46 @@ public class ExamServiceJava {
                 .collect(Collectors.toList());
         return examClassResponse1s;
     }
+
+    private static final Function<ExamQueryResult, Double> totalMarkOfSubject = examQueryResult ->
+            examQueryResult.getExam()
+                    .stream()
+                    .mapToDouble(exam -> (exam.getObtainedNumber() * exam.getPercentile()) / 100)
+                    .sum();
+
+    private Map<String, Double> subjectToObtainMarkMap(List<ExamQueryResult> examQueryResultList) {
+        return examQueryResultList
+                .stream()
+                .collect(Collectors.toMap(ExamQueryResult::getSubject, totalMarkOfSubject));
+    }
+
+    private double totalObtainMark(Map<String, Double> subjectToObtainMarkMap) {
+        return subjectToObtainMarkMap
+                .values()
+                .stream()
+                .mapToDouble(Double::valueOf)
+                .sum();
+    }
+
+    private ExamClassResponse1.Subjects subjectsList(ExamQueryResult examQueryResult,
+                                                           Map<String, Double> subjectToObtainMarkMap,
+                                                           Map<String, Double> subjectTotalMark) {
+        ExamClassResponse1.Subjects subjects = new ExamClassResponse1.Subjects();
+        subjects.setSubjectName(examQueryResult.getSubject());
+        Map<ExamType, Exam> examMap = examTypeToExamMap(examQueryResult);
+        double obtainMark = subjectToObtainMarkMap.get(examQueryResult.getSubject());
+        subjects.setExams(examMap);
+        subjects.setObtained(obtainMark);
+        subjects.setTotal(subjectTotalMark.get(examQueryResult.getSubject()));
+        return subjects;
+    }
+
+    private Map<ExamType, Exam> examTypeToExamMap(ExamQueryResult examQueryResult) {
+        return examQueryResult.getExam()
+                .stream()
+                .collect(Collectors.toMap(Exam::getExamType, Function.identity()));
+    }
+
 
     private Map<String, Double> calculateTotal(List<ExamQueryResult> list) {
         Map<String, Double> map = list
