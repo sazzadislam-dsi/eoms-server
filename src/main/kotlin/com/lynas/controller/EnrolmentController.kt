@@ -1,7 +1,6 @@
 package com.lynas.controller
 
 import com.lynas.dto.EnrolmentDTO
-import com.lynas.exception.DuplicateEntryException
 import com.lynas.model.Enrolment
 import com.lynas.service.ClassService
 import com.lynas.service.EnrolmentService
@@ -24,30 +23,18 @@ class EnrolmentController(val enrolmentService: EnrolmentService, val studentSer
     @PostMapping
     fun createNewEnrolment(@RequestBody enrolmentDTO: EnrolmentDTO, request: HttpServletRequest): ResponseEntity<*> {
         val organizationId = authUtil.getOrganizationIdFromToken(request)
-        val (isValid, message) = enrolmentService.studentEnrolmentCheck(
-                roleNumber = enrolmentDTO.roleNumber,
-                studentId = enrolmentDTO.studentId,
-                classId = enrolmentDTO.classId,
-                year = enrolmentDTO.year,
-                orgId = organizationId)
-        if (!isValid) {
-            throw DuplicateEntryException(message)
-        }
+        enrolmentService.validateStudentEnrolment(enrolmentDTO = enrolmentDTO,orgId = organizationId)
         val student = studentService.findById(enrolmentDTO.studentId, organizationId)
         val course = classService.findById(enrolmentDTO.classId, organizationId)
-
         val enrolment = Enrolment(year = enrolmentDTO.year, roleNumber = enrolmentDTO.roleNumber,
                 student = student, cls = course)
-
         enrolmentService.create(enrolment)
         return responseOK(enrolment)
     }
 
     @DeleteMapping("/{id}/studentId/{stdId}/year/{year}")
-    fun deleteEnrolment(@PathVariable id: Long,
-               @PathVariable stdId: Long,
-               @PathVariable year: Int,
-               request: HttpServletRequest): ResponseEntity<*> {
+    fun deleteEnrolment(@PathVariable id: Long,@PathVariable stdId: Long, @PathVariable year: Int,
+                        request: HttpServletRequest): ResponseEntity<*> {
         return responseOK(enrolmentService.delete(id, stdId, year, authUtil.getOrganizationIdFromToken(request)))
     }
 
