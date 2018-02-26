@@ -15,6 +15,7 @@ import org.springframework.boot.devtools.remote.client.HttpHeaderInterceptor
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 
@@ -60,7 +61,7 @@ class ClassControllerTest {
 
     @Test
     fun testCreateCourse() {
-        val result = testRestTemplate.postForEntity("/classes",
+        val result: ResponseEntity<HashMap<*, *>> = testRestTemplate.postForEntity("/classes",
                 CourseDTO(name = "random class ${Math.random()}",shift = Shift.MORNING,section = Section.SECTION_1),
                 HashMap::class.java)
         assertEquals(result.statusCode, HttpStatus.CREATED)
