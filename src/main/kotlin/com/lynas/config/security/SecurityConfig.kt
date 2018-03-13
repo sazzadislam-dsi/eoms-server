@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class SecurityConfig(val userDetailsService: UserDetailsService,
-                     val jwtAuthenticationEntryPoint: JWTAuthenticationEntryPoint,
+                     val authenticationEntryPoint: AuthenticationEntryPoint,
                      val filter: JwtAuthenticationTokenFilter) : WebSecurityConfigurerAdapter() {
 
 
@@ -28,16 +28,14 @@ class SecurityConfig(val userDetailsService: UserDetailsService,
     }
 
     @Autowired
-    @Throws(Exception::class)
     fun configureAuthentication(authenticationManagerBuilder: AuthenticationManagerBuilder) {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder())
     }
 
 
-    @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http.csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/auth/**",
